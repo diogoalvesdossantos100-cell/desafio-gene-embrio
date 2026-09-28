@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200" role="img" aria-label="Saúde em Jogo">
+<defs>
+  <linearGradient id="gb" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3B8CFF"/><stop offset="1" stop-color="#1B4FC4"/></linearGradient>
+  <linearGradient id="gj" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#22E6C8"/><stop offset="1" stop-color="#3DDC84"/></linearGradient>
+</defs>
+<rect width="200" height="200" rx="44" fill="#0B1A2E"/>
+<g transform="translate(4,24) scale(1.12)">
+  <path d="M85 6 L145 28 L85 50 L25 28 Z" fill="#3B8CFF"/>
+  <path d="M50 40 V57 C50 66 120 66 120 57 V40 L85 52 Z" fill="#1B4BB0"/>
+  <path d="M139 31 V55" stroke="#22E6C8" stroke-width="3" stroke-linecap="round"/>
+  <circle cx="139" cy="58" r="3.6" fill="#22E6C8"/>
+  <path d="M32 80 C32 67 43 60 56 60 H114 C127 60 138 67 138 80 L150 114 C153 127 139 135 128 128 L110 114 H60 L42 128 C31 135 17 127 20 114 Z" fill="url(#gb)"/>
+  <rect x="52" y="86" width="16" height="8" rx="2.5" fill="#fff"/>
+  <rect x="56" y="82" width="8" height="16" rx="2.5" fill="#fff"/>
+  <polyline points="74,90 80,90 84,79 90,101 94,90 101,90" fill="none" stroke="#22E6C8" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/>
+  <circle cx="118" cy="82" r="4.6" fill="#fff"/><circle cx="128" cy="90" r="4.6" fill="#fff"/>
+  <circle cx="118" cy="98" r="4.6" fill="#fff"/><circle cx="108" cy="90" r="4.6" fill="#fff"/></g>
+</svg>
