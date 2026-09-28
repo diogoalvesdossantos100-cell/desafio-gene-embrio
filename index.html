@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Desafio Gene &amp; Embrio</title>
+<style>
+  :root{
+    --bg:#0b1a24; --card:#12283a; --card2:#183449; --txt:#eaf3f7; --mut:#93aebd;
+    --teal:#19b3a1; --gold:#f0b44c; --ok:#2ecc71; --bad:#e5533d; --line:#24485f;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:radial-gradient(1200px 600px at 50% -10%,#123a4a 0%,var(--bg) 60%);
+    color:var(--txt);font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;min-height:100vh}
+  .wrap{max-width:720px;margin:0 auto;padding:20px 16px 60px}
+  h1{font-size:1.6rem;margin:8px 0 4px}
+  h1 span{color:var(--teal)}
+  .sub{color:var(--mut);margin:0 0 18px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:20px;margin-bottom:14px}
+  label{display:block;font-size:.85rem;color:var(--mut);margin:12px 0 6px}
+  input,select{width:100%;padding:12px;border-radius:10px;border:1px solid var(--line);
+    background:var(--card2);color:var(--txt);font-size:1rem}
+  button{cursor:pointer;font-size:1rem;border:0;border-radius:12px;padding:13px 18px;font-weight:600}
+  .primary{background:var(--teal);color:#032a26;width:100%;margin-top:18px}
+  .primary:disabled{opacity:.5;cursor:not-allowed}
+  .ghost{background:transparent;color:var(--txt);border:1px solid var(--line)}
+  .rules{font-size:.9rem;color:var(--mut);line-height:1.6;margin:14px 0 0;padding-left:18px}
+  .hud{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:10px;font-size:.95rem}
+  .pill{background:var(--card2);border:1px solid var(--line);border-radius:999px;padding:6px 12px}
+  .pill b{color:var(--gold)}
+  .bar{height:8px;background:var(--card2);border-radius:99px;overflow:hidden;margin-bottom:16px}
+  .bar i{display:block;height:100%;width:100%;background:var(--teal);transition:width .1s linear}
+  .bar i.low{background:var(--bad)}
+  .q{font-size:1.15rem;line-height:1.5;margin:0 0 16px}
+  .opt{display:block;width:100%;text-align:left;background:var(--card2);color:var(--txt);
+    border:1px solid var(--line);margin-bottom:10px;padding:14px;border-radius:12px;line-height:1.4}
+  .opt:hover:not(:disabled){border-color:var(--teal)}
+  .opt.ok{background:#12452f;border-color:var(--ok)}
+  .opt.bad{background:#4a1f19;border-color:var(--bad)}
+  .fb{margin-top:12px;padding:14px;border-radius:12px;background:var(--card2);border-left:4px solid var(--teal);line-height:1.5;font-size:.95rem}
+  .fb.ok{border-left-color:var(--ok)} .fb.bad{border-left-color:var(--bad)}
+  .big{font-size:2.6rem;font-weight:800;margin:4px 0}
+  .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:14px 0}
+  .stat{background:var(--card2);border:1px solid var(--line);border-radius:12px;padding:12px;text-align:center}
+  .stat small{display:block;color:var(--mut)} .stat b{font-size:1.4rem}
+  .rev{border-top:1px solid var(--line);padding-top:12px;margin-top:12px;font-size:.92rem;line-height:1.5}
+  .rev em{color:var(--gold);font-style:normal}
+  .note{font-size:.85rem;color:var(--mut);margin-top:10px}
+  .warn{color:var(--gold)}
+  .hide{display:none}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Desafio <span>Gene &amp; Embrio</span></h1>
+  <p class="sub" id="subtitulo"></p>
+
+  <!-- TELA INICIAL -->
+  <section id="tela-inicio" class="card">
+    <label for="nome">Nome completo</label>
+    <input id="nome" autocomplete="name" placeholder="Seu nome">
+    <label for="matricula">Matrícula</label>
+    <input id="matricula" inputmode="numeric" placeholder="Sua matrícula">
+    <label for="disc">Disciplina</label>
+    <select id="disc">
+      <option value="misto">Genética + Embriologia (misto)</option>
+      <option value="genetica">Genética</option>
+      <option value="embriologia">Embriologia</option>
+    </select>
+    <button id="btn-iniciar" class="primary">Começar desafio</button>
+    <p id="msg-inicio" class="note warn"></p>
+    <ul class="rules" id="regras"></ul>
+  </section>
+
+  <!-- TELA DO JOGO -->
+  <section id="tela-jogo" class="hide">
+    <div class="hud">
+      <span class="pill">Questão <b id="hud-n">1</b>/<span id="hud-total">10</span></span>
+      <span class="pill">Pontos <b id="hud-pts">0</b></span>
+      <span class="pill">Combo <b id="hud-combo">x0</b></span>
+    </div>
+    <div class="bar"><i id="barra"></i></div>
+    <div class="card">
+      <p class="q" id="enunciado"></p>
+      <div id="opcoes"></div>
+      <div id="feedback" class="fb hide"></div>
+      <button id="btn-prox" class="primary hide">Próxima</button>
+    </div>
+  </section>
+
+  <!-- TELA FINAL -->
+  <section id="tela-fim" class="card hide">
+    <div class="note" id="fim-nome"></div>
+    <div class="big" id="fim-acertos"></div>
+    <div class="grid">
+      <div class="stat"><small>Pontos</small><b id="fim-pts"></b></div>
+      <div class="stat"><small>Nota</small><b id="fim-nota"></b></div>
+      <div class="stat"><small>Tentativa</small><b id="fim-tent"></b></div>
+    </div>
+    <p class="note" id="fim-envio"></p>
+    <button id="btn-reenviar" class="ghost hide">Tentar enviar novamente</button>
+    <div id="revisao"></div>
+    <button id="btn-nova" class="primary hide">Nova tentativa</button>
+  </section>
+</div>
+
+<script>
+/* =====================  CONFIGURAÇÃO (edite aqui)  ===================== */
+const CONFIG = {
+  TURMA: "1º A Fisioterapia",
+  QUESTOES_POR_PARTIDA: 10,   // quantas questões são sorteadas do banco
+  TEMPO_POR_QUESTAO: 30,      // segundos
+  MAX_TENTATIVAS: 2,          // tentativas por aluno
+  NOTA_MAXIMA: 2.0,           // valor da atividade na média da disciplina
+  URL_PLANILHA: "https://script.google.com/macros/s/AKfycbyxliHa5f1iuxdszS_YCAcqpMxoXy0gCxiWiXFceak5NSKBaY-Isfh9bfrhC-nGuhcTFA/exec"            // cole aqui a URL do Apps Script (veja o passo a passo)
+};
+
+/* =====================  BANCO DE QUESTÕES  =====================
+   Formato: d = disciplina, q = enunciado, o = alternativas, c = índice da correta, e = explicação.
+   Para trocar de tema, basta substituir este banco. */
+const BANK = [
+/* ---------- GENÉTICA ---------- */
+{id:"G01",d:"genetica",q:"O pareamento correto de bases nitrogenadas no DNA é:",o:["A-C e G-T","A-T e C-G","A-G e C-T","A-U e C-G"],c:1,e:"A pareia com T (2 pontes de hidrogênio) e C com G (3 pontes). A uracila só existe no RNA."},
+{id:"G02",d:"genetica",q:"As mucopolissacaridoses são exemplos de:",o:["Mutações cromossômicas numéricas","Doenças de depósito lisossômico, com repercussão articular e óssea","Herança ligada ao sexo","Doenças multifatoriais"],c:1,e:"O acúmulo de substrato não degradado causa rigidez articular, contraturas e deformidades esqueléticas."},
+{id:"G03",d:"genetica",q:"Na transcrição, a base nitrogenada que substitui a timina no RNA é:",o:["Adenina","Citosina","Guanina","Uracila"],c:3,e:"No RNA, a uracila substitui a timina e pareia com a adenina."},
+{id:"G04",d:"genetica",q:"A distrofia muscular de Duchenne é causada por mutação no gene que codifica:",o:["A hemoglobina beta","A distrofina, proteína estrutural do sarcolema","A fenilalanina hidroxilase","O fator VIII da coagulação"],c:1,e:"A ausência de distrofina compromete a integridade da membrana da fibra muscular, que degenera."},
+{id:"G05",d:"genetica",q:"A atrofia muscular espinhal (AME) é uma doença de herança:",o:["Autossômica dominante","Autossômica recessiva","Ligada ao X recessiva","Multifatorial"],c:1,e:"Causada por deficiência do gene SMN1, que leva à degeneração de neurônios motores da medula."},
+{id:"G06",d:"genetica",q:"O ribossomo interrompe a tradução ao encontrar:",o:["O códon AUG","Um códon de parada (UAA, UAG ou UGA)","Um íntron","A cauda poli-A"],c:1,e:"AUG inicia a tradução. A terminação ocorre nos códons de parada."},
+{id:"G07",d:"genetica",q:"A mutação responsável pela anemia falciforme é classificada como:",o:["Nonsense","Silenciosa","Missense","Frameshift"],c:2,e:"Missense: troca ácido glutâmico por valina na posição 6 da beta-globina, gerando a hemoglobina S."},
+{id:"G08",d:"genetica",q:"A necrose avascular da cabeça do fêmur em pacientes com anemia falciforme decorre de:",o:["Infecção bacteriana primária","Infartos ósseos recorrentes por obstrução vascular","Deficiência de vitamina D","Mutação no gene da distrofina"],c:1,e:"As hemácias em foice obstruem vasos e causam infartos ósseos repetidos."},
+{id:"G09",d:"genetica",q:"Um casal com tipos sanguíneos A (IAi) e B (IBi) pode ter filhos com fenótipo:",o:["Apenas A ou B","A, B, AB ou O","Apenas AB","Apenas O"],c:1,e:"IAi x IBi resulta em IAIB (AB), IAi (A), IBi (B) e ii (O)."},
+{id:"G10",d:"genetica",q:"A hipotonia generalizada ao nascimento é uma manifestação clássica de:",o:["Síndrome de Turner","Síndrome de Down","Anemia falciforme","Distrofia muscular de Duchenne"],c:1,e:"É característica e praticamente universal na síndrome de Down, junto com frouxidão ligamentar e atraso motor."},
+{id:"G11",d:"genetica",q:"A notação de cariótipo 47,XX,+21 corresponde a:",o:["Síndrome de Turner","Síndrome de Klinefelter","Síndrome de Down em indivíduo do sexo feminino","Síndrome de Edwards"],c:2,e:"47 cromossomos, sexo XX e um cromossomo 21 a mais: trissomia do 21."},
+{id:"G12",d:"genetica",q:"O exame que permite coleta de material fetal mais precocemente (10 a 13 semanas) para cariótipo é:",o:["Amniocentese","Biópsia de vilo corial","NIPT","Ultrassonografia morfológica"],c:1,e:"A biópsia de vilo corial é feita mais cedo que a amniocentese."},
+{id:"G13",d:"genetica",q:"O mecanismo pelo qual a radiação ionizante em altas doses pode ser teratogênica é:",o:["Inibição da angiogênese","Quebra direta da fita de DNA em células de rápida divisão","Bloqueio da síntese de folato","Vasoconstrição placentária"],c:1,e:"As quebras no DNA são especialmente lesivas em células que se dividem rápido, como as do embrião."},
+{id:"G14",d:"genetica",q:"A farmacogenética estuda principalmente:",o:["A estrutura da dupla-hélice do DNA","A influência de variações genéticas individuais na resposta a fármacos","A herança dos grupos sanguíneos","A formação dos anexos embrionários"],c:1,e:"Polimorfismos individuais alteram eficácia, dose necessária e risco de efeitos adversos."},
+{id:"G15",d:"genetica",q:"O gene COL5A1 está relacionado à estrutura de qual componente?",o:["Osso","Colágeno","Hemoglobina","Sistema nervoso central"],c:1,e:"COL5A1 se relaciona ao colágeno de tendões e ligamentos, e à predisposição a lesões tendíneas."},
+{id:"G16",d:"genetica",q:"A síndrome de Down é classificada como doença:",o:["Monogênica autossômica dominante","Monogênica ligada ao X","Cromossômica numérica","Multifatorial"],c:2,e:"É uma aneuploidia: trissomia do cromossomo 21."},
+{id:"G17",d:"genetica",q:"A distrofia muscular de Duchenne é classificada como doença:",o:["Cromossômica","Monogênica ligada ao X","Multifatorial","Autossômica dominante"],c:1,e:"Mutação em um único gene (distrofina) no cromossomo X, por isso acomete quase só meninos."},
+{id:"G18",d:"genetica",q:"Um dos principais dilemas éticos dos testes genéticos preditivos é:",o:["O alto custo de sequenciamento apenas","A ausência de padrão de herança conhecido","Revelar um futuro sem tratamento disponível, com impacto na autonomia e no bem-estar psicológico","A impossibilidade técnica de realizar o exame"],c:2,e:"Saber com antecedência um destino sem intervenção terapêutica pesa sobre a autonomia e o psicológico do indivíduo."},
+{id:"G19",d:"genetica",q:"Caso clínico: menino de 5 anos com dificuldade progressiva para subir escadas, quedas frequentes e que «escala» as próprias pernas com as mãos para levantar do chão. A hipótese mais provável é:",o:["Atrofia muscular espinhal","Distrofia muscular de Duchenne","Síndrome de Down","Anemia falciforme"],c:1,e:"É o sinal de Gowers: fraqueza da musculatura proximal, típica da DMD (herança ligada ao X)."},
+{id:"G20",d:"genetica",q:"Por que exercícios com flexão cervical forçada ou impacto exigem cautela em crianças com síndrome de Down?",o:["Risco de instabilidade atlantoaxial por frouxidão ligamentar","Risco de crise vaso-oclusiva","Fraqueza por ausência de distrofina","Excesso de estrogênio circulante"],c:0,e:"A frouxidão ligamentar pode atingir C1-C2 e aumentar o risco de subluxação atlantoaxial."},
+/* ---------- EMBRIOLOGIA ---------- */
+{id:"E01",d:"embriologia",q:"O pico de LH é responsável por:",o:["Manter o corpo lúteo indefinidamente","Desencadear a ovulação","Iniciar a menstruação","Estimular a espermatogênese"],c:1,e:"O surto de LH provoca a ruptura folicular e a liberação do oócito, por volta do dia 14."},
+{id:"E02",d:"embriologia",q:"O hormônio associado ao aumento da frouxidão do colágeno ligamentar na fase pré-ovulatória é:",o:["Progesterona","FSH","Estrogênio","GnRH"],c:2,e:"O pico de estrogênio se associa a maior frouxidão e, em algumas evidências, a maior risco de lesão de LCA sem contato em atletas mulheres."},
+{id:"E03",d:"embriologia",q:"As camadas da parede uterina, de fora para dentro, são:",o:["Endométrio, miométrio, perimétrio","Perimétrio, miométrio, endométrio","Miométrio, perimétrio, endométrio","Endométrio, perimétrio, miométrio"],c:1,e:"Perimétrio (externo), miométrio (muscular) e endométrio (mucosa interna)."},
+{id:"E04",d:"embriologia",q:"O bloqueio rápido da poliespermia ocorre por:",o:["Espessamento da zona pelúcida","Despolarização da membrana plasmática do oócito","Liberação de hCG","Formação do corpo lúteo"],c:1,e:"A despolarização é imediata (bloqueio rápido). A reação cortical vem depois (bloqueio lento)."},
+{id:"E05",d:"embriologia",q:"A redução importante do volume de líquido amniótico (oligoidrâmnio) está associada a:",o:["Macrossomia fetal","Artrogripose e restrição de movimento fetal","Aumento da frouxidão ligamentar","Parto prematuro isolado, sem repercussão musculoesquelética"],c:1,e:"Sem espaço para se mover, o feto perde o estímulo mecânico que molda articulações e músculos."},
+{id:"E06",d:"embriologia",q:"O líquido amniótico está contido dentro:",o:["Do córion","Do saco vitelino","Do âmnio","Do alantoide"],c:2,e:"O âmnio delimita a cavidade amniótica onde o líquido se acumula."},
+{id:"E07",d:"embriologia",q:"O folheto embrionário que origina o sistema musculoesquelético é:",o:["Endoderma","Mesoderma","Ectoderma","Trofoblasto"],c:1,e:"O mesoderma (em especial o paraxial, via somitos) origina ossos, músculos e tecido conjuntivo do aparelho locomotor."},
+{id:"E08",d:"embriologia",q:"A mielomeningocele decorre de:",o:["Fechamento incompleto do tubo neural na extremidade caudal","Mutação no gene da beta-globina","Deficiência de vitamina A","Trissomia do cromossomo 21"],c:0,e:"É uma falha de fechamento caudal do tubo neural. O ácido fólico pré-concepcional reduz o risco."},
+{id:"E09",d:"embriologia",q:"A talidomida é classicamente associada a que tipo de malformação?",o:["Cardiopatias congênitas","Focomelia (malformação de membros)","Catarata congênita","Defeitos do tubo neural"],c:1,e:"É o exemplo histórico clássico de teratógeno, com exposição crítica entre a 4ª e a 8ª semana."},
+{id:"E10",d:"embriologia",q:"A síndrome congênita do Zika está classicamente associada a:",o:["Focomelia","Microcefalia com espasticidade e artrogripose secundária","Catarata isolada","Escoliose idiopática"],c:1,e:"Comprometimento neurológico central grave, com disfagia e epilepsia. Exige fisioterapia neurofuncional precoce."},
+{id:"E11",d:"embriologia",q:"A tríade clássica da toxoplasmose congênita inclui:",o:["Surdez, catarata, cardiopatia","Coriorretinite, hidrocefalia, calcificações intracranianas","Focomelia, microcefalia, fenda palatina","Icterícia, anemia, hepatomegalia"],c:1,e:"Surdez, catarata e cardiopatia formam a síndrome da rubéola congênita."},
+{id:"E12",d:"embriologia",q:"A infecção congênita mais comum no mundo, frequentemente assintomática ao nascimento mas causadora de surdez progressiva, é:",o:["Rubéola","Citomegalovírus","Sífilis","Zika vírus"],c:1,e:"O citomegalovírus é a infecção congênita mais prevalente globalmente."},
+{id:"E13",d:"embriologia",q:"O único método anticoncepcional que também previne IST é:",o:["DIU de cobre","Pílula combinada","Preservativo","Método da tabelinha"],c:2,e:"O preservativo tem dupla função: contracepção e barreira contra IST."},
+{id:"E14",d:"embriologia",q:"O mecanismo de ação do DIU de cobre é:",o:["Inibição hormonal da ovulação","Reação inflamatória local espermicida","Bloqueio mecânico das tubas uterinas","Espessamento do muco cervical por progestagênio"],c:1,e:"O DIU de cobre não contém hormônio: a reação inflamatória local é tóxica aos espermatozoides."},
+{id:"E15",d:"embriologia",q:"A vasectomia impede a gravidez porque:",o:["Reduz a produção de testosterona","Impede a presença de espermatozoides no sêmen ejaculado","Inibe a ereção","Bloqueia a próstata"],c:1,e:"Secciona o ducto deferente. O sêmen continua sendo produzido pelas glândulas anexas, mas sem espermatozoides."},
+{id:"E16",d:"embriologia",q:"A hiperlordose lombar gestacional está relacionada principalmente a:",o:["Aumento da frequência cardíaca","Deslocamento do centro de gravidade e ação da relaxina","Redução da capacidade vital pulmonar","Aumento da taxa de filtração glomerular"],c:1,e:"O útero desloca o centro de gravidade para a frente e a relaxina aumenta a frouxidão ligamentar."},
+{id:"E17",d:"embriologia",q:"A diástase dos músculos retos abdominais decorre de:",o:["Ação da ocitocina sobre a mama","Estiramento progressivo da linha alba durante a gestação","Compressão vesical pelo útero","Redução do volume plasmático"],c:1,e:"A linha alba, tecido conjuntivo entre os retos abdominais, é estirada ao longo da gestação."},
+{id:"E18",d:"embriologia",q:"O período de maior risco de hemorragia por atonia uterina é:",o:["A fase de dilatação","A fase de expulsão","A dequitação","O quarto período (primeira hora pós-parto)"],c:3,e:"O quarto período exige vigilância para atonia uterina."},
+{id:"E19",d:"embriologia",q:"Caso clínico: recém-nascido com múltiplas contraturas articulares (artrogripose) e mãe com oligoidrâmnio importante na gestação. O mecanismo mais provável é:",o:["Restrição do movimento fetal por redução do líquido amniótico","Mutação no gene da distrofina","Trissomia do cromossomo 21","Deficiência de ácido fólico"],c:0,e:"O movimento fetal ativo é estímulo essencial ao desenvolvimento articular. Sem ele, a articulação enrijece."},
+{id:"E20",d:"embriologia",q:"Por que se evita o decúbito dorsal prolongado no 3º trimestre de gestação?",o:["A compressão da veia cava inferior reduz a perfusão uteroplacentária","Aumenta a produção de relaxina","Provoca diástase abdominal imediata","Eleva o pico de LH"],c:0,e:"O útero comprime a veia cava, reduz o retorno venoso e a perfusão da placenta. Prefere-se o decúbito lateral."}
+];
+
+/* =====================  MOTOR DO JOGO  ===================== */
+const $ = id => document.getElementById(id);
+const LS = {
+  get(k){ try{ return localStorage.getItem(k); }catch(e){ return null; } },
+  set(k,v){ try{ localStorage.setItem(k,v); }catch(e){} }
+};
+let S = null; // estado da partida
+
+function shuffle(a){
+  a = a.slice();
+  for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; }
+  return a;
+}
+function prepara(q){
+  const ordem = shuffle(q.o.map((_,i)=>i));
+  return {id:q.id,d:q.d,q:q.q,e:q.e,opts:ordem.map(i=>q.o[i]),correta:ordem.indexOf(q.c)};
+}
+function sorteia(disc){
+  const n = CONFIG.QUESTOES_POR_PARTIDA;
+  let escolhidas;
+  if(disc==="misto"){
+    const g = shuffle(BANK.filter(q=>q.d==="genetica")).slice(0,Math.ceil(n/2));
+    const e = shuffle(BANK.filter(q=>q.d==="embriologia")).slice(0,Math.floor(n/2));
+    escolhidas = shuffle(g.concat(e));
+  } else {
+    escolhidas = shuffle(BANK.filter(q=>q.d===disc)).slice(0,n);
+  }
+  return escolhidas.map(prepara);
+}
+function chaveTent(mat){ return "tent_"+mat; }
+async function tentativasFeitas(mat){
+  let n = parseInt(LS.get(chaveTent(mat))||"0",10);
+  if(CONFIG.URL_PLANILHA){
+    try{
+      const ctl = new AbortController(); const t = setTimeout(()=>ctl.abort(),4000);
+      const r = await fetch(CONFIG.URL_PLANILHA+"?matricula="+encodeURIComponent(mat),{signal:ctl.signal});
+      clearTimeout(t);
+      const j = await r.json();
+      if(typeof j.tentativas==="number") n = Math.max(n,j.tentativas);
+    }catch(e){ /* sem internet: vale o registro local */ }
+  }
+  return n;
+}
+function mostra(id){ ["tela-inicio","tela-jogo","tela-fim"].forEach(t=>$(t).classList.toggle("hide",t!==id)); window.scrollTo(0,0); }
+
+/* ---------- início ---------- */
+$("subtitulo").textContent = CONFIG.TURMA+" · Atividade avaliativa em formato de jogo";
+$("regras").innerHTML =
+  "<li>"+CONFIG.QUESTOES_POR_PARTIDA+" questões sorteadas, "+CONFIG.TEMPO_POR_QUESTAO+" segundos cada.</li>"+
+  "<li>Você tem "+CONFIG.MAX_TENTATIVAS+" tentativas. As questões mudam a cada partida.</li>"+
+  "<li>Pontos do jogo: 100 por acerto, bônus por rapidez e por sequência de acertos.</li>"+
+  "<li>A nota da atividade (até "+CONFIG.NOTA_MAXIMA.toFixed(1).replace(".",",")+") é proporcional ao número de acertos.</li>"+
+  "<li>Depois de cada resposta aparece a explicação. Leia: é aqui que você aprende.</li>";
+if(!CONFIG.URL_PLANILHA) $("msg-inicio").textContent = "Modo teste: o resultado não será enviado ao professor.";
+
+$("btn-iniciar").onclick = async () => {
+  const nome = $("nome").value.trim(), mat = $("matricula").value.trim();
+  const msg = $("msg-inicio");
+  if(nome.length<5 || !nome.includes(" ")){ msg.textContent="Digite seu nome completo."; return; }
+  if(mat.length<3){ msg.textContent="Digite sua matrícula."; return; }
+  const btn=$("btn-iniciar"); btn.disabled=true; btn.textContent="Verificando…";
+  const feitas = await tentativasFeitas(mat.toLowerCase());
+  btn.disabled=false; btn.textContent="Começar desafio";
+  if(feitas>=CONFIG.MAX_TENTATIVAS){ msg.textContent="Você já usou suas "+CONFIG.MAX_TENTATIVAS+" tentativas."; return; }
+  msg.textContent = CONFIG.URL_PLANILHA ? "" : msg.textContent;
+  inicia(nome,mat,$("disc").value,feitas+1);
+};
+
+function inicia(nome,mat,disc,tentativa){
+  S = {nome,mat,disc,tentativa,qs:sorteia(disc),i:0,pts:0,acertos:0,streak:0,resp:[],trava:false,timer:null,tLeft:0};
+  $("hud-total").textContent = S.qs.length;
+  mostra("tela-jogo");
+  pergunta();
+}
+
+/* ---------- pergunta ---------- */
+function pergunta(){
+  const q = S.qs[S.i];
+  S.trava=false;
+  $("hud-n").textContent = S.i+1;
+  $("hud-pts").textContent = S.pts;
+  $("hud-combo").textContent = "x"+S.streak;
+  $("enunciado").textContent = q.q;
+  const box = $("opcoes"); box.innerHTML="";
+  q.opts.forEach((t,idx)=>{
+    const b=document.createElement("button");
+    b.className="opt"; b.textContent = String.fromCharCode(65+idx)+") "+t;
+    b.onclick=()=>responde(idx,false);
+    box.appendChild(b);
+  });
+  $("feedback").className="fb hide"; $("btn-prox").classList.add("hide");
+  S.tLeft = CONFIG.TEMPO_POR_QUESTAO;
+  atualizaBarra();
+  clearInterval(S.timer);
+  const ini = Date.now();
+  S.timer = setInterval(()=>{
+    S.tLeft = Math.max(0, CONFIG.TEMPO_POR_QUESTAO - (Date.now()-ini)/1000);
+    atualizaBarra();
+    if(S.tLeft<=0) responde(-1,true);
+  },100);
+}
+function atualizaBarra(){
+  const p = S.tLeft/CONFIG.TEMPO_POR_QUESTAO*100;
+  const b=$("barra"); b.style.width=p+"%"; b.classList.toggle("low",p<25);
+}
+function responde(idx,tempoEsgotado){
+  if(S.trava) return; S.trava=true; clearInterval(S.timer);
+  const q=S.qs[S.i], ok = idx===q.correta;
+  let ganho=0;
+  if(ok){
+    S.streak++; S.acertos++;
+    const bonusTempo = Math.round(50*S.tLeft/CONFIG.TEMPO_POR_QUESTAO);
+    const bonusCombo = Math.min(50,(S.streak-1)*10);
+    ganho = 100+bonusTempo+bonusCombo; S.pts+=ganho;
+  } else { S.streak=0; }
+  S.resp.push({id:q.id,ok,marcada:idx});
+  [...$("opcoes").children].forEach((b,k)=>{
+    b.disabled=true;
+    if(k===q.correta) b.classList.add("ok");
+    else if(k===idx) b.classList.add("bad");
+  });
+  const fb=$("feedback");
+  fb.className="fb "+(ok?"ok":"bad");
+  fb.textContent = (ok?"Correto! +"+ganho+" pontos. ":(tempoEsgotado?"Tempo esgotado. ":"Não foi dessa vez. "))+q.e;
+  $("hud-pts").textContent=S.pts; $("hud-combo").textContent="x"+S.streak;
+  const nx=$("btn-prox");
+  nx.textContent = S.i===S.qs.length-1 ? "Ver resultado" : "Próxima";
+  nx.classList.remove("hide");
+}
+$("btn-prox").onclick = () => {
+  if(S.i===S.qs.length-1){ termina(); } else { S.i++; pergunta(); }
+};
+
+/* ---------- resultado ---------- */
+function fmt(n){ return n.toFixed(2).replace(".",","); }
+function termina(){
+  const total=S.qs.length;
+  const nota = Math.round(S.acertos/total*CONFIG.NOTA_MAXIMA*100)/100;
+  LS.set(chaveTent(S.mat.toLowerCase()), String(S.tentativa));
+  mostra("tela-fim");
+  $("fim-nome").textContent = S.nome+" · matrícula "+S.mat;
+  $("fim-acertos").textContent = S.acertos+" de "+total+" acertos";
+  $("fim-pts").textContent = S.pts;
+  $("fim-nota").textContent = fmt(nota);
+  $("fim-tent").textContent = S.tentativa+"/"+CONFIG.MAX_TENTATIVAS;
+  // revisão dos erros
+  const rev=$("revisao"); rev.innerHTML="";
+  const erros = S.qs.filter((q,k)=>!S.resp[k].ok);
+  if(erros.length){
+    const h=document.createElement("div"); h.className="rev"; h.innerHTML="<b>Revise o que errou:</b>"; rev.appendChild(h);
+    erros.forEach(q=>{
+      const d=document.createElement("div"); d.className="rev";
+      const p=document.createElement("div"); p.textContent=q.q; d.appendChild(p);
+      const r=document.createElement("div"); r.innerHTML="<em>Resposta:</em> "; r.appendChild(document.createTextNode(q.opts[q.correta]+". "+q.e)); d.appendChild(r);
+      rev.appendChild(d);
+    });
+  } else {
+    rev.innerHTML='<div class="rev"><b>Gabarito perfeito. Parabéns!</b></div>';
+  }
+  $("btn-nova").classList.toggle("hide", S.tentativa>=CONFIG.MAX_TENTATIVAS);
+  // envio
+  const payload = {
+    nome:S.nome, matricula:S.mat, turma:CONFIG.TURMA, disciplina:S.disc, tentativa:S.tentativa,
+    acertos:S.acertos, total, pontos:S.pts, nota,
+    erradas:erros.map(q=>q.id).join(", ")
+  };
+  S.payload = payload;
+  envia();
+}
+async function envia(){
+  const st=$("fim-envio"), bt=$("btn-reenviar");
+  bt.classList.add("hide");
+  if(!CONFIG.URL_PLANILHA){ st.textContent="Modo teste: resultado não enviado."; return; }
+  st.textContent="Enviando resultado ao professor…";
+  try{
+    await fetch(CONFIG.URL_PLANILHA,{method:"POST",mode:"no-cors",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify(S.payload)});
+    st.textContent="Resultado enviado. Tire um print desta tela como comprovante.";
+  }catch(e){
+    st.textContent="Não foi possível enviar. Verifique a internet e tente de novo, sem fechar esta página.";
+    bt.classList.remove("hide");
+  }
+}
+$("btn-reenviar").onclick = envia;
+$("btn-nova").onclick = async () => {
+  const feitas = await tentativasFeitas(S.mat.toLowerCase());
+  if(feitas>=CONFIG.MAX_TENTATIVAS){ $("btn-nova").classList.add("hide"); return; }
+  inicia(S.nome,S.mat,S.disc,feitas+1);
+};
+</script>
+</body>
+</html>
