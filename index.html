@@ -60,12 +60,12 @@ input:focus{outline:none;border-color:var(--a);box-shadow:0 0 0 3px rgba(34,230,
 .btn.ghost{background:transparent;color:var(--txt);border:2px solid var(--line);box-shadow:none}
 .msg{min-height:1.2em;color:var(--gold);font-size:.92rem;margin:12px 0 0}
 .hint{color:var(--mut);font-size:.85rem;margin:8px 0 0}
-.kicker{margin:0;font-size:.78rem;letter-spacing:.16em;color:var(--mut)}
+.kicker{margin:0;font-size:.72rem;letter-spacing:.09em;color:var(--mut)}
 
 /* tela de título */
 .hero{text-align:center}
-.selo{display:block;width:min(300px,78vw);height:auto;margin:0 auto 14px}
-.helix{width:150px;height:140px;margin:0 auto 10px;display:flex;flex-direction:column;justify-content:center;overflow:hidden}
+.selo{display:block;width:min(370px,90vw);height:auto;margin:0 auto 12px}
+.helix{width:150px;height:128px;margin:0 auto 10px;display:flex;flex-direction:column;justify-content:center;overflow:hidden}
 .rung{display:flex;align-items:center;justify-content:space-between;height:12px;margin:3px auto;flex:none;width:100%;animation:hx 3.2s ease-in-out infinite;animation-delay:calc(var(--i)*-.23s)}
 .rung s{flex:1;height:3px;margin:0 -2px;background:linear-gradient(90deg,var(--a),var(--b));border-radius:2px;opacity:.75}
 .rung b{width:12px;height:12px;border-radius:50%;flex:none}
@@ -201,11 +201,11 @@ input:focus{outline:none;border-color:var(--a);box-shadow:0 0 0 3px rgba(34,230,
   <!-- 1. TÍTULO -->
   <section id="s-titulo" class="screen on">
     <div class="hero">
-      <img class="selo" src="logo-escuro.svg" alt="Saúde em Jogo" width="300" height="100">
+      <img class="selo" src="logo-escuro.svg" alt="Saúde em Jogo" width="370" height="123">
       <div class="helix" id="helix" aria-hidden="true"></div>
       <p class="kicker" id="kicker"></p>
       <h1 class="logo"><span class="g">GENE</span><em>&amp;</em><span class="e">EMBRIO</span></h1>
-      <p class="tag">A missão: diagnosticar rápido, errar pouco e aprender sempre.</p>
+      <p class="tag">A missão: pensar rápido, errar pouco e aprender sempre.</p>
       <button id="btn-jogar" class="play">▶ JOGAR</button>
       <ul class="how" id="how"></ul>
     </div>
@@ -444,11 +444,11 @@ function contaAte(el,de,ate,ms,dec){
     box.appendChild(s);
   }
   const h=$("helix");
-  for(let i=0;i<8;i++){ const r=document.createElement("i"); r.className="rung"; r.style.setProperty("--i",i); r.innerHTML="<b></b><s></s><b></b>"; h.appendChild(r); }
+  for(let i=0;i<7;i++){ const r=document.createElement("i"); r.className="rung"; r.style.setProperty("--i",i); r.innerHTML="<b></b><s></s><b></b>"; h.appendChild(r); }
 })();
 
 /* ---------- tela de título ---------- */
-$("kicker").textContent = ("ATIVIDADE AVALIATIVA · "+CONFIG.TURMA).toUpperCase();
+$("kicker").textContent = ("ATIVIDADE AVALIATIVA • "+CONFIG.TURMA.replace(/^(\S+ \S+) /,"$1 • ")).toUpperCase();
 $("how").innerHTML = "<li>⏱ "+CONFIG.TEMPO_POR_QUESTAO+"s por caso</li><li>🔥 Combo dá bônus</li><li>💡 2 poderes</li><li>👑 Fase final vale o dobro</li><li>🎯 "+CONFIG.MAX_TENTATIVAS+" tentativas</li>";
 $("btn-jogar").onclick = () => { ac(); SFX.click(); show("s-jogador"); };
 
