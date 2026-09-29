@@ -1,46 +1,64 @@
 /**
- * Recebe os resultados do jogo e grava na planilha.
- * Cole este código em: Planilha Google > Extensões > Apps Script.
- * Depois: Implantar > Nova implantação > Tipo "App da Web"
- *   Executar como: Eu | Quem tem acesso: Qualquer pessoa
- * Copie a URL gerada e cole em CONFIG.URL_PLANILHA no jogo.html.
+ * Saúde em Jogo - recebe os resultados dos jogos e grava na planilha.
+ * Vale para todos os jogos (gene-embrio, psicologia-aplicada, saude-coletiva).
+ * A coluna "Jogo" separa as tentativas de cada jogo.
+ * Regra: valem no máximo 2 tentativas por jogo e conta a MAIOR nota (aba "Melhor nota").
  */
+const SS_ID = "14DMPH6aj__1NNtLSON0sHHh_7hwaKDMurTO23AI7Uzg";
 const ABA = "Resultados";
-const CABECALHO = ["Data/hora","Nome","Matrícula","Turma","Disciplina","Tentativa","Acertos","Total","Pontos","Nota","Questões erradas"];
+const ABA_MELHOR = "Melhor nota";
+const JOGO_PADRAO = "gene-embrio";
+const CAB = ["Data/hora","Nome","Matrícula","Turma","Disciplina","Tentativa","Acertos","Total","Pontos","Nota","Questões erradas","Jogo"];
 
-function aba_() {
-  const ss = SpreadsheetApp.getActiveSpreadsheet();
-  let sh = ss.getSheetByName(ABA);
-  if (!sh) {
-    sh = ss.insertSheet(ABA);
-    sh.appendRow(CABECALHO);
+function norm_(x){ return String(x == null ? "" : x).trim().toLowerCase().replace(/^0+/, ""); }
+
+function aba_(){
+  const ss = SpreadsheetApp.openById(SS_ID);
+  let sh = ss.getSheetByName(ABA) || ss.insertSheet(ABA);
+  if (sh.getLastRow() === 0) {
+    sh.getRange(1,1,1,CAB.length).setValues([CAB]).setFontWeight("bold");
     sh.setFrozenRows(1);
   }
+  if (sh.getRange(1,12).getValue() !== "Jogo") {           // migração da versão antiga (11 colunas)
+    sh.getRange(1,12).setValue("Jogo").setFontWeight("bold");
+    const n = sh.getLastRow() - 1;
+    if (n > 0) {
+      const l = sh.getRange(2,12,n,1), v = l.getValues().map(r => [r[0] || JOGO_PADRAO]);
+      l.setValues(v);
+      const c = sh.getRange(2,3,n,1), cv = c.getValues().map(r => [String(r[0])]);
+      c.setNumberFormat("@").setValues(cv);
+    }
+  }
+  sh.getRange("C2:C").setNumberFormat("@");                 // matrícula sempre como texto
+  melhor_(ss);
   return sh;
 }
 
-function doPost(e) {
-  const d = JSON.parse(e.postData.contents);
-  aba_().appendRow([
-    new Date(), d.nome, String(d.matricula), d.turma, d.disciplina, d.tentativa,
-    d.acertos, d.total, d.pontos, d.nota, d.erradas
-  ]);
-  return ContentService.createTextOutput(JSON.stringify({ ok: true }))
-    .setMimeType(ContentService.MimeType.JSON);
-}
-
-// O jogo consulta quantas tentativas o aluno já fez (evita burlar limpando o navegador)
-function doGet(e) {
-  const mat = String((e.parameter && e.parameter.matricula) || "").trim().toLowerCase();
-  const dados = aba_().getDataRange().getValues();
-  let n = 0;
-  for (let i = 1; i < dados.length; i++) {
-    if (String(dados[i][2]).trim().toLowerCase() === mat) n++;
+function melhor_(ss){
+  let m = ss.getSheetByName(ABA_MELHOR);
+  if (!m) m = ss.insertSheet(ABA_MELHOR);
+  if (m.getRange("A1").getFormula() === "") {
+    m.getRange("A1").setFormula('=QUERY(' + ABA + '!A:L,"select L, C, B, count(C), max(J) where C is not null group by L, C, B order by L, C label L \'Jogo\', C \'Matrícula\', B \'Nome\', count(C) \'Tentativas\', max(J) \'Maior nota (vale)\'",1)');
   }
-  return ContentService.createTextOutput(JSON.stringify({ tentativas: n }))
-    .setMimeType(ContentService.MimeType.JSON);
 }
 
-/* Aba "Melhor nota" (crie uma nova aba e cole esta fórmula na célula A1):
-=QUERY(Resultados!A:K; "select C, B, max(J) where C is not null group by C, B order by B label C 'Matrícula', B 'Nome', max(J) 'Melhor nota'"; 1)
-*/
+function doPost(e){
+  const lock = LockService.getScriptLock(); lock.waitLock(20000);
+  try {
+    const d = JSON.parse(e.postData.contents), sh = aba_();
+    sh.appendRow([new Date(), d.nome, String(d.matricula), d.turma, d.disciplina, d.tentativa, d.acertos, d.total, d.pontos, d.nota, d.erradas, d.jogo || JOGO_PADRAO]);
+    return ContentService.createTextOutput(JSON.stringify({ok:true})).setMimeType(ContentService.MimeType.JSON);
+  } finally { lock.releaseLock(); }
+}
+
+function doGet(e){
+  const mat = norm_(e.parameter.matricula), jogo = String(e.parameter.jogo || JOGO_PADRAO).trim().toLowerCase();
+  const sh = aba_(), n = sh.getLastRow() - 1;
+  let tent = 0, melhor = 0;
+  if (mat && n > 0) {
+    sh.getRange(2,1,n,12).getValues().forEach(r => {
+      if (norm_(r[2]) === mat && String(r[11] || JOGO_PADRAO).trim().toLowerCase() === jogo) { tent++; melhor = Math.max(melhor, Number(r[9]) || 0); }
+    });
+  }
+  return ContentService.createTextOutput(JSON.stringify({tentativas: tent, melhor: melhor})).setMimeType(ContentService.MimeType.JSON);
+}
