@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#070f1a">
-<title>Saúde em Jogo · Gene &amp; Embrio</title>
+<title>Saúde em Jogo · Genética</title>
 <link rel="icon" type="image/svg+xml" href="../icone-app.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -95,6 +95,7 @@ input:focus{outline:none;border-color:var(--a);box-shadow:0 0 0 3px color-mix(in
 .who .av{font-size:1.8rem}
 .pill{margin-left:auto;background:var(--deep);border:1px solid var(--line);border-radius:999px;padding:5px 12px;font-size:.85rem;color:var(--gold)}
 .missions{display:grid;gap:14px}
+.missions.um{grid-template-columns:1fr !important}
 .mission{position:relative;display:grid;grid-template-columns:56px 1fr;gap:2px 14px;align-items:center;text-align:left;padding:16px;border-radius:20px;cursor:pointer;
   font:inherit;color:var(--txt);border:2px solid var(--opt-b);background:var(--opt);box-shadow:0 6px 0 var(--deep);transition:transform .1s}
 .mission:hover{transform:translateY(-3px)}
@@ -191,7 +192,7 @@ input:focus{outline:none;border-color:var(--a);box-shadow:0 0 0 3px color-mix(in
 .orbit .sat span{position:absolute;left:-15px;top:-15px;width:30px;height:30px;display:grid;place-items:center;font-size:1.35rem;transform:translateX(52px);animation:unspin 11s linear infinite;animation-delay:inherit}
 @keyframes spin{to{transform:rotate(360deg)}}
 @keyframes unspin{from{transform:translateX(52px) rotate(0)}to{transform:translateX(52px) rotate(-360deg)}}
-
+:root{--violet:#8b7bff}
 @media (prefers-reduced-motion:reduce){
   *{animation:none !important;transition:none !important}
 }
@@ -213,7 +214,7 @@ input:focus{outline:none;border-color:var(--a);box-shadow:0 0 0 3px color-mix(in
       <img class="selo" src="../logo-escuro.svg" alt="Saúde em Jogo" width="370" height="123">
       <div class="hero-art" id="heroart" aria-hidden="true"></div>
       <p class="kicker" id="kicker"></p>
-      <h1 class="logo"><span class="g">GENE</span><em>&amp;</em><span class="e">EMBRIO</span></h1>
+      <h1 class="logo"><span class="g">GENÉTICA</span></h1>
       <p class="tag" id="tag"></p>
       <button id="btn-jogar" class="play">▶ JOGAR</button>
       <ul class="how" id="how"></ul>
@@ -305,7 +306,7 @@ input:focus{outline:none;border-color:var(--a);box-shadow:0 0 0 3px color-mix(in
 </main>
 
 <script>
-const GAME = {"id": "gene-embrio", "tag": "A missão: pensar rápido, errar pouco e aprender sempre.", "glifos": ["A", "T", "C", "G"], "hero": {"tipo": "helix"}, "avatares": ["🧬", "🩺", "🦴", "🧠", "🫀", "🫁", "👶", "🔬"], "temas": {"genetica": {"cls": "ta", "txt": "🧬 GENÉTICA"}, "embriologia": {"cls": "tb", "txt": "👶 EMBRIOLOGIA"}}, "missoes": [{"d": "genetica", "ico": "🧬", "nome": "Missão Genética", "sub": "Distrofias, herança, mutações e testes", "cls": "m-a"}, {"d": "embriologia", "ico": "👶", "nome": "Missão Embriologia", "sub": "Gametas, gestação e teratógenos", "cls": "m-b"}, {"d": "misto", "ico": "⚡", "nome": "Missão Completa", "sub": "As duas juntas", "cls": "m-c", "faixa": "RECOMENDADA"}], "ranks": [["👑", "Lenda da Genética"], ["🏆", "Mestre Diagnosticador"], ["🩺", "Fisio Investigador"], ["🔬", "Residente em Treino"], ["🧪", "Calouro do Laboratório"]]};
+const GAME = {"id": "genetica", "tag": "A missão: pensar rápido, errar pouco e aprender sempre.", "glifos": ["A", "T", "C", "G"], "hero": {"tipo": "helix"}, "avatares": ["🧬", "🩺", "🦴", "🧠", "🫀", "🫁", "👶", "🔬"], "temas": {"genetica": {"cls": "ta", "txt": "🧬 GENÉTICA"}}, "missoes": [{"d": "genetica", "ico": "🧬", "nome": "Missão Genética", "sub": "Distrofias, herança, mutações e testes genéticos", "cls": "m-a", "faixa": "VAMOS LÁ"}], "ranks": [["👑", "Lenda da Genética"], ["🏆", "Mestre Diagnosticador"], ["🩺", "Fisio Investigador"], ["🔬", "Residente em Treino"], ["🧪", "Calouro do Laboratório"]]};
 
 /* =====================  CONFIGURAÇÃO (edite aqui)  ===================== */
 const CONFIG = {
@@ -320,7 +321,6 @@ const CONFIG = {
 /* =====================  BANCO DE QUESTÕES  =====================
    d = tema, q = enunciado, o = alternativas, c = índice da correta, e = explicação. */
 const BANK = [
-/* ---------- GENÉTICA ---------- */
 {id:"G01",d:"genetica",q:"O pareamento correto de bases nitrogenadas no DNA é:",o:["A-C e G-T","A-T e C-G","A-G e C-T","A-U e C-G"],c:1,e:"A pareia com T (2 pontes de hidrogênio) e C com G (3 pontes). A uracila só existe no RNA."},
 {id:"G02",d:"genetica",q:"As mucopolissacaridoses são exemplos de:",o:["Mutações cromossômicas numéricas","Doenças de depósito lisossômico, com repercussão articular e óssea","Herança ligada ao sexo","Doenças multifatoriais"],c:1,e:"O acúmulo de substrato não degradado causa rigidez articular, contraturas e deformidades esqueléticas."},
 {id:"G03",d:"genetica",q:"Na transcrição, a base nitrogenada que substitui a timina no RNA é:",o:["Adenina","Citosina","Guanina","Uracila"],c:3,e:"No RNA, a uracila substitui a timina e pareia com a adenina."},
@@ -340,28 +340,7 @@ const BANK = [
 {id:"G17",d:"genetica",q:"A distrofia muscular de Duchenne é classificada como doença:",o:["Cromossômica","Monogênica ligada ao X","Multifatorial","Autossômica dominante"],c:1,e:"Mutação em um único gene (distrofina) no cromossomo X, por isso acomete quase só meninos."},
 {id:"G18",d:"genetica",q:"Um dos principais dilemas éticos dos testes genéticos preditivos é:",o:["O alto custo de sequenciamento apenas","A ausência de padrão de herança conhecido","Revelar um futuro sem tratamento disponível, com impacto na autonomia e no bem-estar psicológico","A impossibilidade técnica de realizar o exame"],c:2,e:"Saber com antecedência um destino sem intervenção terapêutica pesa sobre a autonomia e o psicológico do indivíduo."},
 {id:"G19",d:"genetica",q:"Caso clínico: menino de 5 anos com dificuldade progressiva para subir escadas, quedas frequentes e que «escala» as próprias pernas com as mãos para levantar do chão. A hipótese mais provável é:",o:["Atrofia muscular espinhal","Distrofia muscular de Duchenne","Síndrome de Down","Anemia falciforme"],c:1,e:"É o sinal de Gowers: fraqueza da musculatura proximal, típica da DMD (herança ligada ao X)."},
-{id:"G20",d:"genetica",q:"Por que exercícios com flexão cervical forçada ou impacto exigem cautela em crianças com síndrome de Down?",o:["Risco de instabilidade atlantoaxial por frouxidão ligamentar","Risco de crise vaso-oclusiva","Fraqueza por ausência de distrofina","Excesso de estrogênio circulante"],c:0,e:"A frouxidão ligamentar pode atingir C1-C2 e aumentar o risco de subluxação atlantoaxial."},
-/* ---------- EMBRIOLOGIA ---------- */
-{id:"E01",d:"embriologia",q:"O pico de LH é responsável por:",o:["Manter o corpo lúteo indefinidamente","Desencadear a ovulação","Iniciar a menstruação","Estimular a espermatogênese"],c:1,e:"O surto de LH provoca a ruptura folicular e a liberação do oócito, por volta do dia 14."},
-{id:"E02",d:"embriologia",q:"O hormônio associado ao aumento da frouxidão do colágeno ligamentar na fase pré-ovulatória é:",o:["Progesterona","FSH","Estrogênio","GnRH"],c:2,e:"O pico de estrogênio se associa a maior frouxidão e, em algumas evidências, a maior risco de lesão de LCA sem contato em atletas mulheres."},
-{id:"E03",d:"embriologia",q:"As camadas da parede uterina, de fora para dentro, são:",o:["Endométrio, miométrio, perimétrio","Perimétrio, miométrio, endométrio","Miométrio, perimétrio, endométrio","Endométrio, perimétrio, miométrio"],c:1,e:"Perimétrio (externo), miométrio (muscular) e endométrio (mucosa interna)."},
-{id:"E04",d:"embriologia",q:"O bloqueio rápido da poliespermia ocorre por:",o:["Espessamento da zona pelúcida","Despolarização da membrana plasmática do oócito","Liberação de hCG","Formação do corpo lúteo"],c:1,e:"A despolarização é imediata (bloqueio rápido). A reação cortical vem depois (bloqueio lento)."},
-{id:"E05",d:"embriologia",q:"A redução importante do volume de líquido amniótico (oligoidrâmnio) está associada a:",o:["Macrossomia fetal","Artrogripose e restrição de movimento fetal","Aumento da frouxidão ligamentar","Parto prematuro isolado, sem repercussão musculoesquelética"],c:1,e:"Sem espaço para se mover, o feto perde o estímulo mecânico que molda articulações e músculos."},
-{id:"E06",d:"embriologia",q:"O líquido amniótico está contido dentro:",o:["Do córion","Do saco vitelino","Do âmnio","Do alantoide"],c:2,e:"O âmnio delimita a cavidade amniótica onde o líquido se acumula."},
-{id:"E07",d:"embriologia",q:"O folheto embrionário que origina o sistema musculoesquelético é:",o:["Endoderma","Mesoderma","Ectoderma","Trofoblasto"],c:1,e:"O mesoderma (em especial o paraxial, via somitos) origina ossos, músculos e tecido conjuntivo do aparelho locomotor."},
-{id:"E08",d:"embriologia",q:"A mielomeningocele decorre de:",o:["Fechamento incompleto do tubo neural na extremidade caudal","Mutação no gene da beta-globina","Deficiência de vitamina A","Trissomia do cromossomo 21"],c:0,e:"É uma falha de fechamento caudal do tubo neural. O ácido fólico pré-concepcional reduz o risco."},
-{id:"E09",d:"embriologia",q:"A talidomida é classicamente associada a que tipo de malformação?",o:["Cardiopatias congênitas","Focomelia (malformação de membros)","Catarata congênita","Defeitos do tubo neural"],c:1,e:"É o exemplo histórico clássico de teratógeno, com exposição crítica entre a 4ª e a 8ª semana."},
-{id:"E10",d:"embriologia",q:"A síndrome congênita do Zika está classicamente associada a:",o:["Focomelia","Microcefalia com espasticidade e artrogripose secundária","Catarata isolada","Escoliose idiopática"],c:1,e:"Comprometimento neurológico central grave, com disfagia e epilepsia. Exige fisioterapia neurofuncional precoce."},
-{id:"E11",d:"embriologia",q:"A tríade clássica da toxoplasmose congênita inclui:",o:["Surdez, catarata, cardiopatia","Coriorretinite, hidrocefalia, calcificações intracranianas","Focomelia, microcefalia, fenda palatina","Icterícia, anemia, hepatomegalia"],c:1,e:"Surdez, catarata e cardiopatia formam a síndrome da rubéola congênita."},
-{id:"E12",d:"embriologia",q:"A infecção congênita mais comum no mundo, frequentemente assintomática ao nascimento mas causadora de surdez progressiva, é:",o:["Rubéola","Citomegalovírus","Sífilis","Zika vírus"],c:1,e:"O citomegalovírus é a infecção congênita mais prevalente globalmente."},
-{id:"E13",d:"embriologia",q:"O único método anticoncepcional que também previne IST é:",o:["DIU de cobre","Pílula combinada","Preservativo","Método da tabelinha"],c:2,e:"O preservativo tem dupla função: contracepção e barreira contra IST."},
-{id:"E14",d:"embriologia",q:"O mecanismo de ação do DIU de cobre é:",o:["Inibição hormonal da ovulação","Reação inflamatória local espermicida","Bloqueio mecânico das tubas uterinas","Espessamento do muco cervical por progestagênio"],c:1,e:"O DIU de cobre não contém hormônio: a reação inflamatória local é tóxica aos espermatozoides."},
-{id:"E15",d:"embriologia",q:"A vasectomia impede a gravidez porque:",o:["Reduz a produção de testosterona","Impede a presença de espermatozoides no sêmen ejaculado","Inibe a ereção","Bloqueia a próstata"],c:1,e:"Secciona o ducto deferente. O sêmen continua sendo produzido pelas glândulas anexas, mas sem espermatozoides."},
-{id:"E16",d:"embriologia",q:"A hiperlordose lombar gestacional está relacionada principalmente a:",o:["Aumento da frequência cardíaca","Deslocamento do centro de gravidade e ação da relaxina","Redução da capacidade vital pulmonar","Aumento da taxa de filtração glomerular"],c:1,e:"O útero desloca o centro de gravidade para a frente e a relaxina aumenta a frouxidão ligamentar."},
-{id:"E17",d:"embriologia",q:"A diástase dos músculos retos abdominais decorre de:",o:["Ação da ocitocina sobre a mama","Estiramento progressivo da linha alba durante a gestação","Compressão vesical pelo útero","Redução do volume plasmático"],c:1,e:"A linha alba, tecido conjuntivo entre os retos abdominais, é estirada ao longo da gestação."},
-{id:"E18",d:"embriologia",q:"O período de maior risco de hemorragia por atonia uterina é:",o:["A fase de dilatação","A fase de expulsão","A dequitação","O quarto período (primeira hora pós-parto)"],c:3,e:"O quarto período exige vigilância para atonia uterina."},
-{id:"E19",d:"embriologia",q:"Caso clínico: recém-nascido com múltiplas contraturas articulares (artrogripose) e mãe com oligoidrâmnio importante na gestação. O mecanismo mais provável é:",o:["Restrição do movimento fetal por redução do líquido amniótico","Mutação no gene da distrofina","Trissomia do cromossomo 21","Deficiência de ácido fólico"],c:0,e:"O movimento fetal ativo é estímulo essencial ao desenvolvimento articular. Sem ele, a articulação enrijece."},
-{id:"E20",d:"embriologia",q:"Por que se evita o decúbito dorsal prolongado no 3º trimestre de gestação?",o:["A compressão da veia cava inferior reduz a perfusão uteroplacentária","Aumenta a produção de relaxina","Provoca diástase abdominal imediata","Eleva o pico de LH"],c:0,e:"O útero comprime a veia cava, reduz o retorno venoso e a perfusão da placenta. Prefere-se o decúbito lateral."}
+{id:"G20",d:"genetica",q:"Por que exercícios com flexão cervical forçada ou impacto exigem cautela em crianças com síndrome de Down?",o:["Risco de instabilidade atlantoaxial por frouxidão ligamentar","Risco de crise vaso-oclusiva","Fraqueza por ausência de distrofina","Excesso de estrogênio circulante"],c:0,e:"A frouxidão ligamentar pode atingir C1-C2 e aumentar o risco de subluxação atlantoaxial."}
 ];
 
 /* =====================  UTILIDADES  ===================== */
@@ -511,7 +490,7 @@ $("btn-continuar").onclick = async () => {
   SFX.click(); abreMissoes();
 };
 (function(){
-  const box=$("missions");
+  const box=$("missions"); if(GAME.missoes.length===1) box.classList.add("um");
   GAME.missoes.forEach(m=>{
     const b=document.createElement("button"); b.className="mission "+m.cls; b.type="button";
     b.innerHTML=(m.faixa?'<span class="ribbon">'+m.faixa+'</span>':'')+'<i></i><b></b><small></small>';

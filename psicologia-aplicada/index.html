@@ -95,6 +95,7 @@ input:focus{outline:none;border-color:var(--a);box-shadow:0 0 0 3px color-mix(in
 .who .av{font-size:1.8rem}
 .pill{margin-left:auto;background:var(--deep);border:1px solid var(--line);border-radius:999px;padding:5px 12px;font-size:.85rem;color:var(--gold)}
 .missions{display:grid;gap:14px}
+.missions.um{grid-template-columns:1fr !important}
 .mission{position:relative;display:grid;grid-template-columns:56px 1fr;gap:2px 14px;align-items:center;text-align:left;padding:16px;border-radius:20px;cursor:pointer;
   font:inherit;color:var(--txt);border:2px solid var(--opt-b);background:var(--opt);box-shadow:0 6px 0 var(--deep);transition:transform .1s}
 .mission:hover{transform:translateY(-3px)}
@@ -505,7 +506,7 @@ $("btn-continuar").onclick = async () => {
   SFX.click(); abreMissoes();
 };
 (function(){
-  const box=$("missions");
+  const box=$("missions"); if(GAME.missoes.length===1) box.classList.add("um");
   GAME.missoes.forEach(m=>{
     const b=document.createElement("button"); b.className="mission "+m.cls; b.type="button";
     b.innerHTML=(m.faixa?'<span class="ribbon">'+m.faixa+'</span>':'')+'<i></i><b></b><small></small>';
