@@ -1572,11 +1572,12 @@ async function postAttempt(p) {
     return await r.json();
   } finally { clearTimeout(t); }
 }
+let lastSync = 0;
 async function syncStatus() {
   if (!REAL || !S.aluno) return false;
   try {
     const r = await api({ acao: "status", matricula: S.aluno.mat });
-    if (r && r.ok) { S.srv[mat()] = r.fases || {}; save(); return true; }
+    if (r && r.ok) { S.srv[mat()] = r.fases || {}; lastSync = Date.now(); save(); return true; }
   } catch (e) { }
   return false;
 }
@@ -1761,7 +1762,7 @@ const barRow = (t, p) => `<div class="brow ${p < 60 ? "low" : ""}"><span class="
 async function startGame(fid) {
   if (!S.aluno) return;
   const b = $('[data-act="jogarfase"][data-v="' + fid + '"]'); if (b) { b.disabled = true; b.textContent = "Verificando…"; }
-  const online = await syncStatus();
+  const online = (Date.now() - lastSync < 90000) ? true : await syncStatus();
   if (REAL && !online) { toast("Sem conexão com o servidor de notas (ou servidor desatualizado). Conecte-se à internet e tente de novo."); shell(); return; }
   if (!restam(fid)) { toast("Você já usou as " + CFG.MAXT + " tentativas desta unidade."); shell(); return; }
   const f = FASE_BY[fid];
@@ -1938,7 +1939,7 @@ document.addEventListener("click", async e => {
     if (v === "prof") { if (REAL && !PIN) { askPin(); return; } role = "prof"; S.tab = "painel"; } else { role = "aluno"; S.tab = "estudar"; }
     shell();
   }
-  else if (a === "tab") { if (v !== "jogar" || (G && G.done)) { G = null; clearInterval(timerId); } S.tab = v; save(); shell(); }
+  else if (a === "tab") { if (v !== "jogar" || (G && G.done)) { G = null; clearInterval(timerId); } S.tab = v; save(); shell(); if (v === "jogar" && !G) syncStatus().then(ok => { if (ok && !G && S.tab === "jogar" && role === "aluno") shell(); }); }
   else if (a === "fase") { S.fase = v; save(); shell(); }
   else if (a === "model") { S.model[S.fase] = v; save(); shell(); }
   else if (a === "lab") act3d(+v);
