@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Painel do teste · Desafio Gene &amp; Embrio</title>
+<meta name="robots" content="noindex">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&family=Sora:wght@500;600;700&display=swap">
+<link rel="stylesheet" href="estilo.css">
+</head><body><div class="wrap">
+<header class="top"><div class="brand"><span class="mark">G&amp;E</span><div><b>Painel do professor · Teste de Genética</b><small>Pré e pós-teste, direto da planilha</small></div></div></header>
+<main id="app"></main></div>
+<script src="questoes.js"></script>
+<script>
+(function () {
+"use strict";
+const C = window.TESTE_CFG, T = window.TESTE, $ = s => document.querySelector(s), app = $("#app");
+const esc = s => String(s == null ? "" : s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+const f1 = n => Number(n).toLocaleString("pt-BR", { minimumFractionDigits: 1, maximumFractionDigits: 1 });
+const f0 = n => Number(n).toLocaleString("pt-BR", { maximumFractionDigits: 0 });
+const norm = x => String(x == null ? "" : x).trim().toLowerCase().replace(/\s+/g, "").replace(/^0+/, "");
+let PIN = ""; try { PIN = sessionStorage.getItem("sj_teste_pin") || ""; } catch (e) { }
+let rows = null, err = "", at = 0, loading = false, sort = "nome";
+
+async function load() {
+  loading = true; err = ""; draw();
+  try {
+    const ctl = new AbortController(), t = setTimeout(() => ctl.abort(), 25000);
+    const r = await (await fetch(C.URL + "?" + new URLSearchParams({ acao: "painel", pin: PIN }), { signal: ctl.signal })).json(); clearTimeout(t);
+    if (r && r.ok) { rows = r.rows || []; at = Date.now(); }
+    else if (r && r.err === "pin") { err = "PIN incorreto."; PIN = ""; try { sessionStorage.removeItem("sj_teste_pin"); } catch (e) { } }
+    else err = "O servidor não respondeu como esperado.";
+  } catch (e) { err = "Sem conexão com a planilha. Tente novamente."; }
+  loading = false; draw();
+}
+function dados() {
+  const por = {};
+  (rows || []).filter(r => r.fase === C.FASE_PRE || r.fase === C.FASE_POS).forEach(r => {
+    const k = norm(r.mat), m = r.fase === C.FASE_PRE ? "pre" : "pos";
+    const o = por[k] = por[k] || { mat: r.mat, nome: r.nome, pre: null, pos: null };
+    o.nome = r.nome;
+    const cur = o[m], ts = Date.parse(r.ts) || 0;
+    if (!cur || ts < cur.ts) o[m] = { ac: r.ac, ts, resp: String(r.det || "").split(",").map(x => x === "" ? -1 : +x) };
+  });
+  return Object.values(por).sort((a, b) => sort === "ra" ? String(a.mat).localeCompare(String(b.mat), "pt-BR", { numeric: true }) : a.nome.localeCompare(b.nome, "pt-BR"));
+}
+const med = a => a.length ? a.reduce((x, y) => x + y, 0) / a.length : null;
+function csv(list) {
+  const c = n => String(n).replace(".", ","), tx = x => { x = String(x).replace(/[;\r\n"]/g, " "); return /^[=+\-@]/.test(x) ? "'" + x : x; };
+  return "﻿" + ["aluno;ra;nota_pre;nota_pos;ganho"].concat(list.map(a => [tx(a.nome), tx(a.mat), a.pre ? c(a.pre.ac.toFixed(1)) : "", a.pos ? c(a.pos.ac.toFixed(1)) : "", (a.pre && a.pos) ? c((a.pos.ac - a.pre.ac).toFixed(1)) : ""].join(";"))).join("\r\n");
+}
+function draw() {
+  if (!PIN) { app.innerHTML = `<section class="hero"><h1>Área do professor</h1><p>Digite o PIN do professor para ver as notas do teste.</p></section><form id="pf" class="card stack" style="max-width:420px"><label class="fld"><span>PIN</span><input name="pin" type="password" required autocomplete="off" inputmode="numeric"></label><p class="err" role="alert">${esc(err)}</p><button class="btn" type="submit">Entrar</button></form>`;
+    $("#pf").addEventListener("submit", e => { e.preventDefault(); PIN = String(new FormData(e.target).get("pin")).trim(); try { sessionStorage.setItem("sj_teste_pin", PIN); } catch (x) { } load(); }); return; }
+  if (!rows) { app.innerHTML = `<section class="hero"><h1>Teste pré e pós</h1><p>${loading ? "Carregando dados da planilha…" : esc(err)}</p></section>${loading ? "" : '<button class="btn" data-a="atualizar">Tentar de novo</button>'}`; return; }
+  const list = dados(), pre = list.filter(a => a.pre).map(a => a.pre.ac), pos = list.filter(a => a.pos).map(a => a.pos.ac), amb = list.filter(a => a.pre && a.pos), gan = amb.map(a => a.pos.ac - a.pre.ac);
+  const nt = x => x == null ? "–" : f1(x);
+  const qa = T.map((_, i) => ["pre", "pos"].map(m => { const l = list.filter(a => a[m] && a[m].resp[i] !== undefined && a[m].resp[i] >= 0); return l.length ? l.filter(a => a[m].resp[i] === T[i].c).length / l.length * 100 : null; }));
+  app.innerHTML = `<section class="hero"><div class="row2"><h1>Teste pré e pós</h1><div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn sm" data-a="atualizar" ${loading ? "disabled" : ""}>${loading ? "Atualizando…" : "Atualizar"}</button>${list.length ? '<button class="btn sm" data-a="csv">Exportar CSV</button>' : ""}</div></div><p>Notas de 0 a 10, um ponto por acerto. Atualizado às ${new Date(at).toLocaleTimeString("pt-BR")}. A página se atualiza sozinha a cada 30 segundos.</p>${err ? `<p class="err">${esc(err)}</p>` : ""}</section>
+  <div class="card" style="margin-top:10px"><span class="eyebrow">Palavra para liberar o pós-teste</span><p style="margin:4px 0 0"><b style="font-size:1.3rem;letter-spacing:.08em">${esc(C.SENHA_POS)}</b> <span class="note">Informe à turma só depois da aula.</span></p></div>
+  <div class="stack">${list.length ? `<div class="kpis"><div class="kpi"><small>Alunos</small><b>${list.length}</b><span>${amb.length} com pré e pós</span></div><div class="kpi"><small>Média do pré</small><b>${nt(med(pre))}</b><span>${pre.length} alunos</span></div><div class="kpi"><small>Média do pós</small><b>${nt(med(pos))}</b><span>${pos.length} alunos</span></div><div class="kpi"><small>Ganho médio</small><b>${gan.length ? (med(gan) > 0 ? "+" : "") + f1(med(gan)) : "–"}</b><span>só quem fez os dois</span></div></div>
+  <div class="card"><div class="row2"><h2 style="font-size:1.05rem">Alunos</h2><div class="note">Ordenar: <button class="btn ghost sm" data-a="ord" data-k="nome">Nome</button> <button class="btn ghost sm" data-a="ord" data-k="ra">RA</button></div></div><div class="tw"><table><thead><tr><th>Aluno</th><th>RA</th><th>Pré</th><th>Pós</th><th>Ganho</th></tr></thead><tbody>${list.map(a => `<tr><td>${esc(a.nome)}</td><td>${esc(a.mat)}</td><td>${a.pre ? f1(a.pre.ac) : "–"}</td><td>${a.pos ? f1(a.pos.ac) : "–"}</td><td><b>${(a.pre && a.pos) ? ((a.pos.ac - a.pre.ac) > 0 ? "+" : "") + f1(a.pos.ac - a.pre.ac) : "–"}</b></td></tr>`).join("")}</tbody></table></div></div>
+  <div class="card"><h2 style="font-size:1.05rem">Acerto por questão</h2><div class="tw"><table><thead><tr><th>Questão</th><th>Pré</th><th>Pós</th></tr></thead><tbody>${T.map((t, i) => `<tr><td class="q">${i + 1}. ${esc(t.q)}</td><td>${qa[i][0] == null ? "–" : f0(qa[i][0]) + "%"}</td><td>${qa[i][1] == null ? "–" : f0(qa[i][1]) + "%"}</td></tr>`).join("")}</tbody></table></div></div>` : `<div class="card"><p class="note" style="margin:0">Nenhum aluno fez o teste ainda.</p></div>`}</div>`;
+}
+document.addEventListener("click", e => {
+  const b = e.target.closest("[data-a]"); if (!b) return; const a = b.dataset.a;
+  if (a === "atualizar") load();
+  else if (a === "ord") { sort = b.dataset.k; draw(); }
+  else if (a === "csv") { const blob = new Blob([csv(dados())], { type: "text/csv;charset=utf-8" }), u = URL.createObjectURL(blob), l = document.createElement("a"); l.href = u; l.download = "teste_pre_pos.csv"; document.body.appendChild(l); l.click(); l.remove(); setTimeout(() => URL.revokeObjectURL(u), 2000); }
+});
+setInterval(() => { if (PIN && rows && document.visibilityState === "visible" && !loading) load(); }, 30000);
+draw(); if (PIN) load();
+})();
+</script></body></html>

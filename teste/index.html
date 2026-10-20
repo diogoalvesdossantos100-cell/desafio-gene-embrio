@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Teste de Genética · Desafio Gene &amp; Embrio</title>
+<meta name="robots" content="noindex">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&family=Sora:wght@500;600;700&display=swap">
+<link rel="stylesheet" href="estilo.css">
+</head><body><div class="wrap">
+<header class="top"><div class="brand"><span class="mark">G&amp;E</span><div><b>Teste de Genética</b><small>Fisioterapia · AlfaUnipac · Embriologia e Genética</small></div></div></header>
+<main id="app"></main></div>
+<script src="questoes.js"></script>
+<script>
+(function () {
+"use strict";
+const C = window.TESTE_CFG, T = window.TESTE, $ = s => document.querySelector(s), app = $("#app");
+const esc = s => String(s == null ? "" : s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+const f1 = n => Number(n).toLocaleString("pt-BR", { minimumFractionDigits: 1, maximumFractionDigits: 1 });
+const norm = x => String(x == null ? "" : x).trim().toLowerCase().replace(/\s+/g, "").replace(/^0+/, "");
+const KEY = "sj_teste_gen_v1";
+let S; try { S = JSON.parse(localStorage.getItem(KEY)) || null; } catch (e) { S = null; }
+if (!S || typeof S !== "object") S = {};
+S.done = S.done || {}; S.pend = S.pend || [];
+function save() { try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) { } }
+let TT = null, msg = "", busy = false;
+const faseDe = m => m === "pre" ? C.FASE_PRE : C.FASE_POS;
+const dk = m => norm(S.aluno.mat) + "|" + m;
+
+async function api(params, ms) {
+  const ctl = new AbortController(), t = setTimeout(() => ctl.abort(), ms || 10000);
+  try { const r = await fetch(C.URL + "?" + new URLSearchParams(params).toString(), { signal: ctl.signal }); return await r.json(); } finally { clearTimeout(t); }
+}
+async function post(p) {
+  const ctl = new AbortController(), t = setTimeout(() => ctl.abort(), 20000);
+  try { const r = await fetch(C.URL, { method: "POST", headers: { "Content-Type": "text/plain;charset=utf-8" }, body: JSON.stringify(p), signal: ctl.signal }); return await r.json(); } finally { clearTimeout(t); }
+}
+async function flush() {
+  if (busy || !S.pend.length) return; busy = true;
+  try {
+    for (const p of S.pend.slice()) {
+      let r; try { r = await post(p); } catch (e) { break; }
+      if (r && (r.ok || r.err === "limite")) { S.pend = S.pend.filter(x => x.uid !== p.uid); const d = S.done[norm(p.matricula) + "|" + (p.fase === C.FASE_PRE ? "pre" : "pos")]; if (d) d.sent = true; } else break;
+    }
+  } finally { busy = false; save(); if (S.aluno && !TT) render(); }
+}
+setInterval(flush, 20000); window.addEventListener("online", flush);
+
+async function syncServer() {
+  if (!S.aluno) return;
+  try {
+    const r = await api({ acao: "status", matricula: S.aluno.mat });
+    if (r && r.ok && r.fases) ["pre", "pos"].forEach(m => { const f = r.fases[faseDe(m)]; if (f && f.tent > 0 && !S.done[dk(m)]) S.done[dk(m)] = { ac: f.melhor, ts: Date.now(), sent: true, srv: true }; });
+    save();
+  } catch (e) { }
+}
+
+function login() {
+  app.innerHTML = `<section class="hero"><h1>Entrar</h1><p>Informe seu RA (registro acadêmico) e seu nome completo. É assim que sua nota chega ao professor.</p></section>
+  <form id="lf" class="card stack" style="max-width:480px" autocomplete="on" novalidate>
+    <label class="fld"><span>Nome completo</span><input name="nome" required maxlength="80" autocomplete="name"></label>
+    <label class="fld"><span>RA (registro acadêmico)</span><input name="mat" required maxlength="20" autocomplete="off"></label>
+    <p class="err" id="lgerr" role="alert"></p>
+    <button class="btn" type="submit">Entrar</button>
+  </form>`;
+  $("#lf").addEventListener("submit", async e => {
+    e.preventDefault(); const fd = new FormData(e.target), err = $("#lgerr");
+    const nome = String(fd.get("nome")).trim().replace(/\s+/g, " "), mat = String(fd.get("mat")).trim().replace(/\s+/g, "");
+    if (nome.split(" ").length < 2) { err.textContent = "Digite nome e sobrenome."; return; }
+    if (!/^[A-Za-z0-9.\-]{3,20}$/.test(mat)) { err.textContent = "RA: de 3 a 20 letras ou números, sem espaços."; return; }
+    if (S.aluno && norm(S.aluno.mat) !== norm(mat)) { S.unl = false; }
+    S.aluno = { nome, mat }; save(); err.textContent = "Entrando…"; await syncServer(); render();
+  });
+}
+function render() {
+  if (!S.aluno) return login();
+  if (TT) return questao();
+  const card = (m, tit, desc) => {
+    const d = S.done[dk(m)]; let body;
+    if (d) body = `<span class="tag ${d.sent ? "ok" : "warn"}">${d.sent ? "Concluído e enviado" : "Concluído, enviando…"}</span> <b style="font-size:1.1rem;margin-left:6px">${d.ac} de ${T.length}</b> <span class="note">(nota ${f1(d.ac)})</span>${d.sent ? "" : `<div style="margin-top:8px"><button class="btn sm" data-a="reenviar">Tentar enviar agora</button></div>`}`;
+    else if (m === "pos" && !S.unl) body = `<p class="note" style="margin:0 0 8px">Libere com a palavra que o professor informar depois da aula.</p><div class="row2"><input id="sn" class="fld" style="background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:10px;flex:1;min-width:150px;min-height:44px" autocomplete="off" aria-label="Palavra do pós-teste"><button class="btn sm" data-a="lib">Liberar</button></div><p class="err" id="sm" role="alert" style="margin-top:6px"></p>`;
+    else body = `<button class="btn" data-a="ini" data-m="${m}">Começar ${tit.toLowerCase()}</button>`;
+    return `<div class="card"><span class="eyebrow">${tit}</span><p class="note" style="margin:4px 0 10px">${desc}</p>${body}</div>`;
+  };
+  app.innerHTML = `<section class="hero"><h1>Olá, ${esc(S.aluno.nome.split(" ")[0])}</h1><p>${T.length} questões de múltipla escolha, uma tentativa em cada momento. O app não mostra o gabarito. Responda sem consultar.</p></section>
+  <div class="stack">${card("pre", "Pré-teste", "Antes da aula.")}${card("pos", "Pós-teste", "Depois da aula, o mesmo teste.")}
+  <div class="row2"><span class="note">${esc(S.aluno.nome)} · RA ${esc(S.aluno.mat)}</span><button class="btn ghost sm" data-a="sair">Sair</button></div>
+  <p class="note" role="status">${esc(msg)}</p></div>`;
+}
+function questao() {
+  const q = T[TT.i], n = T.length, sel = TT.r[TT.i];
+  app.innerHTML = `<section class="hero"><span class="eyebrow">${TT.m === "pre" ? "Pré-teste" : "Pós-teste"} · questão ${TT.i + 1} de ${n}</span><div class="prog"><i style="width:${TT.i / n * 100}%"></i></div><h1 style="font-size:1.2rem;margin-top:8px">${esc(q.q)}</h1></section>
+  <div class="opts">${q.o.map((o, k) => `<button class="opt ${sel === k ? "sel" : ""}" data-a="resp" data-k="${k}"><span class="l">${"ABCD"[k]}</span><span>${esc(o)}</span></button>`).join("")}</div>
+  <div class="row2" style="margin-top:14px"><span class="note">Escolha uma alternativa.</span><button class="btn" data-a="prox" ${sel === undefined ? "disabled" : ""}>${TT.i === n - 1 ? "Finalizar" : "Próxima"}</button></div>`;
+}
+function finalizar() {
+  let ac = 0; TT.r.forEach((r, i) => { if (r === T[i].c) ac++; });
+  const m = TT.m, p = { tipo: "mvp", matricula: S.aluno.mat, nome: S.aluno.nome, turma: "", fase: faseDe(m), acertos: ac, total: T.length, seg: Math.round((Date.now() - TT.t0) / 1000), pontos: ac * 10, det: TT.r.join(","), uso: 0, uid: "t" + Date.now().toString(36) + Math.random().toString(36).slice(2, 7), ts: Date.now() };
+  S.done[dk(m)] = { ac, ts: p.ts, sent: false }; S.pend.push(p); TT = null; save(); msg = ""; render(); window.scrollTo(0, 0); flush();
+}
+document.addEventListener("click", async e => {
+  const b = e.target.closest("[data-a]"); if (!b) return; const a = b.dataset.a;
+  if (a === "ini") {
+    const m = b.dataset.m; b.disabled = true; msg = "Verificando…"; render(); await syncServer();
+    if (S.done[dk(m)]) { msg = "Este momento já foi realizado."; render(); return; }
+    msg = ""; TT = { m, i: 0, r: [], t0: Date.now() }; render(); window.scrollTo(0, 0);
+  }
+  else if (a === "resp") { TT.r[TT.i] = +b.dataset.k; questao(); }
+  else if (a === "prox") { if (TT.r[TT.i] === undefined) return; if (TT.i === T.length - 1) finalizar(); else { TT.i++; questao(); window.scrollTo(0, 0); } }
+  else if (a === "lib") { const x = (($("#sn") || {}).value || "").trim().toUpperCase().replace(/\s+/g, ""); if (x === C.SENHA_POS) { S.unl = true; save(); render(); } else $("#sm").textContent = "Palavra incorreta."; }
+  else if (a === "reenviar") { msg = "Enviando…"; render(); await flush(); msg = (S.pend.length ? "Sem conexão. Tente de novo." : "Enviado."); render(); }
+  else if (a === "sair") { S.aluno = null; save(); TT = null; render(); }
+});
+render(); if (S.aluno) { syncServer().then(() => { if (!TT) render(); }); flush(); }
+})();
+</script></body></html>
