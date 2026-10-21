@@ -21,7 +21,7 @@ with sync_playwright() as p:
         return pg
     pg = novo(); pg.goto("file://%s/portal/index.html" % R); pg.wait_for_timeout(500)
     pg.fill('#fa input[name=nome]', "Maria da Silva"); pg.fill('#fa input[name=ra]', "12345"); pg.click('#fa button[type=submit]'); pg.wait_for_timeout(500)
-    assert pg.locator(".dcard").count() == 2, "cards de disciplina"
+    assert pg.locator(".dcard").count() == 4, "cards de disciplina"
     for d, n in (("gen", 2), ("emb", 2)):
         pg.click(".dcard.%s" % d); pg.wait_for_timeout(300)
         assert pg.locator("#al article").count() >= n, "aulas de " + d
