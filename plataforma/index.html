@@ -1547,6 +1547,11 @@ let persist = true;
 function fresh() { return { aluno: null, tab: "estudar", fase: "emb1", model: {}, uso: 0, tent: {}, pend: [], srv: {} }; }
 function load() { try { const raw = localStorage.getItem(KEY); if (raw) return Object.assign(fresh(), JSON.parse(raw)); } catch (e) { persist = false; } return fresh(); }
 let S = load();
+const FOCO = (() => { try { const f = new URLSearchParams(location.search).get("fase"); return /^(emb|gen)\d$/.test(f || "") ? f : ""; } catch (e) { return ""; } })();
+if (FOCO) { S.fase = FOCO; }
+const FASES_V = () => FOCO ? FASES.filter(x => x.id === FOCO) : FASES;
+const DISCS_V = () => FOCO ? DISCS.filter(d => d[0] === FOCO.slice(0, 3)) : DISCS;
+const AULA_N = () => FOCO ? "Aula 0" + FOCO.slice(3) : "";
 function save() { try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) { persist = false; } }
 try { localStorage.setItem(KEY + "_t", "1"); localStorage.removeItem(KEY + "_t"); } catch (e) { persist = false; }
 let role = "aluno"; // aluno | prof
@@ -1673,7 +1678,7 @@ function shell() {
   if (role === "prof" && S.tab === "jogar") S.tab = "painel";
   const tabs = [["estudar", "Estudar"]]; if (role === "aluno") tabs.push(["jogar", "Jogar"]); else tabs.push(["painel", "Painel"]);
   app.innerHTML = `
-  <header class="top"><div class="wrap row">
+  <header class="top"><div class="wrap row">${FOCO ? '<a href="../portal/" style="color:inherit;text-decoration:none;font-weight:600;font-size:.9rem;opacity:.85;margin-right:10px">← Portal</a>' : ''}
     <div class="brand"><span class="mark">G&amp;E</span><div><b>Desafio Gene &amp; Embrio</b><small>${S.aluno && role === "aluno" ? esc(S.aluno.nome.split(" ")[0]) + " · " : ""}Fisioterapia · AlfaUnipac</small></div></div>
     <div class="seg" role="group" aria-label="Perfil"><button data-act="perfil" data-v="aluno" aria-pressed="${role === "aluno"}">Aluno</button><button data-act="perfil" data-v="prof" aria-pressed="${role === "prof"}">Professor</button></div>
   </div></header>
@@ -1710,11 +1715,11 @@ function viewLogin(v) {
 
 /* ---------- ESTUDAR ---------- */
 function viewEstudar(v) {
-  const f = FASE_BY[S.fase] || FASES[0];
+  const f = FASE_BY[FOCO || S.fase] || FASES[0];
   const mk = S.model[f.id] && f.models.some(m => m[0] === S.model[f.id]) ? S.model[f.id] : f.models[0][0];
   v.innerHTML = `
-  <section class="hero"><h1>Estudar</h1><p>Uma unidade por vez, na ordem das apostilas. Cada unidade tem um resumo curto e modelos 3D para girar, dar zoom e tocar nos números.</p></section>
-  ${DISCS.map(([dk, dn]) => `<div class="eyebrow" style="margin-top:12px">${dn}</div><div class="tabs" role="group" aria-label="${dn}">${FASES.filter(x => x.dk === dk).map(x => `<button class="chip" style="--c:${x.cor}" data-act="fase" data-v="${x.id}" aria-pressed="${x.id === f.id}">Unidade ${esc(x.u)}</button>`).join("")}</div>`).join("")}
+  <section class="hero"><h1>${FOCO ? "Laboratório · " + AULA_N() : "Estudar"}</h1><p>${FOCO ? "Só o que é desta aula: resumo curto e modelos 3D para girar, dar zoom e tocar nos números." : "Uma unidade por vez, na ordem das apostilas. Cada unidade tem um resumo curto e modelos 3D para girar, dar zoom e tocar nos números."}</p></section>
+  ${FOCO ? "" : DISCS.map(([dk, dn]) => `<div class="eyebrow" style="margin-top:12px">${dn}</div><div class="tabs" role="group" aria-label="${dn}">${FASES.filter(x => x.dk === dk).map(x => `<button class="chip" style="--c:${x.cor}" data-act="fase" data-v="${x.id}" aria-pressed="${x.id === f.id}">Unidade ${esc(x.u)}</button>`).join("")}</div>`).join("")}
   <div class="stack" style="margin-top:6px">
     <div class="card"><span class="eyebrow">Modelo 3D</span>
       <div class="tabs" style="padding-top:8px" role="group" aria-label="Modelos">${f.models.map(([k, l]) => `<button class="chip" data-act="model" data-v="${k}" aria-pressed="${mk === k}">${esc(l)}</button>`).join("")}</div>
@@ -1734,8 +1739,8 @@ function viewJogar(v) {
   v.innerHTML = `
   <section class="hero"><h1>Jogar</h1><p>Cada unidade tem um banco de questões. Em cada tentativa saem ${NQ} sorteadas, com ${CFG.LIM} segundos por questão (${CFG.LIM_CASO} nos casos clínicos). Você tem ${CFG.MAXT} tentativas por unidade e vale a maior nota.</p></section>
   ${REAL ? "" : '<div class="banner" style="margin-block:10px"><b>Versão de demonstração.</b> As notas ficam só neste aparelho e não vão para o professor.</div>'}
-  ${DISCS.map(([dk, dn]) => `<div class="eyebrow" style="margin:16px 0 8px">${dn} · nota ${f1(notaDisc(eu.fases, dk))} · ${nFeitas(eu.fases, dk)} de 6 unidades</div>
-  <div class="fases">${FASES.filter(f => f.dk === dk).map(f => {
+  ${DISCS_V().map(([dk, dn]) => `<div class="eyebrow" style="margin:16px 0 8px">${FOCO ? AULA_N() + " · " + dn : dn + " · nota " + f1(notaDisc(eu.fases, dk)) + " · " + nFeitas(eu.fases, dk) + " de 6 unidades"}</div>
+  <div class="fases">${FASES_V().filter(f => f.dk === dk).map(f => {
     const b = best(f.id), nt = tentCount(f.id), rest = restam(f.id);
     return `<div class="card fase" style="--c:${f.cor}"><span class="n">UNIDADE ${esc(f.u)}</span><h3>${esc(f.titulo)}</h3>
       <div class="m">${f.q.length} questões no banco · ${f.q.filter(q => q.d === 3).length} casos clínicos · ${nt} de ${CFG.MAXT} tentativas usadas</div>

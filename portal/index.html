@@ -97,8 +97,8 @@ const D={
  gen:{nome:"Genética",tag:"Disciplina",cor:"#8e6bd8",desc:"DNA, cromossomos, divisão celular, heranças e mutações.",aulas:[
   {n:"01",tema:"Revisão de Genética",ds:"O que você precisa dominar antes de começar: DNA, cromossomos, divisão celular, heranças e mutações.",pdf:"../aulas/AULA_01_GENETICA.pdf",nomePdf:"AULA_01_GENETICA.pdf",lab:"../laboratorio/",labT:"Laboratório (2D e 3D)",extra:[["Teste de Genética","../teste/"]]}]},
  emb:{nome:"Embriologia",tag:"Disciplina",cor:"#ff5fa2",desc:"Do ciclo menstrual ao bebê protegido.",aulas:[
-  {n:"01",tema:"Aparelho reprodutor e ciclo menstrual",ds:"Como o corpo se prepara para gerar uma nova vida.",pdf:"../aulas/AULA_01_EMBRIOLOGIA.pdf",nomePdf:"AULA_01_EMBRIOLOGIA.pdf",lab:"../plataforma/",labT:"Laboratório (3D e jogo)"},
-  {n:"02",tema:"Fecundação, implantação, anexos e placenta",ds:"Do encontro dos gametas ao bebê protegido.",pdf:"../aulas/AULA_02_EMBRIOLOGIA.pdf",nomePdf:"AULA_02_EMBRIOLOGIA.pdf",lab:"../plataforma/",labT:"Laboratório (3D e jogo)"}]}};
+  {n:"01",tema:"Aparelho reprodutor e ciclo menstrual",ds:"Como o corpo se prepara para gerar uma nova vida.",pdf:"../aulas/AULA_01_EMBRIOLOGIA.pdf",nomePdf:"AULA_01_EMBRIOLOGIA.pdf",lab:"../plataforma/?fase=emb1",labT:"Laboratório (3D e jogo)"},
+  {n:"02",tema:"Fecundação, implantação, anexos e placenta",ds:"Do encontro dos gametas ao bebê protegido.",pdf:"../aulas/AULA_02_EMBRIOLOGIA.pdf",nomePdf:"AULA_02_EMBRIOLOGIA.pdf",lab:"../plataforma/?fase=emb2",labT:"Laboratório (3D e jogo)"}]}};
 const ses=()=>{try{return JSON.parse(localStorage.getItem("sj_portal_v1")||"null")}catch(e){return null}};
 let S=ses(),isProf=false;try{isProf=sessionStorage.getItem("sj_portal_prof")==="1"}catch(e){}
 function nk(n){n=String(n).normalize("NFD").replace(/[̀-ͯ]/g,"").toLowerCase().replace(/[^a-z]/g,"");let h=5381;for(const c of n)h=((h*33)^c.charCodeAt(0))>>>0;return h.toString(36)}
