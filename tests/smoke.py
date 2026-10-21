@@ -27,10 +27,14 @@ with sync_playwright() as p:
         assert pg.locator("#al article").count() >= n, "aulas de " + d
         pg.click("#disc .btn.ghost, #disc button", timeout=2000) if False else None
         pg.goto("file://%s/portal/index.html" % R); pg.wait_for_timeout(400)
-    for u in ("laboratorio/", "laboratorio-aula2/", "dna3d/", "plataforma/?fase=emb1", "plataforma/?fase=emb2&modo=jogo", "plataforma/?fase=gen1", "teste/"):
+    for u in ("laboratorio/", "laboratorio-aula2/", "laboratorio-aula3/", "laboratorio-aula4/", "laboratorio-emb3/", "dna3d/", "plataforma/?fase=emb1", "plataforma/?fase=emb2&modo=jogo", "plataforma/?fase=gen1", "plataforma/?fase=gen2&modo=jogo", "plataforma/?fase=gen3", "plataforma/?fase=emb3", "teste/"):
         q = novo()
-        q.add_init_script("localStorage.setItem('sj_portal_v1',JSON.stringify({role:'aluno',nome:'Maria da Silva',ra:'12345'}))")
+        q.add_init_script("sessionStorage.setItem('sj_portal_prof','1');localStorage.setItem('sj_portal_v1',JSON.stringify({role:'aluno',nome:'Maria da Silva',ra:'12345'}))")
         q.goto("file://%s/%s" % (R, u + ("index.html" if u.endswith("/") else ""))) if u.endswith("/") else q.goto("file://%s/%s" % (R, u.replace("plataforma/", "plataforma/index.html")))
         q.wait_for_timeout(800); assert len(q.inner_text("body")) > 40, "página vazia: " + u; q.close()
+    # aluno antes da hora: páginas travadas
+    for u in ("laboratorio-aula3/index.html", "plataforma/index.html?fase=emb3"):
+        q = novo(); q.goto("file://%s/%s" % (R, u)); q.wait_for_timeout(900)
+        assert "abre em" in q.inner_text("body"), "deveria estar travada: " + u; q.close()
 assert not errs, "erros de JavaScript: %s" % errs
 print("OK: links, portal, laboratórios, plataforma e teste")
