@@ -33,8 +33,8 @@ async function load() {
 function dados() {
   const por = {};
   (rows || []).filter(r => r.fase === C.FASE_PRE || r.fase === C.FASE_POS).forEach(r => {
-    const k = norm(r.mat), m = r.fase === C.FASE_PRE ? "pre" : "pos";
-    const o = por[k] = por[k] || { mat: r.mat, nome: r.nome, pre: null, pos: null };
+    const ra = String(r.mat).split("~")[0], k = norm(ra) + "|" + String(r.nome).normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().replace(/[^a-z]/g, ""), m = r.fase === C.FASE_PRE ? "pre" : "pos";
+    const o = por[k] = por[k] || { mat: ra, nome: r.nome, pre: null, pos: null };
     o.nome = r.nome;
     const cur = o[m], ts = Date.parse(r.ts) || 0;
     if (!cur || ts < cur.ts) o[m] = { ac: r.ac, ts, resp: String(r.det || "").split(",").map(x => x === "" ? -1 : +x) };

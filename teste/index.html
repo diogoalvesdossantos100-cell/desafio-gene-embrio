@@ -15,14 +15,16 @@ const C = window.TESTE_CFG, T = window.TESTE, $ = s => document.querySelector(s)
 const esc = s => String(s == null ? "" : s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
 const f1 = n => Number(n).toLocaleString("pt-BR", { minimumFractionDigits: 1, maximumFractionDigits: 1 });
 const norm = x => String(x == null ? "" : x).trim().toLowerCase().replace(/\s+/g, "").replace(/^0+/, "");
-const KEY = "sj_teste_gen_v1";
+const KEY = "sj_teste_gen_v2";
+const nk = n => { n = String(n).normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().replace(/[^a-z]/g, ""); let h = 5381; for (const c of n) h = ((h * 33) ^ c.charCodeAt(0)) >>> 0; return h.toString(36); };
+const keyOf = (nome, mat) => mat + "~" + nk(nome);
 let S; try { S = JSON.parse(localStorage.getItem(KEY)) || null; } catch (e) { S = null; }
 if (!S || typeof S !== "object") S = {};
 S.done = S.done || {}; S.pend = S.pend || [];
 function save() { try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) { } }
 let TT = null, msg = "", busy = false;
 const faseDe = m => m === "pre" ? C.FASE_PRE : C.FASE_POS;
-const dk = m => norm(S.aluno.mat) + "|" + m;
+const dk = m => norm(S.aluno.key) + "|" + m;
 
 async function api(params, ms) {
   const ctl = new AbortController(), t = setTimeout(() => ctl.abort(), ms || 10000);
@@ -37,7 +39,7 @@ async function flush() {
   try {
     for (const p of S.pend.slice()) {
       let r; try { r = await post(p); } catch (e) { break; }
-      if (r && r.err === "limite") { S.pend = S.pend.filter(x => x.uid !== p.uid); delete S.done[norm(p.matricula) + "|" + (p.fase === C.FASE_PRE ? "pre" : "pos")]; S.warn = "Seu resultado NÃO foi salvo: o RA " + p.matricula + " já foi usado por outro aluno. Toque em Sair, entre com o seu RA verdadeiro e refaça o teste."; }
+      if (r && r.err === "limite") { S.pend = S.pend.filter(x => x.uid !== p.uid); delete S.done[norm(p.matricula) + "|" + (p.fase === C.FASE_PRE ? "pre" : "pos")]; S.warn = "Seu resultado NÃO foi salvo (limite de tentativas). Avise o professor."; }
       else if (r && r.ok) { S.pend = S.pend.filter(x => x.uid !== p.uid); const d = S.done[norm(p.matricula) + "|" + (p.fase === C.FASE_PRE ? "pre" : "pos")]; if (d) d.sent = true; } else break;
     }
   } finally { busy = false; save(); if (S.aluno && !TT) render(); }
@@ -47,7 +49,7 @@ setInterval(flush, 20000); window.addEventListener("online", flush);
 async function syncServer() {
   if (!S.aluno) return;
   try {
-    const r = await api({ acao: "status", matricula: S.aluno.mat });
+    const r = await api({ acao: "status", matricula: S.aluno.key });
     if (r && r.ok && r.fases) ["pre", "pos"].forEach(m => { const f = r.fases[faseDe(m)]; if (f && f.tent > 0 && !S.done[dk(m)]) S.done[dk(m)] = { ac: f.melhor, ts: Date.now(), sent: true, srv: true };
       else if ((!f || !(f.tent > 0)) && S.done[dk(m)] && S.done[dk(m)].sent && !S.pend.some(x => x.fase === faseDe(m))) delete S.done[dk(m)]; /* professor apagou o registro na planilha: libera de novo */ });
     save();
@@ -67,9 +69,8 @@ function login() {
     const nome = String(fd.get("nome")).trim().replace(/\s+/g, " "), mat = String(fd.get("mat")).trim().replace(/\s+/g, "");
     if (nome.split(" ").length < 2) { err.textContent = "Digite nome e sobrenome."; return; }
     if (!/^[A-Za-z0-9.\-]{3,20}$/.test(mat)) { err.textContent = "RA: de 3 a 20 letras ou números, sem espaços."; return; }
-    if (/^\d+$/.test(mat) && (mat.length < 6 || /^(\d)\1+$/.test(mat) || "01234567890123456789".includes(mat) || "98765432109876543210".includes(mat))) { err.textContent = "Digite o seu RA verdadeiro (o número da sua matrícula). Números inventados como 123 ou 12345 não valem."; return; }
-    if (S.aluno && norm(S.aluno.mat) !== norm(mat)) { S.unl = false; }
-    S.aluno = { nome, mat }; save(); err.textContent = "Entrando…"; await syncServer(); render();
+    if (S.aluno && norm(S.aluno.key) !== norm(keyOf(nome, mat))) { S.unl = false; }
+    S.aluno = { nome, mat, key: keyOf(nome, mat) }; save(); err.textContent = "Entrando…"; await syncServer(); render();
   });
 }
 function render() {
@@ -95,7 +96,7 @@ function questao() {
 }
 function finalizar() {
   let ac = 0; TT.r.forEach((r, i) => { if (r === T[i].c) ac++; });
-  const m = TT.m, p = { tipo: "mvp", matricula: S.aluno.mat, nome: S.aluno.nome, turma: "", fase: faseDe(m), acertos: ac, total: T.length, seg: Math.round((Date.now() - TT.t0) / 1000), pontos: ac * 10, det: TT.r.join(","), uso: 0, uid: "t" + Date.now().toString(36) + Math.random().toString(36).slice(2, 7), ts: Date.now() };
+  const m = TT.m, p = { tipo: "mvp", matricula: S.aluno.key, nome: S.aluno.nome, turma: "", fase: faseDe(m), acertos: ac, total: T.length, seg: Math.round((Date.now() - TT.t0) / 1000), pontos: ac * 10, det: TT.r.join(","), uso: 0, uid: "t" + Date.now().toString(36) + Math.random().toString(36).slice(2, 7), ts: Date.now() };
   S.done[dk(m)] = { ac, ts: p.ts, sent: false }; S.pend.push(p); TT = null; save(); msg = ""; render(); window.scrollTo(0, 0); flush();
 }
 document.addEventListener("click", async e => {
