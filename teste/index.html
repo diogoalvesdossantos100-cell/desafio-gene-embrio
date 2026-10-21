@@ -47,7 +47,8 @@ async function syncServer() {
   if (!S.aluno) return;
   try {
     const r = await api({ acao: "status", matricula: S.aluno.mat });
-    if (r && r.ok && r.fases) ["pre", "pos"].forEach(m => { const f = r.fases[faseDe(m)]; if (f && f.tent > 0 && !S.done[dk(m)]) S.done[dk(m)] = { ac: f.melhor, ts: Date.now(), sent: true, srv: true }; });
+    if (r && r.ok && r.fases) ["pre", "pos"].forEach(m => { const f = r.fases[faseDe(m)]; if (f && f.tent > 0 && !S.done[dk(m)]) S.done[dk(m)] = { ac: f.melhor, ts: Date.now(), sent: true, srv: true };
+      else if ((!f || !(f.tent > 0)) && S.done[dk(m)] && S.done[dk(m)].sent && !S.pend.some(x => x.fase === faseDe(m))) delete S.done[dk(m)]; /* professor apagou o registro na planilha: libera de novo */ });
     save();
   } catch (e) { }
 }
