@@ -67,7 +67,7 @@ h1 .b{background:linear-gradient(100deg,var(--pk),var(--p2));-webkit-background-
    <form class="card" id="fa" autocomplete="on" novalidate><span class="tag">Sou aluno</span><h2>Entrar na turma</h2><p>Use seu nome completo e o RA.</p>
     <label class="fld"><span>Nome completo</span><input name="nome" maxlength="80" autocomplete="name" required></label>
     <label class="fld"><span>RA</span><input name="ra" maxlength="20" inputmode="text" autocomplete="off" required></label>
-    <button class="btn" type="submit" style="width:100%">Entrar como aluno</button><p class="err" id="ea" role="alert"></p></form>
+    <button class="btn" type="submit" style="width:100%">Entrar como aluno</button><p class="err" id="ea" role="alert"></p><p style="font-size:.78rem;color:var(--mut);margin:10px 0 0;line-height:1.4">Usamos seu nome e RA só para registrar seu estudo e suas notas nesta disciplina, e eles ficam visíveis apenas ao professor. Ao entrar, você concorda com esse uso (LGPD).</p></form>
    <form class="card" id="fp" autocomplete="off" novalidate><span class="tag" style="color:var(--y)">Sou professor</span><h2>Área do professor</h2><p>Digite o PIN do painel.</p>
     <label class="fld"><span>PIN</span><input name="pin" type="password" inputmode="numeric" maxlength="20" autocomplete="off" required></label>
     <button class="btn ghost" type="submit" style="width:100%;margin-top:4px">Entrar como professor</button><p class="err" id="ep" role="alert"></p></form>
@@ -106,6 +106,8 @@ function nk(n){n=String(n).normalize("NFD").replace(/[̀-ͯ]/g,"").toLowerCase()
 function prefill(nome,ra){try{const K="sj_teste_gen_v2";let T=JSON.parse(localStorage.getItem(K)||"null")||{},key=ra+"~"+nk(nome);
   if(!T.aluno||T.aluno.key!==key){T.aluno={nome,mat:ra,key};T.unl=false;T.done=T.done||{};T.pend=T.pend||[];localStorage.setItem(K,JSON.stringify(T))}
   const Dn="sj_dna3d_v1";let d={};try{d=JSON.parse(localStorage.getItem(Dn)||"{}")}catch(e){}if(d.n!==nome||d.r!==ra)localStorage.setItem(Dn,JSON.stringify({n:nome,r:ra,sent:false}))}catch(e){}}
+const VER="20261021b";const USO_ON=false;const vv=u=>u+(u.includes("?")?"&":"?")+"v="+VER;
+function uso(ev,aula){if(!USO_ON||!S||isProf)return;try{navigator.sendBeacon(API,new Blob([JSON.stringify({tipo:"uso",ev,aula,matricula:S.ra,nome:S.nome,ts:Date.now()})],{type:"text/plain;charset=utf-8"}))}catch(e){}}
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 function view(v){["landing","home","disc"].forEach(k=>$("#"+k).hidden=k!==v);$("#who").hidden=v==="landing";scrollTo(0,0)}
 function enter(){const first=(S.nome||"Professor").split(" ")[0];$("#gt").textContent=isProf?"Olá, professor.":"Olá, "+first+".";$("#whoT").textContent=isProf?"Professor":S.nome;$("#prof").hidden=!isProf;view("home")}
@@ -118,7 +120,7 @@ $("#fp").addEventListener("submit",async e=>{e.preventDefault();const pin=String
   else er.textContent=j&&j.err==="pin"?"PIN incorreto.":"Não consegui validar agora. Tente de novo."}catch(x){er.textContent="Sem resposta do servidor. Verifique a internet."}});
 $("#sair").onclick=()=>{try{localStorage.removeItem("sj_portal_v1");sessionStorage.removeItem("sj_portal_prof")}catch(e){}S=null;isProf=false;view("landing")};
 document.addEventListener("click",e=>{const d=e.target.closest("[data-d]");if(!d)return;const x=D[d.dataset.d];$("#dtag").textContent=x.tag;$("#dt").textContent=x.nome;$("#dd").textContent=x.desc;
- $("#al").innerHTML=x.aulas.map(a=>`<article class="card aula" style="--c:${x.cor}"><div class="num">${a.n}</div><div><h3>${esc(a.tema)}</h3><p class="ds">${esc(a.ds)}</p><div class="acts"><a class="btn" href="${a.pdf}" target="_blank" rel="noopener">Ver a aula</a><a class="btn ghost" href="${a.pdf}" download="${a.nomePdf}">Baixar PDF</a><a class="btn ghost" href="${a.lab}">${esc(a.labT)}</a>${a.jogo?`<a class="btn ghost" href="${a.jogo}">Jogo</a>`:""}${(a.extra||[]).map(z=>`<a class="btn ghost" href="${z[1]}">${esc(z[0])}</a>`).join("")}</div></div></article>`).join("");view("disc")});
+ $("#al").innerHTML=x.aulas.map(a=>`<article class="card aula" style="--c:${x.cor}"><div class="num">${a.n}</div><div><h3>${esc(a.tema)}</h3><p class="ds">${esc(a.ds)}</p><div class="acts"><a class="btn" data-u="aula" href="${a.pdf}" target="_blank" rel="noopener">Ver a aula</a><a class="btn ghost" data-u="pdf" href="${a.pdf}" download="${a.nomePdf}">Baixar PDF</a><a class="btn ghost" data-u="lab" href="${vv(a.lab)}">${esc(a.labT)}</a>${a.jogo?`<a class="btn ghost" data-u="jogo" href="${vv(a.jogo)}">Jogo</a>`:""}${(a.extra||[]).map(z=>`<a class="btn ghost" data-u="teste" href="${vv(z[1])}">${esc(z[0])}</a>`).join("")}</div></div></article>`).join("");view("disc");$("#al").querySelectorAll("a[data-u]").forEach((l,i)=>l.addEventListener("click",()=>uso(l.dataset.u,x.nome+" · "+(l.closest("article").querySelector(".num")||{}).textContent)))});
 $("#vh").onclick=()=>view("home");
 if(S&&(S.role==="aluno"||isProf)){if(S.role==="aluno")prefill(S.nome,S.ra);enter()}else view("landing");
 /* arte dos cards */

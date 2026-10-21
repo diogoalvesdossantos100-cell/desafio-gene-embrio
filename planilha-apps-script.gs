@@ -95,11 +95,21 @@ function mvpPainel_(pin){
   return {ok:true, rows:mvpRows_().map(r => ({ts:r[0] instanceof Date ? r[0].toISOString() : String(r[0]), mat:String(r[1]), nome:r[2], turma:r[3], fase:String(r[4]), tent:Number(r[5]), ac:Number(r[6]), total:Number(r[7]), seg:Number(r[9]), pts:Number(r[10]), det:String(r[11]), uso:Number(r[12])}))};
 }
 
+/* ---- Registro de uso (aula / PDF / laboratório / jogo abertos) ---- */
+function usoPost_(d){
+  const ss = SpreadsheetApp.getActive();
+  let sh = ss.getSheetByName("USO");
+  if (!sh) { sh = ss.insertSheet("USO"); sh.appendRow(["quando","matricula","nome","evento","aula"]); sh.setFrozenRows(1); }
+  sh.appendRow([new Date(d.ts || Date.now()), String(d.matricula || ""), String(d.nome || ""), String(d.ev || ""), String(d.aula || "")]);
+  return {ok:true};
+}
+
 function doPost(e){
   const lock = LockService.getScriptLock(); lock.waitLock(20000);
   try {
     const d = JSON.parse(e.postData.contents);
     if (d.tipo === "mvp") return json_(mvpPost_(d));
+    if (d.tipo === "uso") return json_(usoPost_(d));
     const sh = aba_();
     sh.appendRow([new Date(), d.nome, String(d.matricula), d.turma, d.disciplina, d.tentativa, d.acertos, d.total, d.pontos, d.nota, d.erradas, d.jogo || JOGO_PADRAO]);
     return ContentService.createTextOutput(JSON.stringify({ok:true})).setMimeType(ContentService.MimeType.JSON);
