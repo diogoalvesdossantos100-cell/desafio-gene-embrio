@@ -1548,7 +1548,17 @@ function fresh() { return { aluno: null, tab: "estudar", fase: "emb1", model: {}
 function load() { try { const raw = localStorage.getItem(KEY); if (raw) return Object.assign(fresh(), JSON.parse(raw)); } catch (e) { persist = false; } return fresh(); }
 let S = load();
 const FOCO = (() => { try { const f = new URLSearchParams(location.search).get("fase"); return /^(emb|gen)\d$/.test(f || "") ? f : ""; } catch (e) { return ""; } })();
-if (FOCO) { S.fase = FOCO; }
+const MODO = (() => { try { return new URLSearchParams(location.search).get("modo") === "jogo" ? "jogo" : "lab"; } catch (e) { return "lab"; } })();
+let PORTAL_PROF = false;
+if (FOCO) {
+  S.fase = FOCO; S.tab = MODO === "jogo" ? "jogar" : "estudar";
+  try {
+    PORTAL_PROF = sessionStorage.getItem("sj_portal_prof") === "1";
+    const ps = JSON.parse(localStorage.getItem("sj_portal_v1") || "null");
+    if (ps && ps.nome && ps.ra && !PORTAL_PROF && (!S.aluno || norm0(S.aluno.mat) !== norm0(ps.ra) || S.aluno.nome !== ps.nome)) S.aluno = { nome: ps.nome, mat: String(ps.ra), turma: "Fisioterapia" };
+  } catch (e) { }
+}
+function norm0(x) { return String(x == null ? "" : x).trim().toLowerCase().replace(/\s+/g, "").replace(/^0+/, ""); }
 const FASES_V = () => FOCO ? FASES.filter(x => x.id === FOCO) : FASES;
 const DISCS_V = () => FOCO ? DISCS.filter(d => d[0] === FOCO.slice(0, 3)) : DISCS;
 const AULA_N = () => FOCO ? "Aula 0" + FOCO.slice(3) : "";
@@ -1673,21 +1683,24 @@ const IC = {
 const app = $("#app");
 let G = null, timerId = 0, painel = { rows: null, err: "", loading: false, at: 0, turma: "", demo: false };
 function shell() {
+  if (FOCO && !G) S.tab = MODO === "jogo" ? "jogar" : "estudar";
+  if (FOCO && PORTAL_PROF) role = "prof";
   const logged = role === "prof" || !!S.aluno;
   if (role === "aluno" && S.tab === "painel") S.tab = "estudar";
-  if (role === "prof" && S.tab === "jogar") S.tab = "painel";
+  if (role === "prof" && S.tab === "jogar" && !FOCO) S.tab = "painel";
   const tabs = [["estudar", "Estudar"]]; if (role === "aluno") tabs.push(["jogar", "Jogar"]); else tabs.push(["painel", "Painel"]);
   app.innerHTML = `
   <header class="top"><div class="wrap row">${FOCO ? '<a href="../portal/" style="color:inherit;text-decoration:none;font-weight:600;font-size:.9rem;opacity:.85;margin-right:10px">← Portal</a>' : ''}
     <div class="brand"><span class="mark">G&amp;E</span><div><b>Desafio Gene &amp; Embrio</b><small>${S.aluno && role === "aluno" ? esc(S.aluno.nome.split(" ")[0]) + " · " : ""}Fisioterapia · AlfaUnipac</small></div></div>
-    <div class="seg" role="group" aria-label="Perfil"><button data-act="perfil" data-v="aluno" aria-pressed="${role === "aluno"}">Aluno</button><button data-act="perfil" data-v="prof" aria-pressed="${role === "prof"}">Professor</button></div>
+    ${FOCO ? "" : `<div class="seg" role="group" aria-label="Perfil"><button data-act="perfil" data-v="aluno" aria-pressed="${role === "aluno"}">Aluno</button><button data-act="perfil" data-v="prof" aria-pressed="${role === "prof"}">Professor</button></div>`}
   </div></header>
   <main class="wrap" id="view"></main>
-  ${logged ? `<nav class="bar" aria-label="Seções"><div class="in">${tabs.map(([k, l]) => `<button data-act="tab" data-v="${k}" ${S.tab === k ? 'aria-current="page"' : ""}>${IC[k]}${l}</button>`).join("")}</div></nav>` : ""}`;
+  ${logged && !FOCO ? `<nav class="bar" aria-label="Seções"><div class="in">${tabs.map(([k, l]) => `<button data-act="tab" data-v="${k}" ${S.tab === k ? 'aria-current="page"' : ""}>${IC[k]}${l}</button>`).join("")}</div></nav>` : ""}`;
   v3stop();
   const v = $("#view");
   if (role === "aluno" && !S.aluno) return viewLogin(v);
-  if (S.tab === "estudar") viewEstudar(v); else if (S.tab === "jogar") { if (G) viewGame(v); else viewJogar(v); } else viewPainel(v);
+  if (FOCO && role === "prof" && S.tab === "jogar") v.innerHTML = `<section class="hero"><h1>Jogo · ${AULA_N()}</h1><p>O jogo é para o aluno. Você vê as notas no painel do professor.</p></section><a class="btn" href="../teste/painel.html" style="text-decoration:none;display:inline-block">Abrir painel</a>`;
+  else if (S.tab === "estudar") viewEstudar(v); else if (S.tab === "jogar") { if (G) viewGame(v); else viewJogar(v); } else viewPainel(v);
 }
 
 /* ---------- LOGIN ---------- */
@@ -1728,7 +1741,7 @@ function viewEstudar(v) {
       <div class="legend3d" id="lg3"></div><div class="info3d" id="if3"><span class="note">Toque em um número no modelo ou na lista para ver o que é.</span></div></div>
     <div class="card" style="--c:${f.cor}"><span class="eyebrow">${f.disc} · Unidade ${esc(f.u)}</span><h2 style="font-size:1.2rem;margin-top:4px">${esc(f.titulo)}</h2>
       <ul class="res">${f.resumo.map(([t, d]) => `<li><b>${esc(t)}</b><span>${esc(d)}</span></li>`).join("")}</ul>
-      ${role === "aluno" ? `<div style="margin-top:16px"><button class="btn" data-act="jogarfase" data-v="${f.id}" ${restam(f.id) ? "" : "disabled"}>Jogar esta unidade</button>${restam(f.id) ? "" : '<span class="note" style="margin-left:10px">Tentativas esgotadas.</span>'}</div>` : ""}</div>
+      ${role === "aluno" && !FOCO ? `<div style="margin-top:16px"><button class="btn" data-act="jogarfase" data-v="${f.id}" ${restam(f.id) ? "" : "disabled"}>Jogar esta unidade</button>${restam(f.id) ? "" : '<span class="note" style="margin-left:10px">Tentativas esgotadas.</span>'}</div>` : ""}</div>
   </div>`;
   v3mount(mk);
 }
@@ -1750,7 +1763,7 @@ function viewJogar(v) {
     ${eu.tot ? `<div class="kv"><div><small>Nota Embriologia</small><b>${f1(notaDisc(eu.fases, "emb"))}</b></div><div><small>Nota Genética</small><b>${f1(notaDisc(eu.fases, "gen"))}</b></div><div><small>Acerto geral</small><b>${f0(eu.ok / eu.tot * 100)}%</b></div><div><small>Tempo de uso</small><b>${f0(Math.round(S.uso / 60))} min</b></div></div>${barrasSub(eu.sub, 6)}` : '<p class="note" style="margin:8px 0 0">Jogue uma unidade para ver aqui sua nota e os assuntos em que você mais erra.</p>'}
   </div>
   <p class="note" style="margin-top:12px">Nota da unidade = acertos ÷ ${NQ} × 10, pela maior tentativa. Nota da disciplina = média das 6 unidades (unidade não feita conta zero). ${persist ? "" : "Este aparelho não guarda dados locais: não feche a página durante o jogo."}</p>
-  <p style="margin-top:8px"><button class="btn ghost sm" data-act="sair-conta">Trocar de aluno</button></p>`;
+  ${FOCO ? "" : '<p style="margin-top:8px"><button class="btn ghost sm" data-act="sair-conta">Trocar de aluno</button></p>'}`;
 }
 function syncBadge() {
   if (!REAL) return '<span class="tag warn" id="syncst">Demonstração: não envia</span>';
