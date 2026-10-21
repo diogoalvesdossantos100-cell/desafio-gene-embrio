@@ -32,7 +32,7 @@
 <div class="stack">
 <div class="card"><div class="row2"><span class="eyebrow" id="prog">Peça 1 de 6</span><span class="note">Arraste para girar · pinça para ampliar</span></div><div class="chips" id="chips" style="margin-top:8px"></div></div>
 <div class="card" id="step"></div>
-<details class="card" id="reg"><summary style="cursor:pointer;font-weight:700">Registrar meu resultado (opcional)</summary><p class="note" style="margin:8px 0">Se o professor pedir, preencha. Ao destravar as 6 peças, seu resultado é enviado.</p><div class="stack" style="gap:8px"><input id="rn" class="fld" placeholder="Nome completo" autocomplete="name" style="width:100%;min-height:44px;border-radius:10px;border:1px solid var(--line);background:var(--s2);color:var(--ink);padding:0 12px"><input id="rr" class="fld" placeholder="RA" inputmode="numeric" style="width:100%;min-height:44px;border-radius:10px;border:1px solid var(--line);background:var(--s2);color:var(--ink);padding:0 12px"></div><p class="note" id="rs" role="status" style="margin:8px 0 0"></p></details>
+
 </div></main></div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script>
@@ -60,7 +60,7 @@ const VIEWS = {
 function shuf(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a}
 function prep(q){const idx=shuf([...q.o.keys()]);q.o2=idx.map(i=>q.o[i]);q.c2=idx.indexOf(q.c);}
 const vdone={}, tries=[0,0,0,0,0,0];let sent=false;
-let unl = 0, cur = 0, tentou = -1, mode = "quiz", view = "tudo", exT = 0, exC = 0;
+let unl = 6, cur = 0, tentou = -1, mode = "lab", view = "tudo", exT = 0, exC = 0;
 const cv = $("#cv"); let R;
 try { R = new THREE.WebGLRenderer({ canvas: cv, antialias: true, alpha: true }); } catch (e) { R = null; }
 if (!R) { $(".cvw").innerHTML = '<div class="card"><p class="note" style="margin:0">Seu aparelho não conseguiu abrir o modelo 3D. As explicações abaixo continuam funcionando.</p></div>'; }
@@ -188,19 +188,19 @@ function ui() {
   const st = $("#step");
   if (mode === "lab") {
     $("#prog").textContent = "Laboratório";
-    $("#chips").innerHTML = Object.keys(VIEWS).map(k => `<button class="chip vw ${k === view ? "on" : ""}" style="cursor:pointer" data-a="view" data-k="${k}">${VIEWS[k].nome}${vdone[k] ? " ✔" : ""}</button>`).join("");
+    $("#chips").innerHTML = Object.keys(VIEWS).filter(k => !VIEWS[k].monte).map(k => `<button class="chip vw ${k === view ? "on" : ""}" style="cursor:pointer" data-a="view" data-k="${k}">${VIEWS[k].nome}</button>`).join("");
     const leg = $("#leg"); leg.hidden = false; leg.innerHTML = LEG();
     const V = VIEWS[view]; let extra = "";
     if (V.monte) {
       const pend = mpos < MO + MN;
       extra = pend ? `<p style="margin:14px 0 0;font-weight:700">Degrau ${mpos - MO + 1} de ${MN}: a base de cima é <span style="color:${CORES[SEQ[mpos]]}">${SEQ[mpos]}</span>. Qual base entra na outra fita?</p><div class="opts2" style="grid-template-columns:repeat(4,1fr)">${["A", "T", "C", "G"].map(b => `<button class="o2" style="text-align:center;border-color:${CORES[b]}" data-a="mb" data-k="${b}">${b}</button>`).join("")}</div><p class="note" role="status" style="margin:8px 0 0">${monteMsg || "Lembre: A com T, C com G."}</p>`
         : `<p style="margin:14px 0 0"><span class="tag ok">Você montou os ${MN} degraus!</span></p><div class="row2" style="margin-top:10px"><button class="btn ghost" data-a="mreset">Montar de novo</button></div>`;
-    } else if (V.qq) {
+    } else if (false) {
       extra = vdone[view] ? `<p style="margin:14px 0 0"><span class="tag ok">Pergunta certa!</span></p>`
         : `<p style="margin:14px 0 0;font-weight:700">${V.qq.q}</p><div class="opts2">${V.qq.o2.map((o, k) => `<button class="o2 ${tentou === k ? "bad" : ""}" data-a="vresp" data-k="${k}">${o}</button>`).join("")}</div>${tentou >= 0 ? '<p class="note" role="status" style="margin:8px 0 0">Quase! Releia o texto e tente de novo.</p>' : ""}`;
     }
-    st.innerHTML = `<span class="eyebrow">Estudar por partes</span><h2 style="font-size:1.15rem;margin-top:4px">${V.nome}</h2><p style="margin:8px 0 0">${V.txt}</p>${V.monte ? "" : `<label class="note" style="display:block;margin-top:14px;font-weight:700">Montado ↔ Separado</label><input id="ex" type="range" min="0" max="100" value="${Math.round(exT * 100)}" style="width:100%;margin-top:6px" aria-label="Separar as peças">`}${extra}
-<div class="row2" style="margin-top:14px"><button class="btn ghost" data-a="reiniciar">Voltar ao desafio</button><a class="btn ghost" href="resumo-dna.pdf" download style="text-decoration:none;display:inline-flex;align-items:center">Baixar resumo (PDF)</a></div>`;
+    st.innerHTML = `<span class="eyebrow">Laboratório · DNA em 3D</span><h2 style="font-size:1.15rem;margin-top:4px">${V.nome}</h2><p style="margin:8px 0 0">${V.txt}</p>${V.monte ? "" : `<label class="note" style="display:block;margin-top:14px;font-weight:700">Montado ↔ Separado</label><input id="ex" type="range" min="0" max="100" value="${Math.round(exT * 100)}" style="width:100%;margin-top:6px" aria-label="Separar as peças">`}${extra}
+<div class="row2" style="margin-top:14px"><a class="btn ghost" href="resumo-dna.pdf" download style="text-decoration:none;display:inline-flex;align-items:center">Baixar resumo (PDF)</a></div>`;
     return;
   }
   $("#chips").innerHTML = chips();

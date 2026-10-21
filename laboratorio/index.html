@@ -55,7 +55,7 @@ const LV=[
  {n:"DNA",t:"Se desenrolar o cromossomo, aparece o DNA: uma escada torcida, a dupla hélice. Os degraus são as bases A, T, C e G.",q:"Qual é a forma do DNA?",o:["Dupla hélice","Uma bola","Uma linha reta única"],c:0,lab:[["Fita",[1.2,1.8,0]],["Bases (degraus)",[0,0,1.1]]]},
  {n:"Gene",t:"Um trecho do DNA com a receita de uma proteína é um gene. O destaque verde mostra um gene. Ele é só uma parte do DNA.",q:"O que é um gene?",o:["Um trecho do DNA com a receita de uma proteína","O DNA inteiro","Uma célula"],c:0,lab:[["Gene",[1.7,0,0]]]}
 ];
-let zl=0,zu=0,zt=-1,zanim=1;const R=(()=>{try{return new THREE.WebGLRenderer({canvas:$("#cv"),antialias:true,alpha:true})}catch(e){return null}})();
+let zl=0,zu=99,zt=-1,zanim=1;const R=(()=>{try{return new THREE.WebGLRenderer({canvas:$("#cv"),antialias:true,alpha:true})}catch(e){return null}})();
 const sc=new THREE.Scene(),cam=new THREE.PerspectiveCamera(42,1,.1,100);let dist=8,rx=.2,ry=.4,touched=false;
 sc.add(new THREE.HemisphereLight(0xffffff,0x223344,.9));const dl=new THREE.DirectionalLight(0xffffff,.8);dl.position.set(3,5,6);sc.add(dl);
 const root=new THREE.Group();sc.add(root);let cur=null;
@@ -85,9 +85,9 @@ if(R){addEventListener("resize",size);const cv=$("#cv"),ptr=new Map();let pinch=
  size();let last=performance.now();(function loop(t){const dt=Math.min(.05,(t-last)/1000);last=t;if(!touched)ry+=dt*.4;zanim=Math.min(1,zanim+dt*1.6);const e=1-Math.pow(1-zanim,3);root.scale.setScalar(.25+.75*e);root.rotation.set(rx,ry,0);cam.position.set(0,0,dist);cam.lookAt(0,0,0);root.updateMatrixWorld(true);R.render(sc,cam);
   const w=$("#cv").clientWidth,h=$("#cv").clientHeight,dots=$("#dots");LV[zl].lab.forEach((l,k)=>{let el=dots.children[k];if(!el){el=document.createElement("div");el.className="dot";el.textContent=l[0];dots.appendChild(el)}const p=new THREE.Vector3(...l[1]);root.localToWorld(p);p.project(cam);el.style.display=(zanim>.7&&p.z<1)?"block":"none";el.style.left=((p.x*.5+.5)*w)+"px";el.style.top=((-p.y*.5+.5)*h)+"px"});requestAnimationFrame(loop)})(last)}
 else $("#m0 .cvw").innerHTML='<div class="card"><p class="note" style="margin:0">Seu aparelho não abriu o 3D. Os textos continuam funcionando.</p></div>';
-function zui(){$("#zc").innerHTML=LV.map((l,i)=>`<button class="chip ${i===zl?"on":""}" data-z="${i}" ${i>zu?"disabled":""}>${i>zu?"🔒 ":""}${i<=zu?l.n:"Nível "+(i+1)}</button>`).join("");
+function zui(){$("#zc").innerHTML=LV.map((l,i)=>`<button class="chip ${i===zl?"on":""}" data-z="${i}" ${i>zu?"disabled":""}>${l.n}</button>`).join("");
  const L=LV[zl],done=zl<zu;let h=`<span class="eyebrow">Zoom ${zl+1} de ${LV.length}</span><h2 style="font-size:1.15rem;margin:4px 0">${L.n}</h2><p style="margin:6px 0 0">${L.t}</p>`;
- if(done)h+=`<div class="row2" style="margin-top:12px"><span class="tag ok">Respondido certo</span>${zl<LV.length-1?'<button class="btn" data-zn="1">Dar mais zoom</button>':'<span class="note">Você chegou ao gene.</span>'}</div>`;
+ if(done)h+=`<div class="row2" style="margin-top:12px">${zl<LV.length-1?'<button class="btn" data-zn="1">Dar mais zoom</button>':'<span class="note">Você chegou ao gene.</span>'}</div>`;
  else h+=`<p style="margin:14px 0 0;font-weight:700">${L.q}</p><div class="opts2">${L.o2.map((o,k)=>`<button class="o2 ${zt===k?"bad":""}" data-zq="${k}">${o}</button>`).join("")}</div><p class="note" role="status" style="margin:8px 0 0">${zt>=0?"Quase! Releia o texto e tente de novo.":"Responda para dar mais zoom."}</p>`;
  $("#zs").innerHTML=h}
 function shuf(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}

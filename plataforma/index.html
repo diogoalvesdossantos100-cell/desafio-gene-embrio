@@ -1731,7 +1731,7 @@ function viewEstudar(v) {
   const f = FASE_BY[FOCO || S.fase] || FASES[0];
   const mk = S.model[f.id] && f.models.some(m => m[0] === S.model[f.id]) ? S.model[f.id] : f.models[0][0];
   v.innerHTML = `
-  <section class="hero"><h1>${FOCO ? "Laboratório · " + AULA_N() : "Estudar"}</h1><p>${FOCO ? "Só o que é desta aula: resumo curto e modelos 3D para girar, dar zoom e tocar nos números." : "Uma unidade por vez, na ordem das apostilas. Cada unidade tem um resumo curto e modelos 3D para girar, dar zoom e tocar nos números."}</p></section>
+  <section class="hero"><h1>${FOCO ? "Laboratório · " + AULA_N() : "Estudar"}</h1><p>${FOCO ? "Só os modelos 3D desta aula: gire, dê zoom e toque nos números para ver o que é cada parte." : "Uma unidade por vez, na ordem das apostilas. Cada unidade tem um resumo curto e modelos 3D para girar, dar zoom e tocar nos números."}</p></section>
   ${FOCO ? "" : DISCS.map(([dk, dn]) => `<div class="eyebrow" style="margin-top:12px">${dn}</div><div class="tabs" role="group" aria-label="${dn}">${FASES.filter(x => x.dk === dk).map(x => `<button class="chip" style="--c:${x.cor}" data-act="fase" data-v="${x.id}" aria-pressed="${x.id === f.id}">Unidade ${esc(x.u)}</button>`).join("")}</div>`).join("")}
   <div class="stack" style="margin-top:6px">
     <div class="card"><span class="eyebrow">Modelo 3D</span>
@@ -1739,9 +1739,9 @@ function viewEstudar(v) {
       <div class="viewer" id="v3"><div class="dots" id="dots"></div><span class="hint">Arraste para girar · pinça ou roda para zoom</span></div>
       <div class="slider" id="sl3" hidden><label for="rg3" id="rgl"></label><input type="range" id="rg3" min="0" max="100" value="50"><output id="rgo"></output></div>
       <div class="legend3d" id="lg3"></div><div class="info3d" id="if3"><span class="note">Toque em um número no modelo ou na lista para ver o que é.</span></div></div>
-    <div class="card" style="--c:${f.cor}"><span class="eyebrow">${f.disc} · Unidade ${esc(f.u)}</span><h2 style="font-size:1.2rem;margin-top:4px">${esc(f.titulo)}</h2>
+    ${FOCO ? "" : `<div class="card" style="--c:${f.cor}"><span class="eyebrow">${f.disc} · Unidade ${esc(f.u)}</span><h2 style="font-size:1.2rem;margin-top:4px">${esc(f.titulo)}</h2>
       <ul class="res">${f.resumo.map(([t, d]) => `<li><b>${esc(t)}</b><span>${esc(d)}</span></li>`).join("")}</ul>
-      ${role === "aluno" && !FOCO ? `<div style="margin-top:16px"><button class="btn" data-act="jogarfase" data-v="${f.id}" ${restam(f.id) ? "" : "disabled"}>Jogar esta unidade</button>${restam(f.id) ? "" : '<span class="note" style="margin-left:10px">Tentativas esgotadas.</span>'}</div>` : ""}</div>
+      ${role === "aluno" && !FOCO ? `<div style="margin-top:16px"><button class="btn" data-act="jogarfase" data-v="${f.id}" ${restam(f.id) ? "" : "disabled"}>Jogar esta unidade</button>${restam(f.id) ? "" : '<span class="note" style="margin-left:10px">Tentativas esgotadas.</span>'}</div>` : ""}</div>`}
   </div>`;
   v3mount(mk);
 }
