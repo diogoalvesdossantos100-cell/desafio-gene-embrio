@@ -1561,7 +1561,7 @@ if (FOCO) {
 function norm0(x) { return String(x == null ? "" : x).trim().toLowerCase().replace(/\s+/g, "").replace(/^0+/, ""); }
 const FASES_V = () => FOCO ? FASES.filter(x => x.id === FOCO) : FASES;
 const DISCS_V = () => FOCO ? DISCS.filter(d => d[0] === FOCO.slice(0, 3)) : DISCS;
-const AULA_N = () => FOCO ? "Aula 0" + FOCO.slice(3) : "";
+const AULA_N = () => FOCO ? "Aula 0" + (+FOCO.slice(3) + (FOCO.slice(0, 3) === "gen" ? 1 : 0)) : "";
 function save() { try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) { persist = false; } }
 try { localStorage.setItem(KEY + "_t", "1"); localStorage.removeItem(KEY + "_t"); } catch (e) { persist = false; }
 let role = "aluno"; // aluno | prof
