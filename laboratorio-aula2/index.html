@@ -18,6 +18,15 @@ svg text{font-family:var(--body)}
 .inp{width:100%;min-height:50px;border-radius:12px;border:1px solid var(--line);background:var(--s2);color:var(--ink);padding:0 14px;font:700 1.1rem var(--disp);letter-spacing:.12em;text-transform:uppercase}
 .tg{display:flex;gap:8px;margin:8px 0}.tg button{flex:1;min-height:48px;border-radius:12px;border:1.5px solid var(--line);background:var(--s2);color:var(--ink);font:700 .95rem var(--body);cursor:pointer}.tg button.on{border-color:var(--g);background:var(--gd);color:var(--g)}.tg button.bad.on{border-color:#ff7a7a;background:#2e1717;color:#ff9b9b}
 .mol{transition:all .9s ease}
+main{max-width:880px;margin-left:auto;margin-right:auto}
+body{font-size:19px}
+.cap{margin:14px 2px 6px}.cap .eyebrow{font-size:.9rem}.cap .big{font-size:1.65rem;line-height:1.2;margin:6px 0 8px}.cap p{font-size:1.28rem;line-height:1.55;margin:6px 0 0}
+.card h2{font-size:1.35rem}.note{font-size:1.05rem}.eyebrow{font-size:.85rem}
+.btn{font-size:1.1rem;min-height:54px}.chip{font-size:1rem;padding:9px 16px;min-height:44px}.tg button{font-size:1.1rem;min-height:56px}
+.leg{font-size:1rem}.rg{height:34px}
+.cv{height:min(58vh,520px)}
+.seqrow .bs{width:38px;height:42px;font-size:1.2rem}.cod .aa{font-size:.9rem;max-width:80px}.inp{font-size:1.3rem;min-height:58px}
+#mc .card h2{font-size:1.35rem}#mc .card .note{font-size:1.1rem}
 </style></head><body>
 <header class="top"><div class="brand"><img src="../icone-app.svg" alt="" width="42" height="42" style="border-radius:12px"><div><b>Saúde em Jogo · Laboratório</b><small>Genética · Aula 02 · Dogma Central e EIM</small></div></div></header>
 <main>
@@ -25,17 +34,14 @@ svg text{font-family:var(--body)}
 <section id="menu"><a class="btn ghost" href="../portal/" style="text-decoration:none;display:inline-flex;margin:0 0 12px">← Voltar ao portal</a><p class="note" style="margin:0 2px 12px">Escolha o que quer explorar. Arraste para girar os modelos em 3D.</p><div class="stack" id="mc"></div></section>
 
 <section id="m0" hidden><div class="stack">
- <div class="card"><canvas class="cv" id="c0"></canvas><label class="note" style="display:block;margin-top:10px;font-weight:700">Fechado ↔ Copiando</label><input class="rg" id="r0" type="range" min="0" max="100" value="0"><div class="row2" style="gap:8px"><button class="btn" id="p0">▶ Tocar</button><button class="btn ghost" id="z0">Voltar ao início</button></div>
- <div class="leg"><span><i style="background:#3ddc97"></i>A</span><span><i style="background:#ff7a7a"></i>T</span><span><i style="background:#5cb8ff"></i>C</span><span><i style="background:#ffc83d"></i>G</span><span><i style="background:#8e6bd8"></i>fita antiga</span><span><i style="background:#e9defc"></i>fita nova</span></div></div>
- <div class="card"><span class="eyebrow">Replicação semiconservativa</span><h2 class="big" id="t0"></h2><p id="d0" style="margin:6px 0 0"></p></div></div></section>
+ <div class="card"><canvas class="cv" id="c0"></canvas><div class="cap"><span class="eyebrow">Replicação semiconservativa</span><h2 class="big" id="t0"></h2><p id="d0" style="margin:6px 0 0"></p></div><label class="note" style="display:block;margin-top:10px;font-weight:700">Fechado ↔ Copiando</label><input class="rg" id="r0" type="range" min="0" max="100" value="0"><div class="row2" style="gap:8px"><button class="btn" id="p0">▶ Tocar</button><button class="btn ghost" id="z0">Voltar ao início</button></div>
+ <div class="leg"><span><i style="background:#3ddc97"></i>A</span><span><i style="background:#ff7a7a"></i>T</span><span><i style="background:#5cb8ff"></i>C</span><span><i style="background:#ffc83d"></i>G</span><span><i style="background:#8e6bd8"></i>fita antiga</span><span><i style="background:#e9defc"></i>fita nova</span></div></div></div></section>
 
 <section id="m1" hidden><div class="stack">
- <div class="card"><canvas class="cv" id="c1"></canvas><div class="chips" id="k1" style="margin-top:12px"></div></div>
- <div class="card"><span class="eyebrow" id="e1"></span><h2 class="big" id="t1"></h2><p id="d1" style="margin:6px 0 0"></p></div></div></section>
+ <div class="card"><canvas class="cv" id="c1"></canvas><div class="cap"><span class="eyebrow" id="e1"></span><h2 class="big" id="t1"></h2><p id="d1" style="margin:6px 0 0"></p></div><div class="chips" id="k1" style="margin-top:12px"></div></div></div></section>
 
 <section id="m2" hidden><div class="stack">
- <div class="card"><canvas class="cv" id="c2"></canvas><label class="note" style="display:block;margin-top:10px;font-weight:700">Passo do ribossomo</label><input class="rg" id="r2" type="range" min="0" max="10" value="0"><div class="row2" style="gap:8px"><button class="btn" id="p2">▶ Tocar</button><button class="btn ghost" id="z2">Voltar ao início</button></div></div>
- <div class="card"><span class="eyebrow">Tradução: do RNA à proteína</span><h2 class="big" id="t2"></h2><p id="d2" style="margin:6px 0 0"></p></div></div></section>
+ <div class="card"><canvas class="cv" id="c2"></canvas><div class="cap"><span class="eyebrow">Tradução: do RNA à proteína</span><h2 class="big" id="t2"></h2><p id="d2" style="margin:6px 0 0"></p></div><label class="note" style="display:block;margin-top:10px;font-weight:700">Passo do ribossomo</label><input class="rg" id="r2" type="range" min="0" max="10" value="0"><div class="row2" style="gap:8px"><button class="btn" id="p2">▶ Tocar</button><button class="btn ghost" id="z2">Voltar ao início</button></div></div></div></section>
 
 <section id="m3" hidden><div class="stack"><div class="card">
  <svg id="dg" viewBox="0 0 400 250" style="width:100%;background:#0e1a2b;border-radius:14px" role="img" aria-label="Do DNA à proteína">
@@ -46,9 +52,8 @@ svg text{font-family:var(--body)}
   <g id="rna" style="opacity:0;transition:all 1.2s ease"><path d="M45 140 C65 125 85 155 105 140 S145 125 165 140" stroke="#ff9fc4" stroke-width="5" fill="none" stroke-linecap="round"/><text x="105" y="168" text-anchor="middle" font-size="11" fill="#ff9fc4">RNA</text></g>
   <g id="rib" style="opacity:0;transition:opacity 1s"><ellipse cx="318" cy="150" rx="40" ry="22" fill="#5cb8ff"/><ellipse cx="318" cy="128" rx="26" ry="14" fill="#3b8cff"/><text x="318" y="190" text-anchor="middle" font-size="11" fill="#9db4d4">ribossomo</text></g>
   <g id="prot" style="opacity:0;transition:opacity 1s"><circle cx="300" cy="86" r="9" fill="#ffc83d"/><circle cx="318" cy="76" r="9" fill="#3ddc97"/><circle cx="337" cy="82" r="9" fill="#ff7a7a"/><circle cx="352" cy="68" r="9" fill="#5cb8ff"/><circle cx="364" cy="50" r="9" fill="#c9b3ff"/><text x="345" y="40" text-anchor="middle" font-size="11" fill="#d9e4f2">proteína</text></g>
- </svg>
- <div class="tg" id="dgb"><button data-s="0" class="on">1 · DNA</button><button data-s="1">2 · Cópia (RNA)</button><button data-s="2">3 · Proteína</button></div><button class="btn ghost" id="p3" style="width:100%">▶ Tocar os 3 passos</button></div>
- <div class="card"><h2 class="big" id="t3"></h2><p id="d3" style="margin:6px 0 0"></p></div></div></section>
+ </svg><div class="cap"><h2 class="big" id="t3"></h2><p id="d3" style="margin:6px 0 0"></p></div>
+ <div class="tg" id="dgb"><button data-s="0" class="on">1 · DNA</button><button data-s="1">2 · Cópia (RNA)</button><button data-s="2">3 · Proteína</button></div><button class="btn ghost" id="p3" style="width:100%">▶ Tocar os 3 passos</button></div></div></section>
 
 <section id="m4" hidden><div class="stack"><div class="card">
  <svg id="pk" viewBox="0 0 400 250" style="width:100%;background:#0e1a2b;border-radius:14px" role="img" aria-label="Fenilcetonúria com e sem enzima">
@@ -62,9 +67,8 @@ svg text{font-family:var(--body)}
   <rect x="20" y="140" width="360" height="26" rx="13" fill="#1c2f52"/><rect id="lv" x="20" y="140" width="40" height="26" rx="13" fill="#3ddc97" style="transition:all 1.2s"/>
   <text id="lvt" x="200" y="196" text-anchor="middle" font-size="15" font-weight="700" fill="#3ddc97">Normal</text>
   <text id="lvs" x="200" y="222" text-anchor="middle" font-size="12" fill="#9db4d4"></text>
- </svg>
- <div class="tg" id="pkb"><button data-s="0" class="on">Enzima funcionando</button><button data-s="1" class="bad">Enzima com defeito</button></div></div>
- <div class="card"><span class="eyebrow">Fenilcetonúria (PKU)</span><h2 class="big" id="t4"></h2><p id="d4" style="margin:6px 0 0"></p></div></div></section>
+ </svg><div class="cap"><span class="eyebrow">Fenilcetonúria (PKU)</span><h2 class="big" id="t4"></h2><p id="d4" style="margin:6px 0 0"></p></div>
+ <div class="tg" id="pkb"><button data-s="0" class="on">Enzima funcionando</button><button data-s="1" class="bad">Enzima com defeito</button></div></div></div></section>
 
 <section id="m5" hidden><div class="stack"><div class="card">
  <svg id="ms" viewBox="0 0 400 275" style="width:100%;background:#0e1a2b;border-radius:14px" role="img" aria-label="Lisossomo com e sem enzima">
@@ -74,9 +78,8 @@ svg text{font-family:var(--body)}
   <text x="250" y="216" text-anchor="middle" font-size="12" fill="#d9e4f2">lisossomo (a “lixeira” da célula)</text>
   <g id="pt" style="transition:opacity .8s"></g>
   <text id="mt" x="200" y="264" text-anchor="middle" font-size="13" font-weight="700" fill="#3ddc97"></text>
- </svg>
- <div class="tg" id="msb"><button data-s="0" class="on">Enzima funcionando</button><button data-s="1" class="bad">Enzima com defeito</button></div></div>
- <div class="card"><span class="eyebrow">Mucopolissacaridose (MPS)</span><h2 class="big" id="t5"></h2><p id="d5" style="margin:6px 0 0"></p></div></div></section>
+ </svg><div class="cap"><span class="eyebrow">Mucopolissacaridose (MPS)</span><h2 class="big" id="t5"></h2><p id="d5" style="margin:6px 0 0"></p></div>
+ <div class="tg" id="msb"><button data-s="0" class="on">Enzima funcionando</button><button data-s="1" class="bad">Enzima com defeito</button></div></div></div></section>
 
 <section id="m6" hidden><div class="stack"><div class="card"><span class="eyebrow">Digite um pedaço de DNA (só A, T, C, G)</span><input class="inp" id="sq" maxlength="21" value="ATGGCTGAACTTAAA" autocomplete="off" autocapitalize="characters" inputmode="text" style="margin-top:8px"><p class="note" style="margin:8px 0 0">Veja a fita que encaixa, a cópia em RNA e as “palavras” de 3 letras que viram aminoácidos.</p></div>
  <div class="card" id="so"></div></div></section>
