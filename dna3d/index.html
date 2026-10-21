@@ -25,7 +25,7 @@
 </head><body><div class="wrap">
 <header class="top"><div class="brand"><span class="mark">G&amp;E</span><div><b>DNA em 3D</b><small>Gire, amplie e destrave cada peça</small></div></div></header>
 <main>
-<a class="btn ghost" href="../laboratorio/" style="text-decoration:none;display:inline-flex;margin-bottom:10px">← Menu do laboratório</a>
+<a class="btn ghost" id="vm" href="../laboratorio/" style="text-decoration:none;display:inline-flex;margin-bottom:10px">← Menu do laboratório</a><script>try{if(/laboratorio-aula2/.test(document.referrer))document.getElementById("vm").href="../laboratorio-aula2/"}catch(e){}</script>
 <div class="cvw"><canvas id="cv" aria-label="Modelo 3D do DNA"></canvas><div id="dots"></div></div>
 <p class="note" id="tip" role="status" style="margin:8px 2px 0;min-height:1.3em">Toque numa peça do modelo para ver o nome dela.</p>
 <div class="leg" id="leg" hidden></div>
