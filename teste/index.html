@@ -37,7 +37,8 @@ async function flush() {
   try {
     for (const p of S.pend.slice()) {
       let r; try { r = await post(p); } catch (e) { break; }
-      if (r && (r.ok || r.err === "limite")) { S.pend = S.pend.filter(x => x.uid !== p.uid); const d = S.done[norm(p.matricula) + "|" + (p.fase === C.FASE_PRE ? "pre" : "pos")]; if (d) d.sent = true; } else break;
+      if (r && r.err === "limite") { S.pend = S.pend.filter(x => x.uid !== p.uid); delete S.done[norm(p.matricula) + "|" + (p.fase === C.FASE_PRE ? "pre" : "pos")]; S.warn = "Seu resultado NÃO foi salvo: o RA " + p.matricula + " já foi usado por outro aluno. Toque em Sair, entre com o seu RA verdadeiro e refaça o teste."; }
+      else if (r && r.ok) { S.pend = S.pend.filter(x => x.uid !== p.uid); const d = S.done[norm(p.matricula) + "|" + (p.fase === C.FASE_PRE ? "pre" : "pos")]; if (d) d.sent = true; } else break;
     }
   } finally { busy = false; save(); if (S.aluno && !TT) render(); }
 }
@@ -66,6 +67,7 @@ function login() {
     const nome = String(fd.get("nome")).trim().replace(/\s+/g, " "), mat = String(fd.get("mat")).trim().replace(/\s+/g, "");
     if (nome.split(" ").length < 2) { err.textContent = "Digite nome e sobrenome."; return; }
     if (!/^[A-Za-z0-9.\-]{3,20}$/.test(mat)) { err.textContent = "RA: de 3 a 20 letras ou números, sem espaços."; return; }
+    if (/^\d+$/.test(mat) && (mat.length < 6 || /^(\d)\1+$/.test(mat) || "01234567890123456789".includes(mat) || "98765432109876543210".includes(mat))) { err.textContent = "Digite o seu RA verdadeiro (o número da sua matrícula). Números inventados como 123 ou 12345 não valem."; return; }
     if (S.aluno && norm(S.aluno.mat) !== norm(mat)) { S.unl = false; }
     S.aluno = { nome, mat }; save(); err.textContent = "Entrando…"; await syncServer(); render();
   });
@@ -83,7 +85,7 @@ function render() {
   app.innerHTML = `<section class="hero"><h1>Olá, ${esc(S.aluno.nome.split(" ")[0])}</h1><p>${T.length} questões de múltipla escolha, uma tentativa em cada momento. O app não mostra o gabarito. Responda sem consultar.</p></section>
   <div class="stack">${card("pre", "Pré-teste", "Antes da aula.")}${card("pos", "Pós-teste", "Depois da aula, o mesmo teste.")}
   <div class="row2"><span class="note">${esc(S.aluno.nome)} · RA ${esc(S.aluno.mat)}</span><button class="btn ghost sm" data-a="sair">Sair</button></div>
-  <p class="note" role="status">${esc(msg)}</p></div>`;
+  <p class="note" role="status">${esc(msg)}</p>${S.warn ? `<p class="err" role="alert" style="font-weight:700">${esc(S.warn)}</p>` : ""}</div>`;
 }
 function questao() {
   const q = T[TT.i], n = T.length, sel = TT.r[TT.i];
@@ -107,7 +109,7 @@ document.addEventListener("click", async e => {
   else if (a === "prox") { if (TT.r[TT.i] === undefined) return; if (TT.i === T.length - 1) finalizar(); else { TT.i++; questao(); window.scrollTo(0, 0); } }
   else if (a === "lib") { const x = (($("#sn") || {}).value || "").trim().toUpperCase().replace(/\s+/g, ""); if (x === C.SENHA_POS) { S.unl = true; save(); render(); } else $("#sm").textContent = "Palavra incorreta."; }
   else if (a === "reenviar") { msg = "Enviando…"; render(); await flush(); msg = (S.pend.length ? "Sem conexão. Tente de novo." : "Enviado."); render(); }
-  else if (a === "sair") { S.aluno = null; save(); TT = null; render(); }
+  else if (a === "sair") { S.aluno = null; S.warn = ""; save(); TT = null; render(); }
 });
 render(); if (S.aluno) { syncServer().then(() => { if (!TT) render(); }); flush(); }
 })();
