@@ -1684,7 +1684,7 @@ const app = $("#app");
 let G = null, timerId = 0, painel = { rows: null, err: "", loading: false, at: 0, turma: "", demo: false };
 function shell() {
   if (FOCO && !G) S.tab = MODO === "jogo" ? "jogar" : "estudar";
-  if (FOCO && PORTAL_PROF) role = "prof";
+  try { if (sessionStorage.getItem("sj_portal_prof") === "1" && !G) { if (role !== "prof") { role = "prof"; if (!FOCO && !window.__pi) { window.__pi = 1; S.tab = "painel"; } } } } catch (e) { }
   const logged = role === "prof" || !!S.aluno;
   if (role === "aluno" && S.tab === "painel") S.tab = "estudar";
   if (role === "prof" && S.tab === "jogar" && !FOCO) S.tab = "painel";
@@ -1692,7 +1692,7 @@ function shell() {
   app.innerHTML = `
   <header class="top"><div class="wrap row">${FOCO ? '<a href="../portal/" style="color:inherit;text-decoration:none;font-weight:600;font-size:.9rem;opacity:.85;margin-right:10px">← Portal</a>' : ''}
     <div class="brand"><span class="mark">G&amp;E</span><div><b>Desafio Gene &amp; Embrio</b><small>${S.aluno && role === "aluno" ? esc(S.aluno.nome.split(" ")[0]) + " · " : ""}Fisioterapia · AlfaUnipac</small></div></div>
-    ${FOCO ? "" : `<div class="seg" role="group" aria-label="Perfil"><button data-act="perfil" data-v="aluno" aria-pressed="${role === "aluno"}">Aluno</button><button data-act="perfil" data-v="prof" aria-pressed="${role === "prof"}">Professor</button></div>`}
+    ${true ? "" : `<div class="seg" role="group" aria-label="Perfil"><button data-act="perfil" data-v="aluno" aria-pressed="${role === "aluno"}">Aluno</button><button data-act="perfil" data-v="prof" aria-pressed="${role === "prof"}">Professor</button></div>`}
   </div></header>
   <main class="wrap" id="view"></main>
   ${logged && !FOCO ? `<nav class="bar" aria-label="Seções"><div class="in">${tabs.map(([k, l]) => `<button data-act="tab" data-v="${k}" ${S.tab === k ? 'aria-current="page"' : ""}>${IC[k]}${l}</button>`).join("")}</div></nav>` : ""}`;
