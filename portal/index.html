@@ -109,7 +109,7 @@ function nk(n){n=String(n).normalize("NFD").replace(/[̀-ͯ]/g,"").toLowerCase()
 function prefill(nome,ra){try{const K="sj_teste_gen_v2";let T=JSON.parse(localStorage.getItem(K)||"null")||{},key=ra+"~"+nk(nome);
   if(!T.aluno||T.aluno.key!==key){T.aluno={nome,mat:ra,key};T.unl=false;T.done=T.done||{};T.pend=T.pend||[];localStorage.setItem(K,JSON.stringify(T))}
   const Dn="sj_dna3d_v1";let d={};try{d=JSON.parse(localStorage.getItem(Dn)||"{}")}catch(e){}if(d.n!==nome||d.r!==ra)localStorage.setItem(Dn,JSON.stringify({n:nome,r:ra,sent:false}))}catch(e){}}
-const VER="20261021b";const USO_ON=false;const vv=u=>u+(u.includes("?")?"&":"?")+"v="+VER;
+const VER="20261021b";const USO_ON=true;const vv=u=>u+(u.includes("?")?"&":"?")+"v="+VER;
 function uso(ev,aula){if(!USO_ON||!S||isProf)return;try{navigator.sendBeacon(API,new Blob([JSON.stringify({tipo:"uso",ev,aula,matricula:S.ra,nome:S.nome,ts:Date.now()})],{type:"text/plain;charset=utf-8"}))}catch(e){}}
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 function view(v){["landing","home","disc"].forEach(k=>$("#"+k).hidden=k!==v);$("#who").hidden=v==="landing";scrollTo(0,0)}
