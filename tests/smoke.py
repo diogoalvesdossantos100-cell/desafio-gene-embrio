@@ -27,6 +27,15 @@ with sync_playwright() as p:
         assert pg.locator("#al article").count() >= n, "aulas de " + d
         pg.click("#disc .btn.ghost, #disc button", timeout=2000) if False else None
         pg.goto("file://%s/portal/index.html" % R); pg.wait_for_timeout(400)
+    # pré e pós-teste: todas as aulas de Genética e Embriologia têm os dois botões; a página do teste abre
+    for d in ("gen", "emb"):
+        pg.goto("file://%s/portal/index.html" % R); pg.wait_for_timeout(300); pg.click(".dcard.%s" % d); pg.wait_for_timeout(300)
+        assert pg.locator("a[data-u=pre-teste]").count() == pg.locator("a[data-u=pos-teste]").count() >= 1, "botões de pré/pós-teste em " + d
+    for aid in ("gen-01", "gen-02", "emb-01", "emb-02"):
+        q = novo(); q.add_init_script("localStorage.setItem('sj_portal_v1',JSON.stringify({role:'aluno',nome:'Maria da Silva',ra:'12345'}))")
+        q.goto("file://%s/portal/index.html" % R); q.wait_for_function("localStorage.getItem('sj_teste_gen_v2')", timeout=8000)
+        q.goto("file://%s/teste/index.html?aula=%s&m=pre" % (R, aid)); q.wait_for_timeout(500)
+        assert "questões" in q.inner_text("body"), "teste não abriu: " + aid + " :: " + q.inner_text("body")[:200]; q.close()
     for u in ("laboratorio/", "laboratorio-aula2/", "laboratorio-aula3/", "laboratorio-aula4/", "laboratorio-emb3/", "dna3d/", "plataforma/?fase=emb1", "plataforma/?fase=emb2&modo=jogo", "plataforma/?fase=gen1", "plataforma/?fase=gen2&modo=jogo", "plataforma/?fase=gen3", "plataforma/?fase=emb3", "teste/"):
         q = novo()
         q.add_init_script("sessionStorage.setItem('sj_portal_prof','1');localStorage.setItem('sj_portal_v1',JSON.stringify({role:'aluno',nome:'Maria da Silva',ra:'12345'}))")
