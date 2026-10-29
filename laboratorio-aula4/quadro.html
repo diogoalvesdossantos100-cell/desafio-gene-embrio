@@ -5,6 +5,7 @@
 <script src="../vendor/liberacao.js"></script><script>try{LIB.guard("gen-04")}catch(e){}</script>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&family=Sora:wght@600;700;800&display=swap">
 <style>
+[hidden]{display:none!important}
 :root{--bg:#070b14;--s1:#0d1424;--line:#ffffff24;--ink:#eef3fb;--mut:#a9b7cf;--g:#3ddc97;--y:#ffc83d;--r:#ff8b8b;--disp:'Sora',system-ui,sans-serif;--body:'Figtree',system-ui,sans-serif}
 *{box-sizing:border-box}html{font-size:clamp(14px,1.25vw,30px)}
 body{margin:0;background:var(--bg);color:var(--ink);font:400 1rem/1.45 var(--body);min-height:100vh;display:flex;flex-direction:column}
@@ -30,11 +31,19 @@ dl{margin:.8rem 0 0;display:grid;grid-template-columns:auto 1fr;gap:.4rem 1rem;f
 .pos{color:var(--g)}.neg{color:var(--r)}
 .dots{display:flex;gap:.4rem;margin-top:.8rem}.dots i{width:.7rem;height:.7rem;border-radius:50%;background:#ffffff26}.dots i.on{background:var(--g)}
 .tip{color:var(--mut);font-size:.9rem;margin-top:.4rem}
+.tabs{display:flex;gap:.5rem}.tab{padding:.55rem 1rem;min-height:0}.tab.on{background:var(--g);border-color:var(--g);color:#04140d}
+.pais{display:grid;grid-template-columns:1fr 1fr;gap:1rem}.pais h2{font:700 1.3rem var(--disp);margin:0 0 .6rem}.pais label{display:block;color:var(--mut);font-size:.95rem;margin-top:.6rem}
+select{display:block;width:100%;margin-top:.3rem;font:600 1.1rem var(--body);color:var(--ink);background:#0a1020;border:1px solid var(--line);border-radius:10px;padding:.7rem}
+select:focus-visible{outline:3px solid var(--y);outline-offset:2px}
+table.pun{border-collapse:collapse;margin:.4rem auto 0;font:700 1.5rem var(--disp)}table.pun td,table.pun th{border:1px solid var(--line);padding:.7rem 1.4rem;text-align:center}table.pun th{color:var(--mut);font-weight:600}
+.bar{display:grid;grid-template-columns:5.5rem 1fr 3.5rem;align-items:center;gap:.7rem;margin:.5rem 0;font-size:1.1rem}.bar b{font:700 1.2rem var(--disp)}.bar span.t{height:1.1rem;background:#ffffff14;border-radius:99px;overflow:hidden}.bar span.t i{display:block;height:100%;background:var(--g)}.bar em{font-style:normal;text-align:right;font-weight:700}
+.q h2{font:700 1.3rem var(--disp);margin:0 0 .6rem}
+@media(max-width:900px){.pais{grid-template-columns:1fr}header{flex-wrap:wrap}}
 @media(max-width:900px){main{grid-template-columns:1fr;padding:1rem}header{padding:.8rem 1rem}.slides{gap:.5rem}}
 @media(prefers-reduced-motion:reduce){*{transition:none!important}}
 </style></head><body>
-<header><b>Quadro de tipagem sanguínea</b><a href="../portal/">← Portal</a></header>
-<main>
+<header><b>Quadro de sangue</b><nav class="tabs" role="tablist"><button class="tab on" id="t1" role="tab" aria-selected="true">Tipagem</button><button class="tab" id="t2" role="tab" aria-selected="false">Herança: pai × mãe</button></nav><a href="../portal/">← Portal</a></header>
+<main id="m1">
  <section aria-live="polite">
   <h1 id="tt">Paciente 1</h1>
   <p class="sub">Olhe as três gotas e diga o tipo sanguíneo antes de revelar.</p>
@@ -52,6 +61,19 @@ dl{margin:.8rem 0 0;display:grid;grid-template-columns:auto 1fr;gap:.4rem 1rem;f
    <div class="tip">Teclado: setas para trocar de paciente, espaço ou Enter para revelar.</div>
   </div>
  </aside>
+</main>
+<main id="m2" hidden>
+ <section>
+  <h1>Pai × mãe</h1>
+  <p class="sub">Escolha o sangue dos dois e veja quais filhos podem nascer.</p>
+  <div class="pais">
+   <div class="q"><h2>Pai</h2><label>Tipo ABO<select id="pa"></select></label><label>Rh<select id="pr"></select></label></div>
+   <div class="q"><h2>Mãe</h2><label>Tipo ABO<select id="ma"></select></label><label>Rh<select id="mr"></select></label></div>
+  </div>
+  <div class="how" id="obs"></div>
+ </section>
+ <aside class="side"><div class="q"><h2>Quadro de cruzamento (ABO)</h2><div id="pun"></div></div>
+  <div class="q"><h2>Chance de cada filho</h2><div id="res"></div></div></aside>
 </main>
 <script>
 (function(){"use strict";
@@ -88,7 +110,29 @@ function draw(){
  $("#dots").innerHTML=ORDEM.map((_,k)=>`<i class="${k===i?"on":""}"></i>`).join("")}
 function go(d){i=(i+d+ORDEM.length)%ORDEM.length;rev=false;draw()}
 $("#bp").onclick=()=>go(-1);$("#bn").onclick=()=>go(1);$("#br").onclick=()=>{rev=!rev;draw()};
-document.addEventListener("keydown",e=>{if(e.target.tagName==="BUTTON"&&(e.key==="Enter"||e.key===" "))return;
+document.addEventListener("keydown",e=>{if($("#m1").hidden||e.target.tagName==="SELECT")return;if(e.target.tagName==="BUTTON"&&(e.key==="Enter"||e.key===" "))return;
  if(e.key==="ArrowRight")go(1);else if(e.key==="ArrowLeft")go(-1);else if(e.key===" "||e.key==="Enter"){e.preventDefault();rev=!rev;draw()}});
+
+/* ---- Herança ---- */
+const GEN={"A (homozigoto, AA)":["A","A"],"A (heterozigoto, AO)":["A","O"],"B (homozigoto, BB)":["B","B"],"B (heterozigoto, BO)":["B","O"],"AB":["A","B"],"O (OO)":["O","O"]};
+const RH={"Rh+ (DD)":["D","D"],"Rh+ (Dd)":["D","d"],"Rh− (dd)":["d","d"]};
+function fill(id,o,sel){$(id).innerHTML=Object.keys(o).map((k,n)=>`<option value="${k}"${n===sel?" selected":""}>${k}</option>`).join("")}
+fill("#pa",GEN,1);fill("#ma",GEN,3);fill("#pr",RH,1);fill("#mr",RH,1);
+const fen=g=>{const x=g.slice().sort().join("");return x==="OO"?"O":x==="AB"?"AB":x.includes("A")?"A":"B"};
+function her(){
+ const P=GEN[$("#pa").value],M=GEN[$("#ma").value],PR=RH[$("#pr").value],MR=RH[$("#mr").value];
+ let h='<table class="pun"><tr><th></th>'+P.map(x=>"<th>"+x+"</th>").join("")+"</tr>";
+ const c={A:0,B:0,AB:0,O:0};
+ M.forEach(m=>{h+="<tr><th>"+m+"</th>";P.forEach(pp=>{const g=[pp,m].sort().join("").replace("AB","AB");const lab=[pp,m].sort((a,b)=>a==="O"?1:b==="O"?-1:a<b?-1:1).join("");h+="<td>"+lab+"</td>";c[fen([pp,m])]++});h+="</tr>"});
+ $("#pun").innerHTML=h+"</table>";
+ const r={"+":0,"−":0};PR.forEach(a=>MR.forEach(b=>{(a==="D"||b==="D")?r["+"]++:r["−"]++}));
+ const bar=(n,v)=>`<div class="bar"><b>${n}</b><span class="t"><i style="width:${v*25}%"></i></span><em>${v*25}%</em></div>`;
+ $("#res").innerHTML=["A","B","AB","O"].filter(k=>c[k]).map(k=>bar(k,c[k])).join("")+'<div style="height:.6rem"></div>'+["+","−"].filter(k=>r[k]).map(k=>bar("Rh"+k,r[k]*(4/4))).join("").replace(/width:(\d+)%/g,(m,w)=>"width:"+w+"%");
+ const fx=Object.keys(c).filter(k=>c[k]).join(", ");
+ $("#obs").innerHTML="<b>Filhos possíveis:</b> "+fx+" · Rh "+Object.keys(r).filter(k=>r[k]).join(" ou ")+". Cada quadradinho do cruzamento vale 25%.";
+}
+["#pa","#ma","#pr","#mr"].forEach(id=>$(id).addEventListener("change",her));her();
+function aba(n){$("#m1").hidden=n!==1;$("#m2").hidden=n!==2;$("#t1").classList.toggle("on",n===1);$("#t2").classList.toggle("on",n===2);$("#t1").setAttribute("aria-selected",n===1);$("#t2").setAttribute("aria-selected",n===2)}
+$("#t1").onclick=()=>aba(1);$("#t2").onclick=()=>aba(2);
 draw()})();
 </script></body></html>
