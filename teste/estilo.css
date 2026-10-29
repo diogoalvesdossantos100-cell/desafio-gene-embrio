@@ -43,5 +43,7 @@ th:first-child,td:first-child{text-align:left}
 th{font:600 .8rem var(--disp);color:var(--mut)}
 td.q{white-space:normal;min-width:220px}
 .err{color:var(--red);font-size:.85rem;margin:0}
-@media(min-width:1100px){html{font-size:112.5%}body{font-size:17px}.wrap{max-width:960px}.hero h1{font-size:1.8rem!important}.opt{padding:16px 20px}.btn{padding:14px 24px}header.top{padding-block:22px 10px}}
-@media(min-width:1700px){html{font-size:125%}.wrap{max-width:1080px}}
+@media(min-width:1100px){html{font-size:112.5%}body{font-size:.95rem}.wrap{max-width:54rem}.hero h1{font-size:1.8rem!important}.opt{padding:16px 20px}.btn{padding:14px 24px}header.top{padding-block:22px 10px}}
+@media(min-width:1700px){html{font-size:125%}}
+@media(min-width:2200px){html{font-size:156%}}
+@media(min-width:3000px){html{font-size:200%}}
