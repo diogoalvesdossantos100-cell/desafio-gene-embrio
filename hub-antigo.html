@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#070f1a">
+<title>Saúde em Jogo · Escolha sua disciplina</title>
+<link rel="icon" type="image/svg+xml" href="icone-app.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#070f1a;--p1:#14284a;--p2:#0f1f38;--line:#27446e;--deep:#0c1d38;--txt:#eef5ff;--mut:#9db4d4;--gold:#ffc94a}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0}
+body{background:radial-gradient(900px 500px at 50% -10%,#123a5e 0%,var(--bg) 62%) fixed;color:var(--txt);font-family:'Fredoka','Trebuchet MS','Segoe UI',system-ui,sans-serif;min-height:100vh}
+main{max-width:760px;margin:0 auto;padding:26px 16px 44px;text-align:center}
+.selo{display:block;width:min(370px,90vw);height:auto;margin:0 auto 14px}
+.kicker{margin:0;font-size:.72rem;letter-spacing:.09em;color:var(--mut)}
+h1{margin:18px 0 6px;font-size:clamp(1.7rem,7vw,2.3rem);line-height:1.05}
+.tag{color:var(--mut);margin:0 auto 22px;max-width:32ch;font-size:1.02rem}
+.cards{display:grid;gap:14px;text-align:left}
+.card{position:relative;display:grid;grid-template-columns:64px 1fr;gap:2px 14px;align-items:center;padding:16px;border-radius:22px;text-decoration:none;color:var(--txt);
+  background:linear-gradient(180deg,var(--p1),var(--p2));border:2px solid var(--c);box-shadow:0 6px 0 var(--deep),0 0 26px color-mix(in srgb,var(--c) 20%,transparent);transition:transform .1s}
+.card:hover{transform:translateY(-3px)}
+.card:active{transform:translateY(4px);box-shadow:0 2px 0 var(--deep)}
+.card i{grid-row:span 3;font-style:normal;font-size:2.8rem;text-align:center}
+.card small{font-size:.7rem;letter-spacing:.14em;color:var(--c);font-weight:700}
+.card b{font-size:1.3rem}
+.card span{color:var(--mut);font-size:.9rem}
+.go{font-style:normal;grid-column:2;justify-self:start;margin-top:8px;padding:7px 18px;border-radius:999px;font-weight:700;font-size:.95rem;color:#3a2600;background:linear-gradient(#ffdc6b,#f5a51d);box-shadow:0 3px 0 #a86a05}
+.rodape{color:var(--mut);font-size:.85rem;margin:22px 0 0}
+@media (min-width:700px){.cards{grid-template-columns:1fr 1fr}.card{grid-template-columns:1fr;text-align:center}.card i{grid-row:auto}.go{font-style:normal;grid-column:1;justify-self:center}}
+@media (prefers-reduced-motion:reduce){*{transition:none !important}}
+</style>
+</head>
+<body>
+<main>
+  <img class="selo" src="logo-escuro.svg" alt="Saúde em Jogo" width="370" height="123">
+  <p class="kicker">ATIVIDADE AVALIATIVA • 1º A • FISIOTERAPIA</p>
+  <h1>Escolha sua disciplina</h1>
+  <p class="tag">Cada disciplina é um jogo. Toque no card para começar.</p>
+  <div class="cards">
+    <a class="card" style="--c:#22e6c8" href="genetica/"><i>🧬</i><small>GENÉTICA</small><b>Genética</b><span>Distrofias, herança, mutações e testes genéticos</span><em class="go">▶ JOGAR</em></a>
+    <a class="card" style="--c:#ff5fa2" href="embriologia/"><i>👶</i><small>EMBRIOLOGIA</small><b>Embriologia</b><span>Gametas, gestação, teratógenos e adaptações</span><em class="go">▶ JOGAR</em></a>
+    <a class="card" style="--c:#c084fc" href="psicologia-aplicada/"><i>🧠</i><small>PSICOLOGIA APLICADA</small><b>Mente &amp; Cuidado</b><span>Paciente, dor, Freud, burnout e ética</span><em class="go">▶ JOGAR</em></a>
+    <a class="card" style="--c:#fb923c" href="saude-coletiva/"><i>🏥</i><small>SAÚDE COLETIVA</small><b>SUS &amp; Território</b><span>Determinantes, leis, níveis e controle social</span><em class="go">▶ JOGAR</em></a>
+    <a class="card" style="--c:#3ddc97" href="plataforma/"><i>🔬</i><small>ESTUDO + JOGO • 3D</small><b>Desafio Gene &amp; Embrio</b><span>12 unidades das apostilas, modelos 3D e banco de questões</span><em class="go">▶ ENTRAR</em></a>
+  </div>
+  <p class="rodape">2 tentativas por jogo · vale a maior nota</p>
+</main>
+</body>
+</html>

@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Pré e pós-teste · Saúde em Jogo</title>
+<meta name="robots" content="noindex">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&family=Sora:wght@500;600;700&display=swap">
+<link rel="stylesheet" href="estilo.css">
+<script src="../vendor/liberacao.js"></script><script src="../vendor/ra.js"></script><script>try{LIB.guard(new URLSearchParams(location.search).get("aula"))}catch(e){}</script>
+</head><body><div class="wrap">
+<header class="top"><div class="brand"><img src="../icone-app.svg" alt="" width="42" height="42" style="border-radius:12px"><div><b id="ttl">Pré e pós-teste</b><small>Fisioterapia · AlfaUnipac · Embriologia e Genética</small></div></div></header>
+<p style="margin:8px 16px 0"><a href="../portal/" style="color:inherit;opacity:.75;font-size:.85rem;text-decoration:none">← Voltar ao portal</a></p><main id="app"></main></div>
+<script>["questoes.js","aulas.js"].forEach(function(f){document.write("<script src=\x22"+f+"?t="+Date.now()+"\x22><\/script>")})</script>
+<script>
+(function () {
+"use strict";
+const Q = new URLSearchParams(location.search), AID = (window.TESTES[Q.get("aula")] ? Q.get("aula") : "gen-01"), ONLY = Q.get("m") === "pre" || Q.get("m") === "pos" ? Q.get("m") : "";
+const B = window.TESTES[AID], T = B.q, QS = m => window.TESTE_QS(B, m), $ = s => document.querySelector(s), app = $("#app");
+const C = Object.assign({}, window.TESTE_CFG, { SENHA_POS: B.palavra, FASE_PRE: B.pre, FASE_POS: B.pos });
+document.title = "Pré e pós-teste · " + B.titulo; $("#ttl").textContent = B.titulo;
+const esc = s => String(s == null ? "" : s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+const f1 = n => Number(n).toLocaleString("pt-BR", { minimumFractionDigits: 1, maximumFractionDigits: 1 });
+const norm = x => String(x == null ? "" : x).trim().toLowerCase().replace(/\s+/g, "").replace(/^0+/, "");
+const KEY = "sj_teste_gen_v2";
+const nk = n => { n = String(n).normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().replace(/[^a-z]/g, ""); let h = 5381; for (const c of n) h = ((h * 33) ^ c.charCodeAt(0)) >>> 0; return h.toString(36); };
+const keyOf = (nome, mat) => mat + "~" + nk(nome);
+let S; try { S = JSON.parse(localStorage.getItem(KEY)) || null; } catch (e) { S = null; }
+if (!S || typeof S !== "object") S = {};
+if (S.aluno && RA.check(S.aluno.nome, S.aluno.mat)) { delete S.aluno; }
+S.done = S.done || {}; S.pend = S.pend || [];
+function save() { try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) { } }
+let TT = null, msg = "", busy = false;
+const faseDe = m => m === "pre" ? C.FASE_PRE : C.FASE_POS;
+const SUF = AID === "gen-01" ? "" : "|" + AID;
+const dk = m => norm(S.aluno.key) + "|" + m + SUF;
+const dkP = p => (p.dk || (norm(p.matricula) + "|" + (p.fase === C.FASE_PRE ? "pre" : "pos") + SUF));
+const unlocked = () => !LIB.posAuto[AID] || LIB.prof || !!(S.unlk && S.unlk[AID]);
+
+async function api(params, ms) {
+  const ctl = new AbortController(), t = setTimeout(() => ctl.abort(), ms || 10000);
+  try { const r = await fetch(C.URL + "?" + new URLSearchParams(params).toString(), { signal: ctl.signal }); return await r.json(); } finally { clearTimeout(t); }
+}
+async function post(p) {
+  const ctl = new AbortController(), t = setTimeout(() => ctl.abort(), 20000);
+  try { const r = await fetch(C.URL, { method: "POST", headers: { "Content-Type": "text/plain;charset=utf-8" }, body: JSON.stringify(p), signal: ctl.signal }); return await r.json(); } finally { clearTimeout(t); }
+}
+async function flush() {
+  if (busy || !S.pend.length) return; busy = true;
+  try {
+    for (const p of S.pend.slice()) {
+      let r; try { r = await post(p); } catch (e) { break; }
+      if (r && r.err === "limite") { S.pend = S.pend.filter(x => x.uid !== p.uid); delete S.done[dkP(p)]; S.warn = "Seu resultado NÃO foi salvo (limite de tentativas). Avise o professor."; }
+      else if (r && r.ok) { S.pend = S.pend.filter(x => x.uid !== p.uid); const d = S.done[dkP(p)]; if (d) d.sent = true; } else break;
+    }
+  } finally { busy = false; save(); if (S.aluno && !TT) render(); }
+}
+setInterval(flush, 20000); window.addEventListener("online", flush);
+
+async function syncServer() {
+  if (!S.aluno) return;
+  try {
+    const r = await api({ acao: "status", matricula: S.aluno.key });
+    if (r && r.ok && r.fases) ["pre", "pos"].forEach(m => { const f = r.fases[faseDe(m)]; if (f && f.tent > 0 && !S.done[dk(m)]) S.done[dk(m)] = { ac: f.melhor, ts: Date.now(), sent: true, srv: true };
+      else if ((!f || !(f.tent > 0)) && S.done[dk(m)] && S.done[dk(m)].sent && !S.pend.some(x => x.fase === faseDe(m))) delete S.done[dk(m)]; /* professor apagou o registro na planilha: libera de novo */ });
+    save();
+  } catch (e) { }
+}
+
+function login() {
+  app.innerHTML = `<section class="hero"><h1>Entrar</h1><p>Informe seu RA (registro acadêmico) e seu nome completo. É assim que sua nota chega ao professor.</p></section>
+  <form id="lf" class="card stack" style="max-width:480px" autocomplete="on" novalidate>
+    <label class="fld"><span>Nome completo</span><input name="nome" required maxlength="80" autocomplete="name"></label>
+    <label class="fld"><span>RA (registro acadêmico)</span><input name="mat" required maxlength="14" inputmode="numeric" autocomplete="off"></label>
+    <p class="err" id="lgerr" role="alert"></p>
+    <button class="btn" type="submit">Entrar</button>
+  </form>`;
+  $("#lf").addEventListener("submit", async e => {
+    e.preventDefault(); const fd = new FormData(e.target), err = $("#lgerr");
+    const nome = String(fd.get("nome")).trim().replace(/\s+/g, " "), mat = String(fd.get("mat")).trim().replace(/\s+/g, "");
+    if (nome.split(" ").length < 2) { err.textContent = "Digite nome e sobrenome."; return; }
+    var ck = RA.check(nome, mat); if (ck) { err.textContent = ck; return; }
+    if (S.aluno && norm(S.aluno.key) !== norm(keyOf(nome, mat))) { S.unl = false; S.unlk = {}; }
+    S.aluno = { nome, mat, key: keyOf(nome, mat) }; save(); err.textContent = "Entrando…"; await syncServer(); render();
+  });
+}
+function render() {
+  if (!S.aluno) return login();
+  if (TT) return questao();
+  const card = (m, tit, desc) => {
+    const d = S.done[dk(m)]; let body;
+    if (d) body = `<span class="tag ${d.sent ? "ok" : "warn"}">${d.sent ? "Concluído e enviado" : "Concluído, enviando…"}</span> <b style="font-size:1.1rem;margin-left:6px">${d.ac} de ${T.length}</b> <span class="note">(nota ${f1(d.ac / T.length * 10)})</span>${m === "pos" && S.done[dk("pre")] ? `<div class="note" style="margin-top:6px">Pré-teste: ${S.done[dk("pre")].ac} de ${T.length} → pós-teste: ${d.ac} de ${T.length}</div>` : ""}${d.sent ? "" : `<div style="margin-top:8px"><button class="btn sm" data-a="reenviar">Tentar enviar agora</button></div>`}`;
+    else if (m === "pos" && !unlocked()) body = `<p class="note" style="margin:0">O pós-teste desta aula abre em <b>${LIB.quandoPos(AID)}</b>, depois da aula. Volte nesse horário.</p>`;
+    else body = `<button class="btn" data-a="ini" data-m="${m}">Começar ${tit.toLowerCase()}</button>`;
+    return `<div class="card"><span class="eyebrow">${tit}</span><p class="note" style="margin:4px 0 10px">${desc}</p>${body}</div>`;
+  };
+  app.innerHTML = `<section class="hero"><h1>Olá, ${esc(S.aluno.nome.split(" ")[0])}</h1><p>${T.length} questões de múltipla escolha, uma tentativa em cada momento. O app não mostra o gabarito. Responda sem consultar.</p></section>
+  <div class="stack">${(!ONLY || ONLY === "pre") ? card("pre", "Pré-teste", "Antes da aula.") : ""}${(!ONLY || ONLY === "pos") ? card("pos", "Pós-teste", "Depois da aula, com perguntas diferentes do pré-teste.") : ""}${ONLY ? `<p class="note"><a href="?aula=${AID}" style="color:inherit">Ver pré e pós-teste desta aula</a></p>` : ""}
+  <div class="row2"><span class="note">${esc(S.aluno.nome)} · RA ${esc(S.aluno.mat)}</span><button class="btn ghost sm" data-a="sair">Sair</button></div>
+  <p class="note" role="status">${esc(msg)}</p>${S.warn ? `<p class="err" role="alert" style="font-weight:700">${esc(S.warn)}</p>` : ""}</div>`;
+}
+function questao() {
+  const q = QS(TT.m)[TT.i], n = QS(TT.m).length, sel = TT.r[TT.i];
+  app.innerHTML = `<section class="hero"><span class="eyebrow">${TT.m === "pre" ? "Pré-teste" : "Pós-teste"} · questão ${TT.i + 1} de ${n}</span><div class="prog"><i style="width:${TT.i / n * 100}%"></i></div><h1 style="font-size:1.2rem;margin-top:8px">${esc(q.q)}</h1></section>
+  <div class="opts">${q.o.map((o, k) => `<button class="opt ${sel === k ? "sel" : ""}" data-a="resp" data-k="${k}"><span class="l">${"ABCD"[k]}</span><span>${esc(o)}</span></button>`).join("")}</div>
+  <div class="row2" style="margin-top:14px"><span class="note">Escolha uma alternativa.</span><button class="btn" data-a="prox" ${sel === undefined ? "disabled" : ""}>${TT.i === n - 1 ? "Finalizar" : "Próxima"}</button></div>`;
+}
+function finalizar() {
+  let ac = 0; TT.r.forEach((r, i) => { if (r === QS(TT.m)[i].c) ac++; });
+  const m = TT.m, p = { tipo: "mvp", matricula: S.aluno.key, nome: S.aluno.nome, turma: "", fase: faseDe(m), dk: dk(m), acertos: ac, total: QS(TT.m).length, seg: Math.round((Date.now() - TT.t0) / 1000), pontos: ac * 10, det: TT.r.join(","), uso: 0, uid: "t" + Date.now().toString(36) + Math.random().toString(36).slice(2, 7), ts: Date.now() };
+  S.done[dk(m)] = { ac, ts: p.ts, sent: false }; S.pend.push(p); TT = null; save(); msg = ""; render(); window.scrollTo(0, 0); flush();
+}
+document.addEventListener("click", async e => {
+  const b = e.target.closest("[data-a]"); if (!b) return; const a = b.dataset.a;
+  if (a === "ini") {
+    const m = b.dataset.m; b.disabled = true; msg = "Verificando…"; render(); await syncServer();
+    if (S.done[dk(m)]) { msg = "Este momento já foi realizado."; render(); return; }
+    msg = ""; TT = { m, i: 0, r: [], t0: Date.now() }; render(); window.scrollTo(0, 0);
+  }
+  else if (a === "resp") { TT.r[TT.i] = +b.dataset.k; questao(); }
+  else if (a === "prox") { if (TT.r[TT.i] === undefined) return; if (TT.i === QS(TT.m).length - 1) finalizar(); else { TT.i++; questao(); window.scrollTo(0, 0); } }
+  else if (a === "reenviar") { msg = "Enviando…"; render(); await flush(); msg = (S.pend.length ? "Sem conexão. Tente de novo." : "Enviado."); render(); }
+  else if (a === "sair") { S.aluno = null; S.warn = ""; save(); TT = null; render(); }
+});
+const autoPos = () => { try { if (unlocked()) return; LIB.posAberto(AID).then(ok => { if (ok && !unlocked()) { S.unlk = S.unlk || {}; S.unlk[AID] = true; save(); if (!TT) render(); } }); } catch (e) { } };
+autoPos(); setInterval(autoPos, 30000);
+render(); if (S.aluno) { syncServer().then(() => { if (!TT) render(); }); flush(); }
+})();
+</script></body></html>

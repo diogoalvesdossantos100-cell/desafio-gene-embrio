@@ -1,0 +1,190 @@
+<!doctype html>
+<html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Saúde em Jogo · Fisioterapia</title><script src="../vendor/liberacao.js"></script><script src="../vendor/ra.js"></script><link rel="icon" type="image/svg+xml" href="../icone-app.svg"><meta name="robots" content="noindex"><meta name="theme-color" content="#070b14">
+<link rel="icon" type="image/svg+xml" href="../icone-app.svg">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&family=Sora:wght@500;600;700;800&display=swap">
+<style>
+:root{--bg:#070b14;--ink:#eef3fb;--mut:#93a3bd;--line:#ffffff1c;--g:#3ddc97;--p:#8e6bd8;--p2:#c9b3ff;--pk:#ff5fa2;--b:#5cb8ff;--y:#ffc83d;--disp:"Sora",system-ui,sans-serif;--body:"Figtree",system-ui,sans-serif}
+*{box-sizing:border-box}html{-webkit-text-size-adjust:100%}body{margin:0;background:var(--bg);color:var(--ink);font:400 1rem/1.5 var(--body);min-height:100vh;overflow-x:hidden}
+button,input{font:inherit;color:inherit}a{color:inherit}[hidden]{display:none!important}
+#bg{position:fixed;inset:0;width:100%;height:100%;z-index:0;display:block}
+.glow{position:fixed;inset:0;z-index:0;pointer-events:none;background:radial-gradient(60% 50% at 80% 10%,#8e6bd833,transparent 70%),radial-gradient(50% 45% at 10% 90%,#3ddc9722,transparent 70%),radial-gradient(40% 40% at 50% 50%,#ff5fa211,transparent 70%)}
+.wrap{position:relative;z-index:1;max-width:1080px;margin:0 auto;padding:18px 20px 40px;min-height:100vh;display:flex;flex-direction:column}
+.top{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.brand{display:flex;align-items:center;gap:12px}.mark{width:42px;height:42px;border-radius:12px;background:linear-gradient(135deg,var(--g),var(--b));display:grid;place-items:center;color:#04140d;font:800 .9rem var(--disp)}
+.brand b{font:700 .95rem var(--disp);display:block}.brand small{color:var(--mut);font-size:.75rem}
+.who{display:flex;align-items:center;gap:10px;font-size:.85rem;color:var(--mut)}
+.btn{border:0;border-radius:14px;background:linear-gradient(135deg,var(--g),#2fb57a);color:#04140d;font:700 1rem var(--body);padding:14px 22px;min-height:48px;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;justify-content:center;gap:8px;transition:transform .15s,box-shadow .15s}
+.btn:hover{transform:translateY(-2px);box-shadow:0 10px 26px #3ddc9733}
+.btn.ghost{background:#ffffff0f;color:var(--ink);border:1px solid var(--line)}.btn.ghost:hover{box-shadow:none;background:#ffffff1a}.btn.sm{padding:8px 14px;min-height:38px;font-size:.85rem;border-radius:11px}
+/* landing */
+.hero{flex:1;display:flex;flex-direction:column;justify-content:center;padding:34px 0 22px;max-width:700px}
+.kicker{font:700 .75rem var(--body);letter-spacing:.2em;text-transform:uppercase;color:var(--g);margin:0 0 14px;display:flex;align-items:center;gap:10px}.kicker:before{content:"";width:34px;height:2px;background:var(--g);border-radius:2px}
+h1{font:800 clamp(2.4rem,8.5vw,4.6rem)/1 var(--disp);margin:0;letter-spacing:-.02em}
+h1 .a{background:linear-gradient(100deg,var(--g),var(--b));-webkit-background-clip:text;background-clip:text;color:transparent}
+h1 .b{background:linear-gradient(100deg,var(--pk),var(--p2));-webkit-background-clip:text;background-clip:text;color:transparent}
+.sub{color:#c3cfe3;font-size:1.1rem;max-width:34ch;margin:18px 0 0}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:20px}.chip{border:1px solid var(--line);background:#ffffff0c;border-radius:999px;padding:6px 13px;font-size:.8rem;font-weight:600;color:#d5def0}
+.logins{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:12px}.logins .card{padding:30px 28px}.logins .card h2{font-size:1.6rem;margin:6px 0}.logins .card p{font-size:1rem}.logins .fld span{font-size:.9rem}.logins .fld input{min-height:54px;font-size:1.05rem}.logins .btn{min-height:56px;font-size:1.08rem}
+.card{background:linear-gradient(160deg,#ffffff14,#ffffff08);border:1px solid var(--line);border-radius:22px;padding:20px;backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
+.card h2{font:700 1.1rem var(--disp);margin:0 0 4px}.card p{margin:0 0 12px;color:var(--mut);font-size:.88rem}
+.fld{display:block;margin-bottom:10px}.fld span{display:block;font-size:.75rem;color:var(--mut);margin-bottom:4px;font-weight:600}
+.fld input{width:100%;min-height:46px;border-radius:12px;border:1px solid var(--line);background:#0a1020cc;padding:0 14px;outline:0}.fld input:focus{border-color:var(--g);box-shadow:0 0 0 3px #3ddc9722}
+.err{color:#ff8b8b;font-size:.85rem;min-height:1.2em;margin:6px 0 0}
+.tag{font:700 .68rem var(--body);letter-spacing:.14em;text-transform:uppercase;color:var(--p2)}
+/* home */
+.greet{padding:34px 0 8px}.greet h2{font:800 clamp(1.7rem,5vw,2.6rem)/1.1 var(--disp);margin:0}.greet p{color:var(--mut);margin:8px 0 0}
+.disc{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:22px}
+.dcard{position:relative;overflow:hidden;border-radius:26px;padding:34px 32px 32px;min-height:460px;text-align:left;border:1px solid var(--line);cursor:pointer;color:var(--ink);display:flex;flex-direction:column;justify-content:flex-end;transition:transform .25s,box-shadow .25s;background:#0c1426}
+.dcard:hover{transform:translateY(-4px);box-shadow:0 18px 40px #0007}
+.dcard:after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,#0c1426f2 0%,#0c1426cc 45%,#0c142600 80%);pointer-events:none}.dcard>*:not(svg){z-index:1}.dcard svg.art{position:absolute;inset:0;width:100%;height:100%}
+.dcard .t{position:relative;font:800 2.8rem/1.05 var(--disp);margin:8px 0 8px}.dcard .d{position:relative;color:#d2dcee;font-size:1.2rem;margin:0;max-width:26ch}.dcard .go{position:relative;margin-top:22px;font-weight:700;font-size:1.15rem;display:inline-flex;gap:8px;align-items:center}
+.psi{background:linear-gradient(160deg,#0b2f3a,#0c1426 70%)}.sc{background:linear-gradient(160deg,#0f3322,#0c1426 70%)}.dcard{min-height:380px!important}.gen{background:linear-gradient(160deg,#1b1240,#0c1426 70%)}.emb{background:linear-gradient(160deg,#3a0f2c,#0c1426 70%)}
+/* disciplina */
+.dh{padding:26px 0 6px}.dh h2{font:800 clamp(1.8rem,6vw,2.8rem)/1.05 var(--disp);margin:6px 0 0}.dh p{color:var(--mut);margin:8px 0 0}
+.aulas{display:grid;gap:14px;margin-top:18px}
+.aula{display:grid;grid-template-columns:auto 1fr;gap:18px;align-items:start}
+.num{font:800 2.2rem/1 var(--disp);color:var(--c,#8e6bd8);min-width:64px}
+.aula h3{font:700 1.2rem/1.2 var(--disp);margin:0}.aula .ds{color:var(--mut);margin:6px 0 0;font-size:.92rem}
+.acts{display:flex;flex-wrap:wrap;gap:10px;margin-top:14px}
+.pro{margin-top:22px;border:1px dashed #ffc83d66;background:#ffc83d0d}.pro h3{margin:0 0 10px;font:700 1rem var(--disp);color:var(--y)}
+.back{margin-top:18px}
+@media(max-width:760px){.logins,.disc{grid-template-columns:1fr}.dcard{min-height:340px}.dcard .t{font-size:2.2rem}.hero{padding-top:20px}.aula{grid-template-columns:1fr;gap:8px}}
+@media(prefers-reduced-motion:reduce){*{transition:none!important}}
+</style></head><body>
+<canvas id="bg" aria-hidden="true"></canvas><div class="glow"></div>
+<div class="wrap">
+ <header class="top"><div class="brand"><img src="../icone-app.svg" alt="" width="42" height="42" style="border-radius:12px"><div><b>Saúde em Jogo</b><small>Fisioterapia · AlfaUnipac · 2026/2</small></div></div><div class="who" id="who" hidden><span id="whoT"></span><button class="btn ghost sm" id="sair">Sair</button></div></header>
+
+ <section id="landing">
+  <div class="hero">
+   <p class="kicker">Do primeiro gene ao primeiro batimento</p>
+   <img src="../logo-escuro.svg" alt="Saúde em Jogo" style="width:min(600px,94%);height:auto;display:block;margin:0 0 6px">
+   <p class="sub" style="font-size:1.12rem;max-width:560px">O <b>Saúde em Jogo</b> é a sua sala de estudo no celular: baixe a aula em PDF, explore o laboratório em 2D e 3D e teste o que aprendeu em jogos curtos. Aprender saúde, jogando.</p>
+   <div class="chips"><span class="chip">Aulas em PDF</span><span class="chip">Modelos 3D</span><span class="chip">Testes</span><span class="chip">Jogo</span></div>
+  </div>
+  <div class="logins">
+   <form class="card" id="fa" autocomplete="on" novalidate><span class="tag">Sou aluno</span><h2>Entrar na turma</h2><p>Use seu nome completo e o seu RA (só números). Sem o RA não dá para entrar.</p>
+    <label class="fld"><span>Nome completo</span><input name="nome" maxlength="80" autocomplete="name" required></label>
+    <label class="fld"><span>RA</span><input name="ra" maxlength="14" inputmode="numeric" autocomplete="off" required></label>
+    <button class="btn" type="submit" style="width:100%">Entrar como aluno</button><p class="err" id="ea" role="alert"></p><p style="font-size:.78rem;color:var(--mut);margin:10px 0 0;line-height:1.4">Usamos seu nome e RA só para registrar seu estudo e suas notas nesta disciplina, e eles ficam visíveis apenas ao professor. Ao entrar, você concorda com esse uso (LGPD).</p></form>
+   <form class="card" id="fp" autocomplete="off" novalidate><span class="tag" style="color:var(--y)">Sou professor</span><h2>Área do professor</h2><p>Digite o PIN do painel.</p>
+    <label class="fld"><span>PIN</span><input name="pin" type="password" inputmode="numeric" maxlength="20" autocomplete="off" required></label>
+    <button class="btn ghost" type="submit" style="width:100%;margin-top:4px">Entrar como professor</button><p class="err" id="ep" role="alert"></p></form>
+  </div>
+ </section>
+
+ <section id="home" hidden>
+  <div class="greet"><h2 id="gt"></h2><p>Escolha a disciplina.</p></div>
+  <div class="disc">
+   <button class="dcard gen" data-d="gen"><svg class="art" viewBox="0 0 400 300" preserveAspectRatio="xMidYMid slice" aria-hidden="true" id="artg"></svg><span class="tag" style="position:relative">Disciplina</span><span class="t">Genética</span><p class="d">DNA, cromossomos, heranças e mutações.</p><span class="go">Abrir →</span></button>
+   <button class="dcard emb" data-d="emb"><svg class="art" viewBox="0 0 400 300" preserveAspectRatio="xMidYMid slice" aria-hidden="true" id="arte"></svg><span class="tag" style="position:relative;color:#ffb3d3">Disciplina</span><span class="t">Embriologia</span><p class="d">Do ciclo menstrual ao bebê protegido.</p><span class="go">Abrir →</span></button>
+   <button class="dcard psi" data-d="psi"><svg class="art" viewBox="0 0 400 300" preserveAspectRatio="xMidYMid slice" aria-hidden="true" id="artp"></svg><span class="tag" style="position:relative;color:#8fe3f0">Disciplina</span><span class="t">Psicologia Aplicada</span><p class="d">Entender a pessoa por trás do paciente.</p><span class="go">Abrir →</span></button>
+   <button class="dcard sc" data-d="sc"><svg class="art" viewBox="0 0 400 300" preserveAspectRatio="xMidYMid slice" aria-hidden="true" id="arts"></svg><span class="tag" style="position:relative;color:#9be8b4">Disciplina</span><span class="t">Saúde Coletiva</span><p class="d">O sistema que sustenta o cuidado: SUS e território.</p><span class="go">Abrir →</span></button>
+  </div>
+  <div id="prof" class="card pro" hidden><h3>Área do professor</h3><div class="acts"><a class="btn ghost" href="../teste/painel.html">Painel do teste</a><a class="btn ghost" href="../plataforma/?painel=1">Painel do jogo (Plataforma)</a></div><p style="margin:12px 0 0">Os painéis abrem já liberados com o PIN que você digitou.</p></div>
+ </section>
+
+ <section id="disc" hidden>
+  <button class="btn ghost sm back" id="vh">← Disciplinas</button>
+  <div class="dh"><span class="tag" id="dtag"></span><h2 id="dt"></h2><p id="dd"></p></div>
+  <div class="aulas" id="al"></div>
+ </section>
+</div>
+<script>
+(function(){"use strict";
+const $=s=>document.querySelector(s);
+const API="https://script.google.com/macros/s/AKfycbyxliHa5f1iuxdszS_YCAcqpMxoXy0gCxiWiXFceak5NSKBaY-Isfh9bfrhC-nGuhcTFA/exec";
+const D={
+ gen:{nome:"Genética",tag:"Disciplina",cor:"#8e6bd8",desc:"DNA, cromossomos, divisão celular, heranças e mutações.",aulas:[
+  {tid:"gen-01",n:"01",tema:"Revisão de Genética",ds:"O que você precisa dominar antes de começar: DNA, cromossomos, divisão celular, heranças e mutações.",pdf:"../aulas/AULA_01_GENETICA.pdf",nomePdf:"AULA_01_GENETICA.pdf",lab:"../laboratorio/?v=3",labT:"Laboratório (2D e 3D)"},
+  {id:"gen-02",tid:"gen-02",n:"02",tema:"Dogma Central e Erros Inatos do Metabolismo",ds:"Do DNA à proteína, e o que acontece quando uma enzima falha: PKU, mucopolissacaridoses e teste do pezinho.",pdf:"../aulas/AULA_02_GENETICA.pdf",nomePdf:"AULA_02_GENETICA.pdf",lab:"../laboratorio-aula2/",labT:"Laboratório (2D e 3D)",jogo:"../plataforma/?fase=gen1&modo=jogo"},
+  {id:"gen-03",tid:"gen-03",n:"03",tema:"Tradução, Herança Autossômica e Ligada ao Sexo",ds:"Como a célula lê o RNA, como as doenças passam de pais para filhos e o caso da distrofia de Duchenne.",pdf:"../aulas/AULA_03_GENETICA.pdf",nomePdf:"AULA_03_GENETICA.pdf",lab:"../laboratorio-aula3/",labT:"Laboratório (2D e 3D)",jogo:"../plataforma/?fase=gen2&modo=jogo"},
+  {id:"gen-04",tid:"gen-04",n:"04",tema:"Grupos Sanguíneos e Mutações Gênicas",ds:"Tipos de sangue (ABO e Rh), como o DNA muda e a anemia falciforme.",pdf:"../aulas/AULA_04_GENETICA.pdf",nomePdf:"AULA_04_GENETICA.pdf",lab:"../laboratorio-aula4/",labT:"Laboratório (2D e 3D)",jogo:"../plataforma/?fase=gen3&modo=jogo"},
+  {id:"gen-05",tid:"gen-05",n:"05",tema:"Mutações Cromossômicas e Cariótipo",ds:"Cromossomos a mais, a menos ou trocados: síndrome de Down, Turner, Klinefelter e como ler um cariótipo.",pdf:"../aulas/AULA_05_GENETICA.pdf",nomePdf:"AULA_05_GENETICA.pdf"},
+  {id:"gen-06",tid:"gen-06",n:"06",tema:"Teratologia e Farmacogenética",ds:"O que atrapalha a formação do bebê, e por que os genes mudam a resposta aos remédios.",pdf:"../aulas/AULA_06_GENETICA.pdf",nomePdf:"AULA_06_GENETICA.pdf"},
+  {id:"gen-07",tid:"gen-07",n:"07",tema:"Doenças Genéticas, Aconselhamento e Ética",ds:"Os grupos de doenças genéticas, o aconselhamento, a terapia gênica e as questões éticas.",pdf:"../aulas/AULA_07_GENETICA.pdf",nomePdf:"AULA_07_GENETICA.pdf"},
+  {id:"gen-08",tid:"gen-08",n:"08",tema:"Revisão geral",ds:"As seis unidades de Genética em uma aula, com quiz final.",pdf:"../aulas/AULA_08_GENETICA.pdf",nomePdf:"AULA_08_GENETICA.pdf"}]},
+ psi:{nome:"Psicologia Aplicada",tag:"Disciplina",cor:"#3cc4d6",desc:"Entender a pessoa por trás do paciente.",aulas:[
+  {n:"🎮",tema:"Jogo: Mente & Cuidado",ds:"Desafio de Psicologia Aplicada. Valem 2 tentativas e conta a maior nota.",jogo:"../psicologia-aplicada/"}]},
+ sc:{nome:"Saúde Coletiva",tag:"Disciplina",cor:"#3ddc97",desc:"O sistema que sustenta o cuidado: SUS e território.",aulas:[
+  {n:"🎮",tema:"Jogo: SUS & Território",ds:"Desafio de Saúde Coletiva. Valem 2 tentativas e conta a maior nota.",jogo:"../saude-coletiva/"}]},
+ emb:{nome:"Embriologia",tag:"Disciplina",cor:"#ff5fa2",desc:"Do ciclo menstrual ao bebê protegido.",aulas:[
+  {tid:"emb-01",n:"01",tema:"Aparelho reprodutor e ciclo menstrual",ds:"Como o corpo se prepara para gerar uma nova vida.",pdf:"../aulas/AULA_01_EMBRIOLOGIA.pdf",nomePdf:"AULA_01_EMBRIOLOGIA.pdf",lab:"../plataforma/?fase=emb1",labT:"Laboratório (2D e 3D)",jogo:"../plataforma/?fase=emb1&modo=jogo"},
+  {id:"emb-02",tid:"emb-02",n:"02",tema:"Fecundação",ds:"Do encontro dos gametas ao zigoto: como um espermatozoide fecunda o ovócito.",pdf:"../aulas/AULA_02_EMBRIOLOGIA.pdf",nomePdf:"AULA_02_EMBRIOLOGIA.pdf",lab:"../plataforma/?fase=emb2",labT:"Laboratório (2D e 3D)",jogo:"../plataforma/?fase=emb2&modo=jogo"},
+  {id:"emb-03",tid:"emb-03",n:"03",tema:"Primeira semana, anexos e placenta",ds:"Da clivagem à implantação, e o que protege e alimenta o bebê.",pdf:"../aulas/AULA_03_EMBRIOLOGIA.pdf",nomePdf:"AULA_03_EMBRIOLOGIA.pdf",lab:"../plataforma/?fase=emb2",labT:"Laboratório (2D e 3D)",jogo:"../plataforma/?fase=emb2&modo=jogo"},
+  {id:"emb-04",tid:"emb-04",n:"04",tema:"Organogênese e Teratogênese",ds:"Os três folhetos do embrião, o tubo neural e o que pode atrapalhar a formação do bebê.",pdf:"../aulas/AULA_04_EMBRIOLOGIA.pdf",nomePdf:"AULA_04_EMBRIOLOGIA.pdf",lab:"../laboratorio-emb3/",labT:"Laboratório (2D e 3D)",jogo:"../plataforma/?fase=emb3&modo=jogo"},
+  {id:"emb-05",tid:"emb-05",n:"05",tema:"Infecções congênitas e IST",ds:"Quando o agente atravessa da mãe para o bebê: Zika, toxoplasmose, citomegalovírus, rubéola e sífilis.",pdf:"../aulas/AULA_05_EMBRIOLOGIA.pdf",nomePdf:"AULA_05_EMBRIOLOGIA.pdf"},
+  {id:"emb-06",tid:"emb-06",n:"06",tema:"Métodos anticoncepcionais",ds:"Como se evita uma gravidez: do ciclo menstrual à escolha do método certo.",pdf:"../aulas/AULA_06_EMBRIOLOGIA.pdf",nomePdf:"AULA_06_EMBRIOLOGIA.pdf"},
+  {id:"emb-07",tid:"emb-07",n:"07",tema:"Mudanças no corpo da mulher",ds:"Gestação, parto e puerpério: o que muda no corpo da mãe e onde a fisioterapia atua.",pdf:"../aulas/AULA_07_EMBRIOLOGIA.pdf",nomePdf:"AULA_07_EMBRIOLOGIA.pdf"},
+  {id:"emb-08",tid:"emb-08",n:"08",tema:"Revisão geral",ds:"Seis unidades em uma aula: flashcards, jogo em grupos e quiz final.",pdf:"../aulas/AULA_08_EMBRIOLOGIA.pdf",nomePdf:"AULA_08_EMBRIOLOGIA.pdf"}]}};
+const ses=()=>{try{return JSON.parse(localStorage.getItem("sj_portal_v1")||"null")}catch(e){return null}};
+(function(){try{const k=JSON.parse(localStorage.getItem("sj_prof_keep")||"null");if(k&&k.exp>Date.now()&&k.pin){sessionStorage.setItem("sj_portal_prof","1");sessionStorage.setItem("sj_teste_pin",k.pin);sessionStorage.setItem("sj_ge_pin",k.pin)}else if(k)localStorage.removeItem("sj_prof_keep")}catch(e){}})();
+let S=ses();if(S&&S.role==="aluno"&&(RA.check(S.nome,S.ra))){S=null;try{localStorage.removeItem("sj_portal_v1")}catch(e){}}let isProf=false;try{isProf=sessionStorage.getItem("sj_portal_prof")==="1"}catch(e){}
+function nk(n){n=String(n).normalize("NFD").replace(/[̀-ͯ]/g,"").toLowerCase().replace(/[^a-z]/g,"");let h=5381;for(const c of n)h=((h*33)^c.charCodeAt(0))>>>0;return h.toString(36)}
+function prefill(nome,ra){try{const K="sj_teste_gen_v2";let T=JSON.parse(localStorage.getItem(K)||"null")||{},key=ra+"~"+nk(nome);
+  if(!T.aluno||T.aluno.key!==key){T.aluno={nome,mat:ra,key};T.unl=false;T.unlk={};T.done=T.done||{};T.pend=T.pend||[];localStorage.setItem(K,JSON.stringify(T))}
+  const Dn="sj_dna3d_v1";let d={};try{d=JSON.parse(localStorage.getItem(Dn)||"{}")}catch(e){}if(d.n!==nome||d.r!==ra)localStorage.setItem(Dn,JSON.stringify({n:nome,r:ra,sent:false}))}catch(e){}}
+let DADAS=["gen-01","gen-02","gen-03","emb-01","emb-02","emb-03","emb-04"];let DADAS_SRV=false;try{const c=JSON.parse(localStorage.getItem("sj_dadas")||"null");if(Array.isArray(c))DADAS=c}catch(e){}
+function dadasSync(){try{const c=new AbortController(),t=setTimeout(()=>c.abort(),8000);fetch(API+"?acao=aulas",{signal:c.signal}).then(r=>r.json()).then(j=>{clearTimeout(t);if(j&&j.ok){DADAS_SRV=true;if(Array.isArray(j.dadas)){DADAS=j.dadas;try{localStorage.setItem("sj_dadas",JSON.stringify(DADAS))}catch(e){}}document.querySelectorAll("#al article[data-id]").forEach(dadaPaint)}}).catch(()=>{})}catch(e){}}
+const FAIXA=`<div role="note" style="margin:2px 0 14px;padding:16px 20px;border-radius:16px;background:linear-gradient(90deg,#ffb020,#ff7a45);color:#1b1000;font:800 1.05rem/1.4 system-ui;text-align:center;letter-spacing:.02em">📌 TRABALHO APLICADO · ENTREGAR DIA 05/11</div>`;
+const FAIXA2=`<div role="note" style="margin:2px 0 14px;padding:16px 20px;border-radius:16px;background:linear-gradient(90deg,#8e6bd8,#ff5fa2);color:#fff;font:800 1.05rem/1.4 system-ui;text-align:center;letter-spacing:.02em">📝 SEMANA DE AVALIAÇÃO · 15 PONTOS · CAI DA AULA 01 À 05</div>`;
+const isDada=a=>DADAS.indexOf(a)>=0;
+const SELO=`<span class="dd" title="Aula dada" style="display:inline-block;margin-left:6px;padding:1px 9px;border-radius:999px;background:#3ddc8433;color:#3ddc84;font:800 .85rem/1.5 system-ui;vertical-align:middle">✔ dada</span>`;
+function dadaPaint(ar){const id=ar.dataset.tid||ar.dataset.id;const h=ar.querySelector("h3");if(!h)return;const on=isDada(id);const old=h.querySelector(".dd");if(on&&!old)h.insertAdjacentHTML("beforeend"," "+SELO);if(!on&&old)old.remove();const b=ar.querySelector("[data-dada]");if(b)b.textContent=on?"✔ Aula dada (desmarcar)":"Marcar como aula dada"}
+async function dadaToggle(id,ar){const i=DADAS.indexOf(id);if(i>=0)DADAS.splice(i,1);else DADAS.push(id);try{localStorage.setItem("sj_dadas",JSON.stringify(DADAS))}catch(e){}dadaPaint(ar);
+ let pin="";try{pin=sessionStorage.getItem("sj_ge_pin")||""}catch(e){}const m=$("#dadamsg");
+ try{await fetch(API,{method:"POST",mode:"no-cors",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify({tipo:"aulas",pin,dadas:DADAS})});
+  const j=await (await fetch(API+"?acao=aulas&_="+Date.now())).json();
+  if(m){m.textContent=j&&j.ok&&Array.isArray(j.dadas)&&j.dadas.indexOf(id)>=0===isDada(id)?"Salvo para todos os alunos.":"Salvo só neste aparelho. Para valer para os alunos, reimplante o Apps Script (código novo no repositório).";}}
+ catch(e){if(m)m.textContent="Sem conexão com a planilha. Ficou salvo só neste aparelho."}}const VER="202610291830";const USO_ON=true;const vv=u=>u+(u.includes("?")?"&":"?")+"v="+VER;
+function uso(ev,aula){if(!USO_ON||!S||isProf)return;try{navigator.sendBeacon(API,new Blob([JSON.stringify({tipo:"uso",ev,aula,matricula:S.ra,nome:S.nome,ts:Date.now()})],{type:"text/plain;charset=utf-8"}))}catch(e){}}
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+function view(v){["landing","home","disc"].forEach(k=>$("#"+k).hidden=k!==v);$("#who").hidden=v==="landing";scrollTo(0,0)}
+function enter(){const first=(S.nome||"Professor").split(" ")[0];$("#gt").textContent=isProf?"Olá, professor.":"Olá, "+first+".";$("#whoT").textContent=isProf?"Professor":S.nome;$("#prof").hidden=!isProf;view("home")}
+$("#fa").addEventListener("submit",e=>{e.preventDefault();const f=new FormData(e.target),nome=String(f.get("nome")).trim().replace(/\s+/g," "),ra=String(f.get("ra")).trim().replace(/\s+/g,""),er=$("#ea");
+ if(nome.split(" ").length<2){er.textContent="Digite nome e sobrenome.";return}var ck=RA.check(nome,ra);if(ck){er.textContent=ck;return}
+ er.textContent="";S={role:"aluno",nome,ra};isProf=false;try{sessionStorage.removeItem("sj_portal_prof");localStorage.setItem("sj_portal_v1",JSON.stringify(S))}catch(x){}prefill(nome,ra);enter()});
+$("#fp").addEventListener("submit",async e=>{e.preventDefault();const pin=String(new FormData(e.target).get("pin")).trim(),er=$("#ep");if(!pin){er.textContent="Digite o PIN.";return}er.textContent="Verificando…";
+ try{const c=new AbortController(),t=setTimeout(()=>c.abort(),12000);const r=await fetch(API+"?"+new URLSearchParams({acao:"painel",pin}),{signal:c.signal});clearTimeout(t);const j=await r.json();
+  if(j&&j.ok){try{sessionStorage.setItem("sj_teste_pin",pin);sessionStorage.setItem("sj_ge_pin",pin);sessionStorage.setItem("sj_portal_prof","1");localStorage.setItem("sj_prof_keep",JSON.stringify({pin,exp:Date.now()+8*36e5}))}catch(x){}isProf=true;S={role:"prof",nome:"Professor"};er.textContent="";enter()}
+  else er.textContent=j&&j.err==="pin"?"PIN incorreto.":j&&j.err==="bloqueado"?"Muitas tentativas erradas. Aguarde 15 minutos.":"Não consegui validar agora. Tente de novo."}catch(x){er.textContent="Sem resposta do servidor. Verifique a internet."}});
+$("#sair").onclick=()=>{try{localStorage.removeItem("sj_portal_v1");localStorage.removeItem("sj_prof_keep");sessionStorage.removeItem("sj_portal_prof");sessionStorage.removeItem("sj_teste_pin");sessionStorage.removeItem("sj_ge_pin")}catch(e){}S=null;isProf=false;view("landing")};
+document.addEventListener("click",e=>{const d=e.target.closest("[data-d]");if(!d)return;const x=D[d.dataset.d];$("#dtag").textContent=x.tag;$("#dt").textContent=x.nome;$("#dd").textContent=x.desc;
+ $("#al").innerHTML=x.aulas.map(a=>`<article class="card aula" data-id="${a.id||""}" data-tid="${a.id||a.tid||""}" style="--c:${x.cor}"><div class="num">${a.n}</div><div><h3>${esc(a.tema)}${isDada(a.id||a.tid)?" "+SELO:""}</h3><p class="ds">${esc(a.ds)}</p><div class="acts">${a.tid?`<a class="btn ghost" data-u="pre-teste" href="${vv("../teste/?aula="+a.tid+"&m=pre")}">Pré-teste</a>`:""}${a.pdf?`<a class="btn" data-u="aula" href="${a.pdf}" target="_blank" rel="noopener">Ver a aula</a><a class="btn ghost" data-u="pdf" href="${a.pdf}" download="${a.nomePdf}">Baixar PDF</a>`:""}${a.lab?`<a class="btn ghost" data-u="lab" href="${vv(a.lab)}">${esc(a.labT)}</a>`:""}${a.jogo?`<a class="btn ghost" data-u="jogo" href="${vv(a.jogo)}">Jogo</a>`:""}${a.tid?`<a class="btn ghost" data-u="pos-teste" href="${vv("../teste/?aula="+a.tid+"&m=pos")}">Pós-teste</a>`:""}${(a.extra||[]).map(z=>`<a class="btn ghost" data-u="teste" href="${vv(z[1])}">${esc(z[0])}</a>`).join("")}${isProf?`<button class="btn ghost" data-dada="1" style="border-color:#3ddc8466">Marcar como aula dada</button>`:""}</div></div></article>${a.id==="gen-04"||a.id==="emb-04"?FAIXA:""}${a.id==="gen-05"||a.id==="emb-05"?FAIXA2:""}`).join("")+(isProf?'<p id="dadamsg" class="note" style="margin:10px 2px"></p>':"");$("#al").querySelectorAll("article[data-tid]").forEach(dadaPaint);$("#al").querySelectorAll("[data-dada]").forEach(b=>b.addEventListener("click",()=>{const ar=b.closest("article");dadaToggle(ar.dataset.tid,ar)}));view("disc");$("#al").querySelectorAll("article[data-id]").forEach(ar=>{const id=ar.dataset.id;if(!id)return;LIB.liberado(id).then(ok=>{if(ok)return;ar.style.opacity=".8";ar.querySelector(".acts").innerHTML=`<span class="btn ghost" style="cursor:default;pointer-events:none">🔒 Libera em ${LIB.quando(id)}</span>`})});$("#al").querySelectorAll("a[data-u]").forEach((l,i)=>l.addEventListener("click",()=>uso(l.dataset.u,x.nome+" · "+(l.closest("article").querySelector(".num")||{}).textContent)))});
+$("#vh").onclick=()=>view("home");
+dadasSync();if(isProf&&(!S||S.role!=="prof"))S={role:"prof",nome:"Professor"};if(S&&(S.role==="aluno"||isProf)){if(S.role==="aluno")prefill(S.nome,S.ra);enter()}else view("landing");
+/* arte dos cards */
+function art(id,col,kind){let s="";const el=$("#"+id);
+ if(kind==="g"){for(let i=0;i<14;i++){const y=14+i*20,x1=270+Math.sin(i*.62)*56,x2=270-Math.sin(i*.62)*56;s+=`<line x1="${x1}" y1="${y}" x2="${x2}" y2="${y}" stroke="${["#3ddc97","#ff7a7a","#5cb8ff","#ffc83d"][i%4]}" stroke-width="6" stroke-linecap="round" opacity=".75"/>`}
+  let a="",b="";for(let i=0;i<=56;i++){const y=i*5.2,x=270+Math.sin(i*.62/3.85)*56;a+=`${x.toFixed(1)},${y.toFixed(1)} `;b+=`${(540-x).toFixed(1)},${y.toFixed(1)} `}
+  s=`<polyline points="${a}" fill="none" stroke="#8e6bd8" stroke-width="7" stroke-linecap="round"/><polyline points="${b}" fill="none" stroke="#c9b3ff" stroke-width="7" stroke-linecap="round"/>`+s}
+ else if(kind==="p"){s+='<text x="290" y="205" font-size="230" font-weight="800" fill="#3cc4d6" opacity=".35" text-anchor="middle" font-family="serif">Ψ</text>';[[60,0],[95,1],[130,2]].forEach(([r,i])=>{s+=`<circle cx="290" cy="150" r="${r}" fill="none" stroke="#3cc4d6" stroke-width="2" stroke-dasharray="6 10" opacity=".6"><animateTransform attributeName="transform" type="rotate" from="0 290 150" to="${i%2?-360:360} 290 150" dur="${18+i*8}s" repeatCount="indefinite"/></circle><circle cx="${290+r}" cy="150" r="7" fill="#8fe3f0"><animateTransform attributeName="transform" type="rotate" from="0 290 150" to="${i%2?-360:360} 290 150" dur="${18+i*8}s" repeatCount="indefinite"/></circle>`})}
+ else if(kind==="s"){s+='<path d="M290 85h24v50h50v24h-50v50h-24v-50h-50v-24h50z" fill="#3ddc97" opacity=".35"/>';[[220,70],[360,80],[390,170],[330,250],[230,230],[200,150]].forEach(([x,y],i)=>{s+=`<line x1="302" y1="147" x2="${x}" y2="${y}" stroke="#3ddc97" stroke-width="2" opacity=".5"/><circle cx="${x}" cy="${y}" r="11" fill="#9be8b4"><animate attributeName="r" values="11;15;11" dur="${2.5+i*.4}s" repeatCount="indefinite"/></circle>`})}
+ else{[[300,90,60],[250,130,40],[340,150,44],[290,190,36],[230,70,28],[360,70,26],[210,170,24]].forEach(([x,y,r],i)=>{s+=`<circle cx="${x}" cy="${y}" r="${r}" fill="${i%2?"#ff5fa233":"#ffb3d333"}" stroke="#ff8fc0" stroke-width="2"><animate attributeName="r" values="${r};${r+4};${r}" dur="${3+i*.4}s" repeatCount="indefinite"/></circle><circle cx="${x}" cy="${y}" r="${r*.35}" fill="#ff5fa2" opacity=".6"/>`})}
+ el.innerHTML=s}
+art("arte","","e");art("artp","","p");art("arts","","s");
+(function(){const el=$("#artg"),C=["#3ddc97","#ff7a7a","#5cb8ff","#ffc83d"],rm=matchMedia("(prefers-reduced-motion: reduce)").matches;let t=0;
+ function f(){const N=16,A=46,cx=268;let r="",A1=[],B1=[],bl="";
+  for(let i=0;i<=N;i++){const y=10+i*18.2,p=i*.7+t,sn=Math.sin(p),cs=Math.cos(p),x1=cx+A*sn,x2=cx-A*sn;
+   A1.push(x1.toFixed(1)+","+y.toFixed(1));B1.push(x2.toFixed(1)+","+y.toFixed(1));
+   r+=`<line x1="${x1.toFixed(1)}" y1="${y.toFixed(1)}" x2="${x2.toFixed(1)}" y2="${y.toFixed(1)}" stroke="${C[i%4]}" stroke-width="5" stroke-linecap="round" opacity="${(.3+.5*Math.abs(cs)).toFixed(2)}"/>`;
+   bl+=`<circle cx="${x1.toFixed(1)}" cy="${y.toFixed(1)}" r="${(6+3*cs).toFixed(1)}" fill="#8e6bd8" opacity="${(.55+.4*cs).toFixed(2)}"/><circle cx="${x2.toFixed(1)}" cy="${y.toFixed(1)}" r="${(6-3*cs).toFixed(1)}" fill="#c9b3ff" opacity="${(.55-.4*cs).toFixed(2)}"/>`}
+  el.innerHTML=`<polyline points="${A1.join(" ")}" fill="none" stroke="#8e6bd8" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" opacity=".7"/><polyline points="${B1.join(" ")}" fill="none" stroke="#c9b3ff" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" opacity=".7"/>`+r+bl}
+ f();if(rm)return;function loop(){t+=.025;if(el.isConnected&&el.getBoundingClientRect().width>0)f();requestAnimationFrame(loop)}requestAnimationFrame(loop)})();
+/* fundo animado */
+const cv=$("#bg"),cx=cv.getContext("2d"),RM=matchMedia("(prefers-reduced-motion: reduce)").matches;let W,H,dpr,parts=[];
+function rs(){dpr=Math.min(2,devicePixelRatio||1);W=innerWidth;H=innerHeight;cv.width=W*dpr;cv.height=H*dpr;cx.setTransform(dpr,0,0,dpr,0,0);parts=[];const n=Math.round(W*H/26000);for(let i=0;i<n;i++)parts.push({x:Math.random()*W,y:Math.random()*H,r:6+Math.random()*26,vx:(Math.random()-.5)*.15,vy:-.1-Math.random()*.2,c:["#3ddc97","#8e6bd8","#ff5fa2","#5cb8ff"][i%4],o:.06+Math.random()*.12})}
+addEventListener("resize",rs);rs();
+function draw(t){cx.clearRect(0,0,W,H);
+ parts.forEach(p=>{p.x+=p.vx;p.y+=p.vy;if(p.y<-40)p.y=H+40;if(p.x<-40)p.x=W+40;if(p.x>W+40)p.x=-40;const g=cx.createRadialGradient(p.x,p.y,0,p.x,p.y,p.r);g.addColorStop(0,p.c+"55");g.addColorStop(1,p.c+"00");cx.globalAlpha=p.o*4;cx.fillStyle=g;cx.beginPath();cx.arc(p.x,p.y,p.r,0,7);cx.fill()});
+ cx.globalAlpha=1;
+ if(!$("#landing").hidden){const hx=W>760?W*.76:W*.78,top=-20,bot=H+20,N=46,R=W>760?92:60,ph=t/1400,cols=["#3ddc97","#ff7a7a","#5cb8ff","#ffc83d"],al=W>760?1:.38;
+  const pts=[];for(let i=0;i<=N;i++){const y=top+(bot-top)*i/N,a=ph+i*.42;pts.push({y,x1:hx+Math.cos(a)*R,z1:Math.sin(a),x2:hx-Math.cos(a)*R,z2:-Math.sin(a)})}
+  for(let i=0;i<=N;i++){const p=pts[i],c=cols[i%4];cx.globalAlpha=al*(.25+.35*Math.abs(Math.cos(ph+i*.42)));cx.strokeStyle=c;cx.lineWidth=5;cx.lineCap="round";cx.beginPath();cx.moveTo(p.x1,p.y);cx.lineTo(p.x2,p.y);cx.stroke()}
+  [["x1","z1","#8e6bd8"],["x2","z2","#c9b3ff"]].forEach(([xk,zk,col])=>{for(let i=0;i<N;i++){const a=pts[i],b=pts[i+1];cx.globalAlpha=al*(.35+.65*((a[zk]+1)/2));cx.strokeStyle=col;cx.lineWidth=4+3*((a[zk]+1)/2);cx.beginPath();cx.moveTo(a[xk],a.y);cx.lineTo(b[xk],b.y);cx.stroke()}});
+  cx.globalAlpha=1}
+ if(!RM)requestAnimationFrame(draw)}
+requestAnimationFrame(draw);
+})();
+</script></body></html>

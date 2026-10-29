@@ -1,0 +1,15 @@
+name: teste-rapido
+on: [push, pull_request]
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.12" }
+      - run: pip install playwright && python -m playwright install --with-deps chromium
+      - name: Teste rápido (links, portal, laboratórios, plataforma e teste)
+        env:
+          SJ_TESTE_NOME: ${{ secrets.SJ_TESTE_NOME }}
+          SJ_TESTE_RA: ${{ secrets.SJ_TESTE_RA }}
+        run: python tests/smoke.py

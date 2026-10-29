@@ -1,0 +1,213 @@
+<!doctype html>
+<html lang="pt-BR"><head><meta charset="utf-8"><script src="../vendor/liberacao.js"></script><script>LIB.guard("gen-02")</script><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Saúde em Jogo · Laboratório · Genética Aula 02</title><meta name="robots" content="noindex">
+<link rel="icon" type="image/svg+xml" href="../icone-app.svg">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&family=Sora:wght@500;600;700&display=swap">
+<link rel="stylesheet" href="../laboratorio/estilo.css">
+<style>
+.cv{width:100%;height:min(52vh,420px);min-height:280px;border-radius:14px;background:radial-gradient(circle at 50% 40%,#16241d,#09100d);touch-action:none;display:block}
+.chips{display:flex;gap:8px;flex-wrap:wrap}.chip{border:1px solid var(--line);border-radius:999px;padding:6px 12px;font-size:.8rem;font-weight:600;color:var(--mut);background:var(--s1);min-height:36px;cursor:pointer}
+.chip.on{border-color:var(--g);color:var(--g);background:var(--gd)}
+[hidden]{display:none!important}
+.rg{width:100%;margin:10px 0 4px;accent-color:#3ddc97}
+.leg{display:flex;gap:10px;flex-wrap:wrap;margin-top:8px;font-size:.82rem;color:var(--ink2)}.leg i{display:inline-block;width:12px;height:12px;border-radius:4px;margin-right:5px;vertical-align:-1px}
+.big{font-size:1.15rem;margin:4px 0}
+svg text{font-family:var(--body)}
+.seqrow{display:flex;gap:3px;flex-wrap:wrap;margin:4px 0 12px}.bs{width:30px;height:34px;border-radius:7px;display:grid;place-items:center;font:700 1rem var(--disp);color:#0b1b2b}
+.cod{display:inline-flex;flex-direction:column;align-items:center;gap:3px;margin:0 6px 8px 0}.cod .aa{font-size:.68rem;color:var(--ink2);max-width:62px;text-align:center;line-height:1.1}
+.inp{width:100%;min-height:50px;border-radius:12px;border:1px solid var(--line);background:var(--s2);color:var(--ink);padding:0 14px;font:700 1.1rem var(--disp);letter-spacing:.12em;text-transform:uppercase}
+.tg{display:flex;gap:8px;margin:8px 0}.tg button{flex:1;min-height:48px;border-radius:12px;border:1.5px solid var(--line);background:var(--s2);color:var(--ink);font:700 .95rem var(--body);cursor:pointer}.tg button.on{border-color:var(--g);background:var(--gd);color:var(--g)}.tg button.bad.on{border-color:#ff7a7a;background:#2e1717;color:#ff9b9b}
+.mol{transition:all .9s ease}
+main{max-width:880px;margin-left:auto;margin-right:auto}
+body{font-size:19px}
+.cap{margin:14px 2px 6px}.cap .eyebrow{font-size:.9rem}.cap .big{font-size:1.65rem;line-height:1.2;margin:6px 0 8px}.cap p{font-size:1.28rem;line-height:1.55;margin:6px 0 0}
+.card h2{font-size:1.35rem}.note{font-size:1.05rem}.eyebrow{font-size:.85rem}
+.btn{font-size:1.1rem;min-height:54px}.chip{font-size:1rem;padding:9px 16px;min-height:44px}.tg button{font-size:1.1rem;min-height:56px}
+.leg{font-size:1rem}.rg{height:34px}
+.cv{height:min(58vh,520px)}
+.seqrow .bs{width:38px;height:42px;font-size:1.2rem}.cod .aa{font-size:.9rem;max-width:80px}.inp{font-size:1.3rem;min-height:58px}
+#mc .card h2{font-size:1.35rem}#mc .card .note{font-size:1.1rem}
+</style></head><body>
+<header class="top"><div class="brand"><img src="../icone-app.svg" alt="" width="42" height="42" style="border-radius:12px"><div><b>Saúde em Jogo · Laboratório</b><small>Genética · Aula 02 · Dogma Central e EIM</small></div></div></header>
+<main>
+<button class="btn ghost" id="back" hidden style="margin-bottom:10px">← Menu</button>
+<section id="menu"><a class="btn ghost" href="../portal/" style="text-decoration:none;display:inline-flex;margin:0 0 12px">← Voltar ao portal</a><p class="note" style="margin:0 2px 12px">Escolha o que quer explorar. Arraste para girar os modelos em 3D.</p><div class="stack" id="mc"></div></section>
+
+<section id="m0" hidden><div class="stack">
+ <div class="card"><canvas class="cv" id="c0"></canvas><div class="cap"><span class="eyebrow">Replicação semiconservativa</span><h2 class="big" id="t0"></h2><p id="d0" style="margin:6px 0 0"></p></div><label class="note" style="display:block;margin-top:10px;font-weight:700">Fechado ↔ Copiando</label><input class="rg" id="r0" type="range" min="0" max="100" value="0"><div class="row2" style="gap:8px"><button class="btn" id="p0">▶ Tocar</button><button class="btn ghost" id="z0">Voltar ao início</button></div>
+ <div class="leg"><span><i style="background:#3ddc97"></i>A</span><span><i style="background:#ff7a7a"></i>T</span><span><i style="background:#5cb8ff"></i>C</span><span><i style="background:#ffc83d"></i>G</span><span><i style="background:#8e6bd8"></i>fita antiga</span><span><i style="background:#e9defc"></i>fita nova</span></div></div></div></section>
+
+<section id="m1" hidden><div class="stack">
+ <div class="card"><canvas class="cv" id="c1"></canvas><div class="cap"><span class="eyebrow" id="e1"></span><h2 class="big" id="t1"></h2><p id="d1" style="margin:6px 0 0"></p></div><div class="chips" id="k1" style="margin-top:12px"></div></div></div></section>
+
+<section id="m2" hidden><div class="stack">
+ <div class="card"><canvas class="cv" id="c2"></canvas><div class="cap"><span class="eyebrow">Tradução: do RNA à proteína</span><h2 class="big" id="t2"></h2><p id="d2" style="margin:6px 0 0"></p></div><label class="note" style="display:block;margin-top:10px;font-weight:700">Passo do ribossomo</label><input class="rg" id="r2" type="range" min="0" max="10" value="0"><div class="row2" style="gap:8px"><button class="btn" id="p2">▶ Tocar</button><button class="btn ghost" id="z2">Voltar ao início</button></div></div></div></section>
+
+<section id="m3" hidden><div class="stack"><div class="card">
+ <svg id="dg" viewBox="0 0 400 250" style="width:100%;background:#0e1a2b;border-radius:14px" role="img" aria-label="Do DNA à proteína">
+  <rect x="6" y="6" width="388" height="238" rx="26" fill="#13243b" stroke="#2b4a73" stroke-width="2"/>
+  <ellipse cx="105" cy="105" rx="92" ry="78" fill="#1c2f52" stroke="#6d8fd0" stroke-width="2"/><text x="105" y="40" text-anchor="middle" font-size="12" fill="#9db4d4">NÚCLEO</text>
+  <text x="300" y="30" text-anchor="middle" font-size="12" fill="#9db4d4">CITOPLASMA</text>
+  <g id="dna"><path d="M45 105 C65 80 85 130 105 105 S145 80 165 105" stroke="#8e6bd8" stroke-width="5" fill="none" stroke-linecap="round"/><path d="M45 105 C65 130 85 80 105 105 S145 130 165 105" stroke="#c9b3ff" stroke-width="5" fill="none" stroke-linecap="round"/><g stroke-width="4" stroke-linecap="round"><line x1="55" y1="92" x2="55" y2="118" stroke="#3ddc97"/><line x1="75" y1="96" x2="75" y2="114" stroke="#ff7a7a"/><line x1="95" y1="103" x2="95" y2="107" stroke="#5cb8ff"/><line x1="115" y1="96" x2="115" y2="114" stroke="#ffc83d"/><line x1="135" y1="92" x2="135" y2="118" stroke="#3ddc97"/><line x1="155" y1="99" x2="155" y2="111" stroke="#ff7a7a"/></g></g>
+  <g id="rna" style="opacity:0;transition:all 1.2s ease"><path d="M45 140 C65 125 85 155 105 140 S145 125 165 140" stroke="#ff9fc4" stroke-width="5" fill="none" stroke-linecap="round"/><text x="105" y="168" text-anchor="middle" font-size="11" fill="#ff9fc4">RNA</text></g>
+  <g id="rib" style="opacity:0;transition:opacity 1s"><ellipse cx="318" cy="150" rx="40" ry="22" fill="#5cb8ff"/><ellipse cx="318" cy="128" rx="26" ry="14" fill="#3b8cff"/><text x="318" y="190" text-anchor="middle" font-size="11" fill="#9db4d4">ribossomo</text></g>
+  <g id="prot" style="opacity:0;transition:opacity 1s"><circle cx="300" cy="86" r="9" fill="#ffc83d"/><circle cx="318" cy="76" r="9" fill="#3ddc97"/><circle cx="337" cy="82" r="9" fill="#ff7a7a"/><circle cx="352" cy="68" r="9" fill="#5cb8ff"/><circle cx="364" cy="50" r="9" fill="#c9b3ff"/><text x="345" y="40" text-anchor="middle" font-size="11" fill="#d9e4f2">proteína</text></g>
+ </svg><div class="cap"><h2 class="big" id="t3"></h2><p id="d3" style="margin:6px 0 0"></p></div>
+ <div class="tg" id="dgb"><button data-s="0" class="on">1 · DNA</button><button data-s="1">2 · Cópia (RNA)</button><button data-s="2">3 · Proteína</button></div><button class="btn ghost" id="p3" style="width:100%">▶ Tocar os 3 passos</button></div></div></section>
+
+<section id="m4" hidden><div class="stack"><div class="card">
+ <svg id="pk" viewBox="0 0 400 250" style="width:100%;background:#0e1a2b;border-radius:14px" role="img" aria-label="Fenilcetonúria com e sem enzima">
+  <text x="20" y="28" font-size="13" fill="#9db4d4">Fenilalanina (vem da comida)</text>
+  <g id="fe"><circle class="mol" cx="40" cy="60" r="12" fill="#ffc83d"/><circle class="mol" cx="70" cy="60" r="12" fill="#ffc83d"/><circle class="mol" cx="100" cy="60" r="12" fill="#ffc83d"/></g>
+  <path d="M130 60 H250" stroke="#9db4d4" stroke-width="5"/><path d="M240 50 L254 60 L240 70" stroke="#9db4d4" stroke-width="5" fill="none"/>
+  <rect x="165" y="42" width="50" height="36" rx="10" fill="#3b8cff" id="enz"/><text x="190" y="64" text-anchor="middle" font-size="12" font-weight="700" fill="#fff">enzima</text>
+  <g id="xx" style="opacity:0"><path d="M170 36 L210 84 M210 36 L170 84" stroke="#ff5468" stroke-width="7" stroke-linecap="round"/></g>
+  <circle cx="290" cy="60" r="12" fill="#3ddc97" id="ty"/><text x="290" y="28" text-anchor="middle" font-size="13" fill="#9db4d4">Tirosina</text>
+  <text x="20" y="128" font-size="13" fill="#9db4d4">Quantidade de fenilalanina no sangue</text>
+  <rect x="20" y="140" width="360" height="26" rx="13" fill="#1c2f52"/><rect id="lv" x="20" y="140" width="40" height="26" rx="13" fill="#3ddc97" style="transition:all 1.2s"/>
+  <text id="lvt" x="200" y="196" text-anchor="middle" font-size="15" font-weight="700" fill="#3ddc97">Normal</text>
+  <text id="lvs" x="200" y="222" text-anchor="middle" font-size="12" fill="#9db4d4"></text>
+ </svg><div class="cap"><span class="eyebrow">Fenilcetonúria (PKU)</span><h2 class="big" id="t4"></h2><p id="d4" style="margin:6px 0 0"></p></div>
+ <div class="tg" id="pkb"><button data-s="0" class="on">Enzima funcionando</button><button data-s="1" class="bad">Enzima com defeito</button></div></div></div></section>
+
+<section id="m5" hidden><div class="stack"><div class="card">
+ <svg id="ms" viewBox="0 0 400 275" style="width:100%;background:#0e1a2b;border-radius:14px" role="img" aria-label="Lisossomo com e sem enzima">
+  <ellipse id="cel" cx="200" cy="130" rx="170" ry="108" fill="#1c2f52" stroke="#6d8fd0" stroke-width="3" style="transition:all 1s"/>
+  <ellipse cx="110" cy="100" rx="34" ry="26" fill="#2c4a82" stroke="#8aa6e0" stroke-width="2"/><text x="110" y="104" text-anchor="middle" font-size="11" fill="#d9e4f2">núcleo</text>
+  <circle id="ly" cx="250" cy="140" r="46" fill="#3a2a5e" stroke="#c9b3ff" stroke-width="3" style="transition:all 1s"/>
+  <text x="250" y="216" text-anchor="middle" font-size="12" fill="#d9e4f2">lisossomo (a “lixeira” da célula)</text>
+  <g id="pt" style="transition:opacity .8s"></g>
+  <text id="mt" x="200" y="264" text-anchor="middle" font-size="13" font-weight="700" fill="#3ddc97"></text>
+ </svg><div class="cap"><span class="eyebrow">Mucopolissacaridose (MPS)</span><h2 class="big" id="t5"></h2><p id="d5" style="margin:6px 0 0"></p></div>
+ <div class="tg" id="msb"><button data-s="0" class="on">Enzima funcionando</button><button data-s="1" class="bad">Enzima com defeito</button></div></div></div></section>
+
+<section id="m6" hidden><div class="stack"><div class="card"><span class="eyebrow">Digite um pedaço de DNA (só A, T, C, G)</span><input class="inp" id="sq" maxlength="21" value="ATGGCTGAACTTAAA" autocomplete="off" autocapitalize="characters" inputmode="text" style="margin-top:8px"><p class="note" style="margin:8px 0 0">Veja a fita que encaixa, a cópia em RNA e as “palavras” de 3 letras que viram aminoácidos.</p></div>
+ <div class="card" id="so"></div></div></section>
+</main>
+<script src="../vendor/three.min.js"></script>
+<script>
+(function(){"use strict";
+const $=s=>document.querySelector(s);
+const MENU=[["3D","Replicação do DNA","A escada se abre como um zíper e cada metade ganha uma fita nova.",0],["3D","Do DNA ao cromossomo","Veja como um fio enorme se enrola até caber no núcleo.",1],["3D","Tradução: o ribossomo lê o RNA","Acompanhe a proteína sendo montada, aminoácido por aminoácido.",2],["3D","DNA em 3D","Esqueleto, bases, pares e ligações. Separe as fitas.","../dna3d/"],["2D","DNA → RNA → proteína","Os três passos do Dogma Central, animados.",3],["2D","PKU: com e sem enzima","Veja a fenilalanina se acumular quando a enzima falha.",4],["2D","MPS: a lixeira da célula","Compare o lisossomo com e sem enzima.",5],["2D","Do gene à proteína, letra por letra","Digite um DNA e veja o RNA e os aminoácidos.",6]];
+const mc=$("#mc");MENU.forEach(m=>{const a=document.createElement(typeof m[3]==="number"?"button":"a");a.className="card";a.style.cssText="text-align:left;text-decoration:none;color:inherit;display:block;width:100%;cursor:pointer;font:inherit";if(typeof m[3]==="number")a.onclick=()=>show(m[3]);else a.href=m[3];a.innerHTML=`<span class="eyebrow">${m[0]}</span><h2 style="font-size:1.1rem;margin:4px 0">${m[1]}</h2><p class="note" style="margin:0">${m[2]}</p>`;mc.appendChild(a)});
+let active=-1;const V={};
+function show(i){active=i;for(let k=0;k<7;k++)$("#m"+k).hidden=k!==i;$("#menu").hidden=i!==-1;$("#back").hidden=i===-1;scrollTo(0,0);Object.values(V).forEach(v=>v.on=false);if(i===0||i===1||i===2){const v=V[i]||(V[i]=init3d(i));v.on=true;v.size();v.go()}stopAll()}
+function stopAll(){clearInterval(T0);clearInterval(T2);clearInterval(T3)}
+$("#back").onclick=()=>show(-1);
+const col={A:0x3ddc97,T:0xff7a7a,C:0x5cb8ff,G:0xffc83d,U:0xff9fc4},hex={A:"#3ddc97",T:"#ff7a7a",C:"#5cb8ff",G:"#ffc83d",U:"#ff9fc4"},cmp={A:"T",T:"A",C:"G",G:"C"};
+const THREEOK=typeof THREE!=="undefined";
+/* ===== visualizador 3D ===== */
+function viewer(canvas,camZ){
+ const R=new THREE.WebGLRenderer({canvas,antialias:true,alpha:true});R.setPixelRatio(Math.min(devicePixelRatio||1,2));
+ const sc=new THREE.Scene(),cam=new THREE.PerspectiveCamera(45,1,.1,100);cam.position.set(0,0,camZ);
+ sc.add(new THREE.AmbientLight(0xffffff,.75));const dl=new THREE.DirectionalLight(0xffffff,.9);dl.position.set(4,6,8);sc.add(dl);
+ const root=new THREE.Group();sc.add(root);const o={sc,root,cam,on:false,ry:0,rx:.15,auto:true,frame:null,camZ};
+ o.size=()=>{const w=canvas.clientWidth||300,h=canvas.clientHeight||300;R.setSize(w,h,false);cam.aspect=w/h;cam.updateProjectionMatrix()};
+ const P=new Map();let pinch=0;
+ canvas.addEventListener("pointerdown",e=>{canvas.setPointerCapture(e.pointerId);P.set(e.pointerId,{x:e.clientX,y:e.clientY});o.auto=false;if(P.size===2){const[a,b]=[...P.values()];pinch=Math.hypot(a.x-b.x,a.y-b.y)}});
+ canvas.addEventListener("pointermove",e=>{const p=P.get(e.pointerId);if(!p)return;if(P.size===1){o.ry+=(e.clientX-p.x)*.01;o.rx=Math.max(-1.3,Math.min(1.3,o.rx+(e.clientY-p.y)*.01))}p.x=e.clientX;p.y=e.clientY;if(P.size===2){const[a,b]=[...P.values()],d=Math.hypot(a.x-b.x,a.y-b.y);cam.position.z=Math.max(camZ*.4,Math.min(camZ*1.8,cam.position.z*(pinch/d)));pinch=d}});
+ const up=e=>P.delete(e.pointerId);canvas.addEventListener("pointerup",up);canvas.addEventListener("pointercancel",up);
+ canvas.addEventListener("wheel",e=>{e.preventDefault();cam.position.z=Math.max(camZ*.4,Math.min(camZ*1.8,cam.position.z*(1+e.deltaY*.001)))},{passive:false});
+ o.go=()=>{if(o.running)return;o.running=true;(function loop(){if(!o.on){o.running=false;return}if(o.auto)o.ry+=.004;root.rotation.y=o.ry;root.rotation.x=o.rx;if(o.frame)o.frame();R.render(sc,cam);requestAnimationFrame(loop)})()};
+ return o}
+const M=(c,e)=>new THREE.MeshStandardMaterial({color:c,roughness:.45,metalness:.1,emissive:e||0x000000});
+const sph=new THREE.SphereGeometry(1,16,12),cyl=new THREE.CylinderGeometry(1,1,1,10,1);
+function ball(g,c,r,x,y,z){const m=new THREE.Mesh(sph,M(c));m.scale.setScalar(r);m.position.set(x||0,y||0,z||0);g.add(m);return m}
+const UP=new THREE.Vector3(0,1,0);
+function seg(m,a,b,r){const d=new THREE.Vector3().subVectors(b,a),L=d.length();if(L<.02){m.visible=false;return}m.visible=true;m.position.copy(a).addScaledVector(d,.5);m.quaternion.setFromUnitVectors(UP,d.normalize());m.scale.set(r,L,r)}
+function init3d(i){return [initRep,initChr,initTrad][i]()}
+/* ===== 0. replicação ===== */
+function initRep(){
+ const v=viewer($("#c0"),15),N=22,H=.42,Rr=1,seq="ATGCGTACCTGAAGTCCGATTA".split("");
+ const st=new THREE.Group();v.root.add(st);
+ const pos=(t,d,o)=>{const f=t*.55,k=1-.85*o;return new THREE.Vector3(d*(Rr*Math.cos(f)*k+1.7*o),(t-N/2)*H,d*Rr*Math.sin(f)*k)};
+ const bbA=[],bbB=[],nbA=[],nbB=[];for(let k=0;k<=2*N;k++){bbA.push(ball(st,0x8e6bd8,.15));bbB.push(ball(st,0x8e6bd8,.15));nbA.push(ball(st,0xe9defc,.14));nbB.push(ball(st,0xe9defc,.14))}
+ const rg=[];for(let i=0;i<=N;i++){const mk=c=>{const m=new THREE.Mesh(cyl,M(c));st.add(m);return m};const b=seq[i%seq.length],q=cmp[b];rg.push({a1:mk(col[b]),b1:mk(col[q]),a2:mk(col[b]),a3:mk(col[q]),b2:mk(col[q]),b3:mk(col[b]),b,q})}
+ let s=0;const sm=x=>x*x*(3-2*x),cl=x=>Math.max(0,Math.min(1,x));
+ const oo=t=>sm(cl((t-(N-s*N*1.15))/3));
+ function upd(){
+  for(let k=0;k<=2*N;k++){const t=k/2,o=oo(t),A=pos(t,1,o),B=pos(t,-1,o);bbA[k].position.copy(A);bbB[k].position.copy(B);
+   const u=new THREE.Vector3().subVectors(B,A).normalize();const nA=A.clone().addScaledVector(u,1.05*o),nB=B.clone().addScaledVector(u,-1.05*o);
+   nbA[k].position.copy(nA);nbB[k].position.copy(nB);nbA[k].visible=nbB[k].visible=o>.05;nbA[k].scale.setScalar(.14*o);nbB[k].scale.setScalar(.14*o)}
+  for(let i=0;i<=N;i++){const t=i,o=oo(t),A=pos(t,1,o),B=pos(t,-1,o),u=new THREE.Vector3().subVectors(B,A).normalize(),D=A.distanceTo(B),r=rg[i];
+   const hc=.5*(1-o)*D;seg(r.a1,A,A.clone().addScaledVector(u,hc),.09);seg(r.b1,B,B.clone().addScaledVector(u,-hc),.09);
+   const L=.5*o;const aM=A.clone().addScaledVector(u,L),aN=A.clone().addScaledVector(u,1.05*o);seg(r.a2,A,aM,.09);seg(r.a3,aM,aN,.09);
+   const bM=B.clone().addScaledVector(u,-L),bN=B.clone().addScaledVector(u,-1.05*o);seg(r.b2,B,bM,.09);seg(r.b3,bM,bN,.09)}
+  const f=1-s;$("#t0").textContent=s<.04?"A escada fechada":s<.96?"Copiando: o zíper está abrindo":"Duas escadas iguais";
+  $("#d0").textContent=s<.04?"É o DNA como ele é no núcleo: duas fitas coladas pelos pares A-T e C-G. Mova a barra ou toque em ▶.":s<.96?"A enzima helicase abre a escada. Cada metade vira molde: a DNA polimerase encaixa as letras que faltam (A com T, C com G).":"Cada escada nova tem uma fita antiga (roxo escuro) e uma fita nova (roxo claro). Por isso se diz semiconservativa."}
+ v.frame=()=>{};const upd0=upd;v.set=x=>{s=x;upd0()};upd();
+ $("#r0").oninput=e=>{v.set(+e.target.value/100)};
+ $("#z0").onclick=()=>{clearInterval(T0);$("#r0").value=0;v.set(0);$("#p0").textContent="▶ Tocar"};
+ $("#p0").onclick=()=>{if(T0){clearInterval(T0);T0=0;$("#p0").textContent="▶ Tocar";return}if(s>=1)$("#r0").value=0,v.set(0);$("#p0").textContent="⏸ Pausar";T0=setInterval(()=>{const x=Math.min(1,s+.008);$("#r0").value=x*100;v.set(x);if(x>=1){clearInterval(T0);T0=0;$("#p0").textContent="▶ Tocar"}},30)};
+ return v}
+let T0=0,T2=0,T3=0;
+/* ===== 1. DNA -> cromossomo ===== */
+function initChr(){
+ const v=viewer($("#c1"),13);const G=[];
+ const mk=()=>{const g=new THREE.Group();g.visible=false;v.root.add(g);G.push(g);return g};
+ let g=mk();for(let k=0;k<=56;k++){const t=k*.25,y=(t-7)*.7,f=t*1.3;ball(g,0x8e6bd8,.2,1.2*Math.cos(f),y,1.2*Math.sin(f));ball(g,0xc9b3ff,.2,-1.2*Math.cos(f),y,-1.2*Math.sin(f));if(k%3===0){const cc=[0x3ddc97,0xff7a7a,0x5cb8ff,0xffc83d][(k/3)%4|0];const m=new THREE.Mesh(cyl,M(cc));seg(m,new THREE.Vector3(1.2*Math.cos(f),y,1.2*Math.sin(f)),new THREE.Vector3(-1.2*Math.cos(f),y,-1.2*Math.sin(f)),.08);g.add(m)}}
+ g=mk();for(let k=0;k<11;k++){const x=(k-5)*1.15,y=Math.sin(k*.9)*.5;ball(g,0x8e6bd8,.55,x,y,0);if(k<10){const m=new THREE.Mesh(cyl,M(0xc9b3ff));seg(m,new THREE.Vector3(x+.5,y,0),new THREE.Vector3(x+.65,Math.sin((k+1)*.9)*.5,0),.07);g.add(m)}}
+ g=mk();for(let k=0;k<70;k++){const f=k*.62,y=(k-35)*.17;ball(g,k%2?0x8e6bd8:0xb59af0,.42,1.5*Math.cos(f),y,1.5*Math.sin(f))}
+ g=mk();const X=(sx,col)=>{for(let k=0;k<=26;k++){const t=k/26,y=(.5-t)*7,x=sx*(1-2*t)*2.6*0+sx*(0.5-t)*-2*2.2*-1;const px=sx*(t-.5)*-4.4,r=.5-.2*Math.exp(-Math.pow((t-.5)*7,2));const m=ball(g,col,r*1.05,px,y,0)}};X(1,0x8e6bd8);X(-1,0xd169a8);
+ const st=[["Passo 1 · O DNA","O DNA, a escada torcida","É muito fino e comprido. Se esticássemos o DNA de uma só célula humana, ele teria cerca de 2 metros!"],["Passo 2 · Nucleossomos","O DNA se enrola em “carretéis”","O DNA dá voltas em volta de proteínas e forma bolinhas, como contas num colar. Cada bolinha se chama nucleossomo."],["Passo 3 · Cromatina","O colar se enrola de novo","As contas se enrolam como uma mola e formam a cromatina. É assim que o DNA cabe dentro do núcleo."],["Passo 4 · Cromossomo","Antes de dividir, vira cromossomo","Quando a célula vai se dividir, tudo se enrola ainda mais e forma o cromossomo em X (duas cópias coladas). Temos 46 deles."]];
+ $("#k1").innerHTML=st.map((s,i)=>`<button class="chip" data-i="${i}">${i+1} · ${["DNA","Colar","Mola","Cromossomo"][i]}</button>`).join("");
+ const set=i=>{G.forEach((x,k)=>x.visible=k===i);[...$("#k1").children].forEach((b,k)=>b.classList.toggle("on",k===i));$("#e1").textContent=st[i][0];$("#t1").textContent=st[i][1];$("#d1").textContent=st[i][2]};
+ $("#k1").onclick=e=>{const b=e.target.closest("[data-i]");if(b)set(+b.dataset.i)};set(0);return v}
+/* ===== 2. tradução ===== */
+const AA={F:"Fenilalanina",L:"Leucina",S:"Serina",Y:"Tirosina",C:"Cisteína",W:"Triptofano",P:"Prolina",H:"Histidina",Q:"Glutamina",R:"Arginina",I:"Isoleucina",M:"Metionina",T:"Treonina",N:"Asparagina",K:"Lisina",V:"Valina",A:"Alanina",D:"Ác. aspártico",E:"Ác. glutâmico",G:"Glicina","*":"PARE"};
+const CT="FFLLSSSSYY**CC*WLLLLPPPPHHQQRRRRIIIMTTTTNNKKSSRRVVVVAAAADDEEGGGG",OR="UCAG";
+const aaOf=c=>CT[OR.indexOf(c[0])*16+OR.indexOf(c[1])*4+OR.indexOf(c[2])];
+function initTrad(){
+ const v=viewer($("#c2"),19);v.auto=false;v.ry=.25;v.rx=.25;const cods=["AUG","GCU","GAA","CUU","AAA","UGG","GGC","UUC","GAC","UAA"];const aacol=[0xffc83d,0x3ddc97,0xff7a7a,0x5cb8ff,0xc9b3ff,0xff9fc4,0x9be564,0xffa94d,0x66d9e8,0xffffff];
+ const sp=1.4,x0=-(cods.length-1)*sp/2;
+ cods.forEach((c,i)=>{const g=new THREE.Group();g.position.set(x0+i*sp,0,0);v.root.add(g);const bx=new THREE.Mesh(new THREE.BoxGeometry(1.3,.22,.5),M(0x3a3a55));bx.position.y=-.25;g.add(bx);c.split("").forEach((b,k)=>{const m=new THREE.Mesh(new THREE.BoxGeometry(.38,.38,.38),M(col[b]));m.position.set((k-1)*.43,0,0);g.add(m)})});
+ const rib=new THREE.Group();v.root.add(rib);const r1=new THREE.Mesh(sph,M(0x5cb8ff));r1.scale.set(1.1,.55,.8);r1.position.y=-.1;rib.add(r1);const r2=new THREE.Mesh(sph,M(0x3b8cff));r2.scale.set(.8,.5,.65);r2.position.y=.55;rib.add(r2);
+ const beads=cods.map((c,i)=>{const m=new THREE.Mesh(sph,M(aacol[i]));m.scale.setScalar(.34);m.visible=false;v.root.add(m);return m});
+ const links=cods.map(()=>{const m=new THREE.Mesh(cyl,M(0xdddddd));m.visible=false;v.root.add(m);return m});
+ let k=0;function set(n){k=n;const rx=x0+Math.min(n,9)*sp;rib.position.set(rx,.55,0);rib.visible=n<10;
+  for(let i=0;i<10;i++){const show=i<n&&i<9;beads[i].visible=show;const y=1.9+Math.sin(i*.9)*.25+(n>=10?1.3:0);beads[i].position.set(x0+i*sp,y,0)}
+  for(let i=0;i<9;i++){links[i].visible=false;if(i+1<n&&i+1<9)seg(links[i],beads[i].position,beads[i+1].position,.06)}
+  const nn=n>=10?9:n,c=cods[nn],a=AA[aaOf(c)];
+  if(n===0){$("#t2").textContent="Ribossomo no começo do RNA";$("#d2").textContent="O RNA tem “palavras” de 3 letras (códons). O ribossomo se encaixa no primeiro, AUG, que significa “comece”. Mova a barra para ele andar."}
+  else if(n<10){$("#t2").textContent=`Códon ${n+1}: ${c} → ${a}`;$("#d2").textContent=`O ribossomo lê ${c} e acrescenta ${a} à corrente. Já foram ${n} aminoácido${n>1?"s":""} montado${n>1?"s":""}. ${aaOf(cods[n-1])==="F"?"A fenilalanina é a mesma da PKU!":""}`}
+  else{$("#t2").textContent="Códon UAA: PARE";$("#d2").textContent="O último códon manda parar. A proteína está pronta e se solta do ribossomo. Ela é uma corrente de 9 aminoácidos."}}
+ v.set=set;set(0);
+ $("#r2").oninput=e=>set(+e.target.value);
+ $("#z2").onclick=()=>{clearInterval(T2);T2=0;$("#r2").value=0;set(0);$("#p2").textContent="▶ Tocar"};
+ $("#p2").onclick=()=>{if(T2){clearInterval(T2);T2=0;$("#p2").textContent="▶ Tocar";return}if(k>=10){$("#r2").value=0;set(0)}$("#p2").textContent="⏸ Pausar";T2=setInterval(()=>{const n=k+1;$("#r2").value=n;set(n);if(n>=10){clearInterval(T2);T2=0;$("#p2").textContent="▶ Tocar"}},1100)};
+ return v}
+/* ===== 3. Dogma 2D ===== */
+const DT=[["1 · O DNA fica guardado no núcleo","O DNA é como o livro de receitas: fica seguro dentro do núcleo e não sai de lá. Cada gene é uma receita de uma proteína."],["2 · A receita é copiada em RNA","A célula copia o gene em RNA, que é como uma fotocópia da receita. Essa cópia sai do núcleo e vai ao citoplasma."],["3 · O ribossomo monta a proteína","O ribossomo lê a cópia de RNA e junta os aminoácidos, um por um. Pronto: a proteína, que vai fazer o serviço na célula."]];
+function dg(s){const rna=$("#rna");rna.style.opacity=s>=1?1:0;rna.style.transform=s>=2?"translate(205px,0)":"translate(0,0)";$("#rib").style.opacity=s>=2?1:0;$("#prot").style.opacity=s>=2?1:0;[...$("#dgb").children].forEach((b,i)=>b.classList.toggle("on",i===s));$("#t3").textContent=DT[s][0];$("#d3").textContent=DT[s][1]}
+$("#dgb").onclick=e=>{const b=e.target.closest("[data-s]");if(b){clearInterval(T3);T3=0;dg(+b.dataset.s)}};dg(0);
+$("#p3").onclick=()=>{clearInterval(T3);let s=0;dg(0);T3=setInterval(()=>{s++;if(s>2){clearInterval(T3);T3=0;return}dg(s)},2600)};
+/* ===== 4. PKU ===== */
+function pku(s){const lv=$("#lv"),t=$("#lvt"),sb=$("#lvs");$("#xx").style.opacity=s?1:0;$("#enz").setAttribute("fill",s?"#6b6b7b":"#3b8cff");$("#ty").setAttribute("opacity",s?.15:1);
+ lv.setAttribute("width",s?340:40);lv.setAttribute("fill",s?"#ff5468":"#3ddc97");t.textContent=s?"Muito alta (acumulou!)":"Normal";t.setAttribute("fill",s?"#ff7a7a":"#3ddc97");sb.textContent=s?"Sem a enzima, a fenilalanina se acumula no sangue.":"A enzima a transforma em tirosina e o nível fica baixo.";
+ [...$("#pkb").children].forEach((b,i)=>b.classList.toggle("on",i===s));
+ $("#t4").textContent=s?"Enzima com defeito: a fenilalanina se acumula":"Enzima funcionando: tudo certo";
+ $("#d4").textContent=s?"O excesso de fenilalanina faz mal ao cérebro. Sem tratamento, pode causar músculos duros, tremores e atraso no desenvolvimento. O tratamento é uma dieta com pouca fenilalanina, começando cedo (por isso o teste do pezinho).":"Com a enzima funcionando, a fenilalanina que vem da comida é transformada em tirosina e não sobra demais no sangue."}
+$("#pkb").onclick=e=>{const b=e.target.closest("[data-s]");if(b)pku(+b.dataset.s)};pku(0);
+/* ===== 5. MPS ===== */
+function mps(s){const pts=$("#pt");let h="";const n=s?26:4;for(let i=0;i<n;i++){const a=i*2.4,r=s?(6+(i*7)%34):(8+(i*9)%26),x=250+Math.cos(a)*r,y=140+Math.sin(a)*r;h+=`<polygon points="${x},${y-6} ${x+5},${y-3} ${x+5},${y+3} ${x},${y+6} ${x-5},${y+3} ${x-5},${y-3}" fill="#ffa94d"/>`}pts.innerHTML=h;
+ const ly=$("#ly");ly.setAttribute("r",s?62:46);ly.setAttribute("fill",s?"#6a3a3a":"#3a2a5e");ly.setAttribute("stroke",s?"#ff7a7a":"#c9b3ff");$("#cel").setAttribute("ry",s?112:108);
+ const m=$("#mt");m.textContent=s?"Lisossomo cheio: moléculas acumuladas":"Lisossomo limpo";m.setAttribute("fill",s?"#ff7a7a":"#3ddc97");
+ [...$("#msb").children].forEach((b,i)=>b.classList.toggle("on",i===s));
+ $("#t5").textContent=s?"Enzima com defeito: o lixo se acumula":"Enzima funcionando: a lixeira está limpa";
+ $("#d5").textContent=s?"Sem a enzima, certas moléculas não são desmanchadas e se acumulam nas células do corpo todo. Resultado: articulações rígidas, músculos encurtados (contraturas) e dificuldade para respirar. A Fisioterapia ajuda a manter o movimento e a respiração.":"No lisossomo, uma enzima desmancha certas moléculas e a célula reaproveita as peças. Nada se acumula."}
+$("#msb").onclick=e=>{const b=e.target.closest("[data-s]");if(b)mps(+b.dataset.s)};mps(0);
+/* ===== 6. letra por letra ===== */
+function sq(){const raw=($("#sq").value||"").toUpperCase().replace(/[^ATCG]/g,"").slice(0,21),n=raw.length;if($("#sq").value!==raw)$("#sq").value=raw;
+ if(!n){$("#so").innerHTML='<p class="note" style="margin:0">Digite letras A, T, C ou G.</p>';return}
+ const b=(s,m)=>s.split("").map(c=>`<span class="bs" style="background:${hex[c]}">${c}</span>`).join("");
+ const comp=raw.split("").map(c=>cmp[c]).join(""),rna=raw.split("").map(c=>c==="T"?"U":c).join("");
+ let h=`<span class="eyebrow">1 · Sua fita de DNA</span><div class="seqrow">${b(raw)}</div><span class="eyebrow">2 · A fita que encaixa (A↔T, C↔G)</span><div class="seqrow">${b(comp)}</div><span class="eyebrow">3 · Cópia em RNA (o T vira U)</span><div class="seqrow">${b(rna.replace(/U/g,"U"))}</div>`;
+ h=h.replace(/(<span class="bs" style="background:#ff7a7a">)U/g,"$1U");
+ let cs="";for(let i=0;i+3<=rna.length;i+=3){const c=rna.slice(i,i+3),a=aaOf(c);cs+=`<div class="cod"><div class="seqrow" style="margin:0">${b(c)}</div><div class="aa">${AA[a]}</div></div>`}
+ h+=`<span class="eyebrow">4 · “Palavras” de 3 letras → aminoácidos</span><div style="margin-top:6px">${cs||'<p class="note" style="margin:0">Digite pelo menos 3 letras.</p>'}</div>`;$("#so").innerHTML=h}
+$("#sq").oninput=sq;sq();
+if(!THREEOK){["#c0","#c1","#c2"].forEach(s=>{const c=$(s);if(c)c.outerHTML='<p class="note">Não foi possível carregar o modelo 3D neste aparelho.</p>'})}
+window.addEventListener("resize",()=>{Object.values(V).forEach(v=>v.on&&v.size())});
+show(-1);
+})();
+</script></body></html>

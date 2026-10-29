@@ -1,0 +1,247 @@
+<!doctype html>
+<html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>DNA em 3D · Saúde em Jogo</title>
+<meta name="robots" content="noindex">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&family=Sora:wght@500;600;700&display=swap">
+<link rel="stylesheet" href="estilo.css">
+<style>
+.chip.vw::before{content:""!important}.chip.vw.on::before{content:"✓ "!important}
+#cv{width:100%;height:min(54vh,430px);min-height:300px;border-radius:14px;background:radial-gradient(circle at 50% 40%,#16241d,#09100d);touch-action:none;display:block}
+.cvw{position:relative}
+.dot{position:absolute;transform:translate(-50%,-50%);border:0;border-radius:999px;padding:4px 10px;background:var(--g);color:#052015;font:700 .72rem var(--disp);white-space:nowrap;box-shadow:0 2px 8px #0008;pointer-events:none}
+.leg{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+.leg span{display:inline-flex;align-items:center;gap:6px;font-size:.8rem;color:var(--ink2)}
+.leg i{width:16px;height:16px;border-radius:5px;display:inline-block}
+.chips{display:flex;gap:8px;flex-wrap:wrap}
+.chip{border:1px solid var(--line);border-radius:999px;padding:5px 12px;font-size:.8rem;font-weight:600;color:var(--mut);background:var(--s1)}
+.chip.on{border-color:var(--g);color:var(--g);background:var(--gd)}
+.chip.on::before{content:"✓ "}
+.chip:not(.on)::before{content:"🔒 "}
+.opts2{display:grid;gap:8px;margin-top:10px}
+.o2{text-align:left;background:var(--s2);border:1.5px solid var(--line);border-radius:12px;padding:12px 14px;font-weight:600;width:100%;min-height:44px}
+.o2.bad{border-color:var(--red);background:#2e1717}
+.o2.good{border-color:var(--g);background:var(--gd)}
+</style>
+</head><body><div class="wrap">
+<header class="top"><div class="brand"><img src="../icone-app.svg" alt="" width="42" height="42" style="border-radius:12px"><div><b>DNA em 3D</b><small>Gire, amplie e destrave cada peça</small></div></div></header>
+<main>
+<a class="btn ghost" id="vm" href="../laboratorio/" style="text-decoration:none;display:inline-flex;margin-bottom:10px">← Menu do laboratório</a><script>try{if(/laboratorio-aula2/.test(document.referrer))document.getElementById("vm").href="../laboratorio-aula2/"}catch(e){}</script>
+<div class="cvw"><canvas id="cv" aria-label="Modelo 3D do DNA"></canvas><div id="dots"></div></div>
+<p class="note" id="tip" role="status" style="margin:8px 2px 0;min-height:1.3em">Toque numa peça do modelo para ver o nome dela.</p>
+<div class="leg" id="leg" hidden></div>
+<div class="stack">
+<div class="card"><div class="row2"><span class="eyebrow" id="prog">Peça 1 de 6</span><span class="note">Arraste para girar · pinça para ampliar</span></div><div class="chips" id="chips" style="margin-top:8px"></div></div>
+<div class="card" id="step"></div>
+
+</div></main></div>
+<script src="../vendor/three.min.js"></script>
+<script>
+(function () {
+"use strict";
+const $ = s => document.querySelector(s);
+const STEPS = [
+  { nome: "Esqueleto (açúcar + fosfato)", txt: "As duas fitas em espiral são como os corrimãos de uma escada. Elas são feitas de açúcar e fosfato, repetidos como contas de um colar.", q: "De que é feito o “corrimão” do DNA?", o: ["Só de proteína", "De açúcar e fosfato", "De gordura"], c: 1 },
+  { nome: "Bases: A, T, C e G", txt: "Os degraus da escada são as bases. Existem 4 tipos, que a gente chama pelas letras A, T, C e G. Aqui, cada cor é uma letra.", q: "Quantas letras (bases) diferentes o DNA usa?", o: ["2", "20", "4"], c: 2 },
+  { nome: "Pares de bases", txt: "Cada degrau é um par. A só encaixa com T, e C só encaixa com G. Por isso, se você conhece uma fita, descobre a outra.", q: "Qual base encaixa com a A?", o: ["G", "T", "C"], c: 1 },
+  { nome: "Ligações de hidrogênio", txt: "Os pontinhos brancos no meio dos degraus são ligações fracas. Elas seguram as duas fitas juntas, mas podem se soltar quando a célula precisa ler ou copiar o DNA. O par A–T tem 2 pontinhos e o C–G tem 3.", q: "O que segura as duas fitas juntas no meio?", o: ["Uma cola de açúcar", "Ligações fracas entre as bases", "Nada, elas só se encostam"], c: 1 },
+  { nome: "Nucleotídeo", txt: "O destaque mostra um nucleotídeo, a peça de montar do DNA: 1 fosfato + 1 açúcar + 1 base. O DNA é uma fila enorme de nucleotídeos.", q: "Um nucleotídeo tem:", o: ["Fosfato, açúcar e uma base", "Só uma base", "As duas fitas inteiras"], c: 0 },
+  { nome: "Gene", txt: "O destaque mostra um pedaço do DNA. Um trecho do DNA com a receita de uma proteína é um gene. Ele é só uma parte do DNA, não o DNA inteiro.", q: "Um gene é:", o: ["O DNA inteiro de uma pessoa", "Um tipo de açúcar", "Um trecho do DNA com a receita de uma proteína"], c: 2 }
+];
+// modos de estudo (laboratório)
+const VIEWS = {
+  tudo:  { nome: "Tudo", show: ["back", "base", "h"], ex: 0, qq: { q: "O que mantém as duas fitas unidas no meio?", o: ["Ligações de hidrogênio entre as bases", "Uma proteína", "Gordura"], c: 0 }, txt: "O DNA montado: duas fitas de açúcar e fosfato (as laterais) ligadas pelos pares de bases (os degraus). Use o controle “Montado ↔ Separado” para abrir a escada." },
+  esq:   { nome: "Esqueleto", show: ["back"], ex: 0.9, qq: { q: "Quais peças formam o esqueleto?", o: ["Açúcar e fosfato", "Adenina e timina", "Só proteínas"], c: 0 }, txt: "Só as duas fitas. Cada fita é uma fila de açúcar (desoxirribose) e fosfato, um depois do outro. As fitas correm em sentidos opostos." },
+  bases: { nome: "Bases", show: ["base"], ex: 0.9, qq: { q: "Aqui, a base verde é qual?", o: ["Guanina (G)", "Adenina (A)", "Timina (T)"], c: 1 }, txt: "Só os degraus. Adenina (A, verde), timina (T, vermelha), citosina (C, azul) e guanina (G, amarela). Cada metade de degrau sai de uma fita." },
+  pares: { nome: "Pares e ligações", show: ["base", "h"], ex: 0, qq: { q: "Quantas ligações de hidrogênio tem o par C–G?", o: ["2", "3", "5"], c: 1 }, txt: "A liga com T por 2 ligações de hidrogênio; C liga com G por 3. São ligações fracas: a célula consegue abrir a escada para ler ou copiar o DNA." },
+  nuc:   { nome: "Nucleotídeo", show: [], ex: 0.5, nuc: true, qq: { q: "Qual destas NÃO faz parte de um nucleotídeo?", o: ["Fosfato", "Uma proteína", "Açúcar"], c: 1 }, txt: "Aqui o nucleotídeo foi tirado do DNA. Ele tem 3 pedaços: fosfato (laranja), açúcar (verde-água) e base (a cor da letra). Mexa no controle para separar os pedaços." },
+  gene:  { nome: "Gene", show: ["back", "base", "h"], ex: 0, gene: true, qq: { q: "O gene guarda a receita de quê?", o: ["De um açúcar", "De uma proteína", "De um fosfato"], c: 1 }, txt: "O cilindro verde marca um trecho do DNA. Um trecho com a receita de uma proteína é um gene." },
+  monte: { nome: "Monte você mesmo", show: ["back", "base"], ex: 0, monte: true, txt: "A fita de cima já está pronta. Para cada degrau, escolha a base que se encaixa na outra fita. Lembre: A com T, C com G." }
+};
+function shuf(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a}
+function prep(q){const idx=shuf([...q.o.keys()]);q.o2=idx.map(i=>q.o[i]);q.c2=idx.indexOf(q.c);}
+const vdone={}, tries=[0,0,0,0,0,0];let sent=false;
+let unl = 6, cur = 0, tentou = -1, mode = "lab", view = "tudo", exT = 0, exC = 0;
+const cv = $("#cv"); let R;
+try { R = new THREE.WebGLRenderer({ canvas: cv, antialias: true, alpha: true }); } catch (e) { R = null; }
+if (!R) { $(".cvw").innerHTML = '<div class="card"><p class="note" style="margin:0">Seu aparelho não conseguiu abrir o modelo 3D. As explicações abaixo continuam funcionando.</p></div>'; }
+const scene = new THREE.Scene(), cam = new THREE.PerspectiveCamera(40, 1, 0.1, 100); let dist = 10.5;
+scene.add(new THREE.HemisphereLight(0xffffff, 0x223344, 0.85)); const dl = new THREE.DirectionalLight(0xffffff, 0.8); dl.position.set(3, 5, 6); scene.add(dl);
+const root = new THREE.Group(); scene.add(root);
+const gA = new THREE.Group(), gB = new THREE.Group(), gH = new THREE.Group(); root.add(gA, gB, gH);
+const types = { back: [], base: [], h: [] }; const stickB = [], stickA = [];
+let G = root, T = "back";
+const GRAY = new THREE.Color(0x4b5d54);
+function M(hex, opts) { const m = new THREE.MeshStandardMaterial(Object.assign({ color: GRAY.clone(), roughness: .5, metalness: .05 }, opts || {})); m.userData.real = new THREE.Color(hex); return m; }
+const mBack1 = M(0x8e6bd8), mBack2 = M(0xc9b3ff), mPho = M(0xff9f43), mSug = M(0x7fd1c0);
+const mBase = { A: M(0x3ddc97), T: M(0xff7a7a), C: M(0x5cb8ff), G: M(0xffe066) };
+const BN = new Map([[mBase.A, "Adenina (A)"], [mBase.T, "Timina (T)"], [mBase.C, "Citosina (C)"], [mBase.G, "Guanina (G)"]]);
+const mH = M(0xffffff, { emissive: 0x000000 });
+const mHL = new THREE.MeshStandardMaterial({ color: 0xffffff, transparent: true, opacity: .22, roughness: .3, depthWrite: false });
+const groups = [[mBack1, mBack2, mPho, mSug], Object.values(mBase), [], [mH], [], []];
+const N = 22, SEQ = "ATGCCGTAATGCGCTAGGCATT", COMP = { A: "T", T: "A", C: "G", G: "C" };
+const P = (i, s) => { const th = i * 2 * Math.PI / 10 + (s ? Math.PI : 0), y = (i - (N - 1) / 2) * 0.3; return new THREE.Vector3(Math.cos(th), y, Math.sin(th)); };
+function add(m) { G.add(m); types[T].push(m); const p = m.geometry.parameters || {}, r = p.radius || p.radiusTop;
+  m.userData.nome = T === "h" ? "Ligação de hidrogênio" : T === "base" ? (BN.get(m.material) || "Base") : (r === 0.07 ? "Fita do esqueleto (açúcar + fosfato)" : r === 0.14 ? "Açúcar (desoxirribose)" : "Fosfato"); m.userData.need = T === "back" ? 1 : T === "base" ? 2 : 4; return m; }
+function tube(pts, mat) { const c = new THREE.CatmullRomCurve3(pts); add(new THREE.Mesh(new THREE.TubeGeometry(c, N * 6, 0.07, 8, false), mat)); }
+function pointsOf(s) { const out = []; for (let i = 0; i <= (N - 1) * 4; i++) { const f = i / 4; const th = f * 2 * Math.PI / 10 + (s ? Math.PI : 0), y = (f - (N - 1) / 2) * 0.3; out.push(new THREE.Vector3(Math.cos(th), y, Math.sin(th))); } return out; }
+function stick(a, b, r, mat) { const d = new THREE.Vector3().subVectors(b, a), len = d.length(); const m = new THREE.Mesh(new THREE.CylinderGeometry(r, r, len, 10), mat); m.position.copy(a).add(b).multiplyScalar(.5); m.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), d.normalize()); add(m); }
+function ball(p, r, mat) { const m = new THREE.Mesh(new THREE.SphereGeometry(r, 14, 12), mat); m.position.copy(p); add(m); }
+G = gA; T = "back"; tube(pointsOf(0), mBack1); G = gB; tube(pointsOf(1), mBack2);
+for (let i = 0; i < N; i++) {
+  const a = P(i, 0), b = P(i, 1), mid = a.clone().add(b).multiplyScalar(.5), b1 = SEQ[i], b2 = COMP[b1], up = new THREE.Vector3(0, 0.15, 0);
+  T = "back"; G = gA; ball(a, 0.14, mSug); ball(a.clone().add(up), 0.1, mPho);
+  G = gB; ball(b, 0.14, mSug); ball(b.clone().add(up), 0.1, mPho);
+  T = "base"; G = gA; stick(a, mid, 0.09, mBase[b1]); stickA[i] = types.base[types.base.length - 1]; G = gB; stick(mid, b, 0.09, mBase[b2]); stickB[i] = types.base[types.base.length - 1];
+  T = "h"; G = gH; const nh = (b1 === "A" || b1 === "T") ? 2 : 3;
+  for (let k = 0; k < nh; k++) { const t = nh === 2 ? [0.4, 0.6][k] : [0.36, 0.5, 0.64][k]; ball(a.clone().lerp(b, t), 0.045, mH); }
+}
+const gN = new THREE.Group(); gN.visible = false; root.add(gN);
+const nP = new THREE.Mesh(new THREE.SphereGeometry(0.3, 18, 14), mPho), nS = new THREE.Mesh(new THREE.SphereGeometry(0.42, 18, 14), mSug), nB = new THREE.Mesh(new THREE.CylinderGeometry(0.22, 0.22, 1.5, 14), mBase.A);
+nP.userData = { nome: "Fosfato", need: 1 }; nS.userData = { nome: "Açúcar (desoxirribose)", need: 1 }; nB.userData = { nome: "Base (aqui, adenina)", need: 2 };
+const bondG = new THREE.CylinderGeometry(0.06, 0.06, 1, 8), bondM = new THREE.MeshStandardMaterial({ color: 0xcfd8d3, roughness: .6 }), bd1 = new THREE.Mesh(bondG, bondM), bd2 = new THREE.Mesh(bondG, bondM);
+gN.add(nP, nS, nB, bd1, bd2); gN.scale.setScalar(1.25); gN.position.set(0, 0, 0);
+const nPo = V3n(0, 1.15), nSo = V3n(0, 0), nBo = V3n(0, -1.35);
+function V3n(x, y) { return new THREE.Vector3(x, y, 0); }
+function bond(m, a, b) { const d = b.clone().sub(a), L = d.length(); m.position.copy(a).add(b).multiplyScalar(.5); m.scale.set(1, L, 1); m.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), d.normalize()); }
+function placeN(s) { nP.position.copy(nPo).add(V3n(0, 0.9 * s)); nS.position.copy(nSo); const bc = nBo.clone().add(V3n(0, -0.9 * s)); nB.position.copy(bc); bond(bd1, nP.position, nS.position); bond(bd2, nS.position, bc.clone().add(V3n(0, 0.75))); }
+placeN(0.5);
+const nucC = P(7, 0).clone().lerp(P(7, 1), 0.2);
+const hlNuc = new THREE.Mesh(new THREE.SphereGeometry(0.5, 20, 16), mHL); hlNuc.position.copy(nucC); hlNuc.visible = false; gA.add(hlNuc);
+const hlGene = new THREE.Mesh(new THREE.CylinderGeometry(1.4, 1.4, 8 * 0.3 + 0.3, 24, 1, true), new THREE.MeshStandardMaterial({ color: 0x3ddc97, transparent: true, opacity: .16, side: THREE.DoubleSide, depthWrite: false })); hlGene.position.set(0, (12 - (N - 1) / 2) * 0.3, 0); hlGene.visible = false; root.add(hlGene);
+const hlA = new THREE.Mesh(new THREE.SphereGeometry(0.34, 16, 12), mHL), hlB = hlA.clone(); hlA.visible = hlB.visible = false; root.add(hlA, hlB);
+const MO = 5, MN = 8; let mpos = MO; const hlM = new THREE.Mesh(new THREE.SphereGeometry(0.34, 16, 12), mHL); hlM.scale.set(1.5, 1, 1.5); hlM.visible = false; root.add(hlM);
+function moveM() { if (mpos < MO + MN) hlM.position.copy(mix(mpos, .5)); }
+const iAT = SEQ.indexOf("A"), iCG = SEQ.indexOf("C");
+hlA.position.copy(P(iAT, 0).clone().lerp(P(iAT, 1), .5)); hlB.position.copy(P(iCG, 0).clone().lerp(P(iCG, 1), .5)); hlA.scale.set(1.5, 1, 1.5); hlB.scale.copy(hlA.scale);
+function paint() { const all = mode === "lab"; groups.forEach((g, i) => g.forEach(m => m.color.copy(all || i < unl ? m.userData.real : GRAY))); mH.emissive.setHex(all || unl > 3 ? 0x222222 : 0); }
+const V3 = (x, y, z) => new THREE.Vector3(x, y, z);
+const mix = (i, t) => P(i, 0).clone().lerp(P(i, 1), t);
+// rótulos: s = passo do quiz; l = camada (modo lab); g = grupo que se move; v = só nessa visão
+const LAB = [
+  { s: 1, vw: ["tudo", "esq"], l: "back", g: "A", t: "Fita 1", p: () => P(18, 0).clone().multiplyScalar(1.12) },
+  { vw: ["tudo", "esq"], l: "back", g: "B", t: "Fita 2", p: () => P(3, 1).clone().multiplyScalar(1.12) },
+  { vw: ["esq"], l: "back", g: "A", t: "Fosfato", p: () => P(12, 0).clone().add(V3(0, 0.28, 0)).multiplyScalar(1.05) },
+  { vw: ["esq"], l: "back", g: "B", t: "Açúcar", p: () => P(13, 1).clone().add(V3(0, -0.24, 0)).multiplyScalar(1.12) },
+  { s: 2, vw: ["bases", "pares"], l: "base", g: "A", t: "Adenina (A)", p: () => mix(iAT, .22) },
+  { vw: ["bases", "pares"], l: "base", g: "B", t: "Timina (T)", p: () => mix(iAT, .78) },
+  { vw: ["bases", "pares"], l: "base", g: "A", t: "Citosina (C)", p: () => mix(iCG, .22) },
+  { vw: ["bases", "pares"], l: "base", g: "B", t: "Guanina (G)", p: () => mix(iCG, .78) },
+  { s: 3, l: "base", t: "Par A–T", p: () => hlA.position.clone().add(V3(0, 0.42, 0)) },
+  { s: 3, l: "base", t: "Par C–G", p: () => hlB.position.clone().add(V3(0, -0.42, 0)) },
+  { s: 4, vw: ["tudo", "pares"], l: "h", t: "Ligações de H", p: () => mix(10, .5).add(V3(0, 0.3, 0)) },
+  { s: 5, vw: [], l: "back", g: "A", t: "Nucleotídeo", p: () => nucC.clone().add(V3(0, 0.62, 0)) },
+  { s: 6, l: "back", t: "Gene", p: () => V3(1.6, hlGene.position.y + 1.3, 0) },
+  { vw: ["nuc"], g: "N", t: "Fosfato", p: () => nP.position.clone().add(V3(0.9, 0, 0)) },
+  { vw: ["nuc"], g: "N", t: "Açúcar", p: () => nS.position.clone().add(V3(0.9, 0, 0)) },
+  { vw: ["nuc"], g: "N", t: "Base (A)", p: () => nB.position.clone().add(V3(0.9, 0, 0)) },
+  { vw: ["gene"], l: "back", t: "Gene", p: () => V3(1.6, hlGene.position.y + 1.3, 0) }
+];
+const dotsEl = $("#dots");
+function visibleLabel(l) {
+  if (mode === "lab") return !!l.vw && l.vw.includes(view) && !(l.l === "h" && exC > 0.15);
+  return !!l.s && !(l.vw && l.vw.length === 0 && false) && l.s <= unl && l.s === cur + 1;
+}
+function drawDots() { if (!R) return; const w = cv.clientWidth, h = cv.clientHeight;
+  LAB.forEach((l, i) => { let el = dotsEl.children[i]; if (!el) { el = document.createElement("div"); el.className = "dot"; el.textContent = l.t; dotsEl.appendChild(el); }
+    const on = visibleLabel(l); const pos = l.p();
+    if (l.g === "N") gN.localToWorld(pos); else { if (l.g === "A") pos.add(gA.position); else if (l.g === "B") pos.add(gB.position); root.localToWorld(pos); }
+    pos.project(cam);
+    el.style.display = (on && pos.z < 1) ? "block" : "none"; el.style.left = ((pos.x * .5 + .5) * w) + "px"; el.style.top = ((-pos.y * .5 + .5) * h) + "px"; }); }
+function highlights() {
+  if (mode === "lab") { const V = VIEWS[view]; hlNuc.visible = false; hlGene.visible = !!V.gene; hlA.visible = hlB.visible = false; return; }
+  const s = cur + 1; hlNuc.visible = s === 5 && unl >= 5; hlGene.visible = s === 6 && unl >= 6; hlA.visible = hlB.visible = s === 3 && unl >= 3; }
+function applyView() { const lab = mode === "lab", sh = lab ? VIEWS[view].show : ["back", "base", "h"]; for (const k in types) types[k].forEach(m => m.visible = sh.includes(k) && (k !== "h" || exC < 0.15));
+  gN.visible = lab && !!VIEWS[view].nuc;
+  if (lab && VIEWS[view].monte) { for (let i = 0; i < N; i++) stickB[i].visible = i < MO || i >= MO + MN || i < mpos; if (typeof mpos === "number") hlM.visible = mpos < MO + MN; } else hlM.visible = false; }
+// interação
+let rotY = 0.6, rotX = 0.15, touched = false; const ptr = new Map(); let pinch = 0;
+if (R) {
+  let down = null;
+  cv.addEventListener("pointerdown", e => { down = { x: e.clientX, y: e.clientY, t: performance.now() }; cv.setPointerCapture(e.pointerId); ptr.set(e.pointerId, { x: e.clientX, y: e.clientY }); touched = true; if (ptr.size === 2) { const [a, b] = [...ptr.values()]; pinch = Math.hypot(a.x - b.x, a.y - b.y); } });
+  cv.addEventListener("pointermove", e => { const p = ptr.get(e.pointerId); if (!p) return;
+    if (ptr.size === 1) { rotY += (e.clientX - p.x) * 0.01; rotX = Math.max(-1.2, Math.min(1.2, rotX + (e.clientY - p.y) * 0.008)); }
+    p.x = e.clientX; p.y = e.clientY; if (ptr.size === 2) { const [a, b] = [...ptr.values()]; const d = Math.hypot(a.x - b.x, a.y - b.y); if (pinch) dist = Math.max(5, Math.min(14, dist * pinch / d)); pinch = d; } });
+  const ray = new THREE.Raycaster(), mv = new THREE.Vector2();
+  function vis(o) { for (; o; o = o.parent) if (!o.visible) return false; return true; }
+  function tap(e) { const r = cv.getBoundingClientRect(); mv.set(((e.clientX - r.left) / r.width) * 2 - 1, -((e.clientY - r.top) / r.height) * 2 + 1); ray.setFromCamera(mv, cam);
+    const hit = ray.intersectObjects(root.children, true).find(h => h.object.userData.nome && vis(h.object)); const tip = $("#tip");
+    if (!hit) { tip.textContent = "Toque numa peça do modelo para ver o nome dela."; return; }
+    const o = hit.object.userData, need = mode === "lab" ? 0 : o.need || 0;
+    tip.textContent = unl >= need ? o.nome : "🔒 Peça ainda travada. Responda a pergunta para destravar."; }
+  const up = e => { if (down && ptr.size === 1 && Math.hypot(e.clientX - down.x, e.clientY - down.y) < 6 && performance.now() - down.t < 500) tap(e); down = null; ptr.delete(e.pointerId); pinch = 0; }; cv.addEventListener("pointerup", up); cv.addEventListener("pointercancel", up);
+  cv.addEventListener("wheel", e => { e.preventDefault(); dist = Math.max(5, Math.min(14, dist + e.deltaY * 0.01)); }, { passive: false });
+  function size() { const w = cv.clientWidth, h = cv.clientHeight; R.setPixelRatio(Math.min(2, window.devicePixelRatio || 1)); R.setSize(w, h, false); cam.aspect = w / h; cam.updateProjectionMatrix(); }
+  window.addEventListener("resize", size); size();
+  let last = performance.now();
+  (function loop(t) { const dt = Math.min(0.05, (t - last) / 1000); last = t; if (!touched) rotY += dt * 0.35;
+    const wasH = exC < 0.15; exC += (exT - exC) * Math.min(1, dt * 6); if (Math.abs(exT - exC) < 0.002) exC = exT;
+    const isN = mode === "lab" && view === "nuc"; gA.position.x = isN ? 0 : -exC * 1.7; gB.position.x = isN ? 0 : exC * 1.7; if (isN) placeN(exC * 1.2); moveM(); if ((exC < 0.15) !== wasH) applyView();
+    const sc = Math.max(0.0001, 1 - exC * 4); gH.scale.set(1, 1, 1); hlGene.visible = hlGene.visible && exC < 0.05; hlA.visible = hlA.visible && exC < 0.05; hlB.visible = hlB.visible && exC < 0.05;
+    root.rotation.set(rotX, rotY, 0); cam.position.set(0, 0, dist); cam.lookAt(0, 0, 0); root.updateMatrixWorld(true); R.render(scene, cam); drawDots(); requestAnimationFrame(loop); })(last);
+}
+// interface
+const LEG = () => [["A", "#3ddc97", "adenina"], ["T", "#ff7a7a", "timina"], ["C", "#5cb8ff", "citosina"], ["G", "#ffe066", "guanina"]].map(x => `<span><i style="background:${x[1]}"></i>${x[0]} · ${x[2]}</span>`).join("");
+const CORES = { A: "#3ddc97", T: "#ff7a7a", C: "#5cb8ff", G: "#ffe066" };
+let monteMsg = "";
+function chips() { return STEPS.map((s, i) => `<span class="chip ${i < unl ? "on" : ""}">${i < unl ? s.nome : "Peça " + (i + 1)}</span>`).join(""); }
+function ui() {
+  const st = $("#step");
+  if (mode === "lab") {
+    $("#prog").textContent = "Laboratório";
+    $("#chips").innerHTML = Object.keys(VIEWS).filter(k => !VIEWS[k].monte).map(k => `<button class="chip vw ${k === view ? "on" : ""}" style="cursor:pointer" data-a="view" data-k="${k}">${VIEWS[k].nome}</button>`).join("");
+    const leg = $("#leg"); leg.hidden = false; leg.innerHTML = LEG();
+    const V = VIEWS[view]; let extra = "";
+    if (V.monte) {
+      const pend = mpos < MO + MN;
+      extra = pend ? `<p style="margin:14px 0 0;font-weight:700">Degrau ${mpos - MO + 1} de ${MN}: a base de cima é <span style="color:${CORES[SEQ[mpos]]}">${SEQ[mpos]}</span>. Qual base entra na outra fita?</p><div class="opts2" style="grid-template-columns:repeat(4,1fr)">${["A", "T", "C", "G"].map(b => `<button class="o2" style="text-align:center;border-color:${CORES[b]}" data-a="mb" data-k="${b}">${b}</button>`).join("")}</div><p class="note" role="status" style="margin:8px 0 0">${monteMsg || "Lembre: A com T, C com G."}</p>`
+        : `<p style="margin:14px 0 0"><span class="tag ok">Você montou os ${MN} degraus!</span></p><div class="row2" style="margin-top:10px"><button class="btn ghost" data-a="mreset">Montar de novo</button></div>`;
+    } else if (false) {
+      extra = vdone[view] ? `<p style="margin:14px 0 0"><span class="tag ok">Pergunta certa!</span></p>`
+        : `<p style="margin:14px 0 0;font-weight:700">${V.qq.q}</p><div class="opts2">${V.qq.o2.map((o, k) => `<button class="o2 ${tentou === k ? "bad" : ""}" data-a="vresp" data-k="${k}">${o}</button>`).join("")}</div>${tentou >= 0 ? '<p class="note" role="status" style="margin:8px 0 0">Quase! Releia o texto e tente de novo.</p>' : ""}`;
+    }
+    st.innerHTML = `<span class="eyebrow">Laboratório · DNA em 3D</span><h2 style="font-size:1.15rem;margin-top:4px">${V.nome}</h2><p style="margin:8px 0 0">${V.txt}</p>${V.monte ? "" : `<label class="note" style="display:block;margin-top:14px;font-weight:700">Montado ↔ Separado</label><input id="ex" type="range" min="0" max="100" value="${Math.round(exT * 100)}" style="width:100%;margin-top:6px" aria-label="Separar as peças">`}${extra}
+<div class="row2" style="margin-top:14px"><a class="btn ghost" href="resumo-dna.pdf" download style="text-decoration:none;display:inline-flex;align-items:center">Baixar resumo (PDF)</a></div>`;
+    return;
+  }
+  $("#chips").innerHTML = chips();
+  $("#prog").textContent = unl >= STEPS.length && cur >= STEPS.length ? "Tudo destravado" : `Peça ${cur + 1} de ${STEPS.length}`;
+  const leg = $("#leg"); if (unl >= 2) { leg.hidden = false; leg.innerHTML = LEG(); } else leg.hidden = true;
+  if (unl >= STEPS.length && cur >= STEPS.length) { st.innerHTML = `<h2 style="font-size:1.15rem">Você destravou o DNA inteiro!</h2><p class="note" style="margin:8px 0 12px">Agora dá para estudar cada parte: ver os nomes, isolar esqueleto, bases e pares, tirar um nucleotídeo, separar as fitas e montar a sua própria escada.</p><div class="row2"><button class="btn" data-a="lab">Estudar por partes</button><button class="btn ghost" data-a="reiniciar">Recomeçar</button></div>`; return; }
+  const s = STEPS[cur], done = cur < unl;
+  st.innerHTML = `<span class="eyebrow">${done ? "Destravado" : "Para destravar"}</span><h2 style="font-size:1.15rem;margin-top:4px">${done ? s.nome : "Peça " + (cur + 1)}</h2><p style="margin:8px 0 0">${s.txt}</p>`
+    + (done ? `<div class="row2" style="margin-top:12px"><span class="tag ok">Respondido certo</span><button class="btn" data-a="prox">${cur === STEPS.length - 1 ? "Concluir" : "Próxima peça"}</button></div>`
+      : `<p style="margin:14px 0 0;font-weight:700">${s.q}</p><div class="opts2">${s.o2.map((o, k) => `<button class="o2 ${tentou === k ? "bad" : ""}" data-a="resp" data-k="${k}">${o}</button>`).join("")}</div><p class="note" role="status" style="margin:8px 0 0">${tentou >= 0 ? "Quase! Releia o texto acima e tente de novo." : "Escolha a resposta para destravar a peça."}</p>`)
+    + (cur === 0 && unl === 0 ? `<p style="margin:14px 0 0"><button class="btn ghost" data-a="lab">Pular para o laboratório</button></p>` : "");
+}
+function setMode(m) { mode = m; paint(); applyView(); highlights(); ui(); }
+function resetPrep() { STEPS.forEach(prep); Object.values(VIEWS).forEach(v => v.qq && prep(v.qq)); }
+resetPrep();
+// registro opcional
+const KEY = "sj_dna3d_v1";
+function ident() { try { return JSON.parse(localStorage.getItem(KEY) || "{}"); } catch (e) { return {}; } }
+function saveId() { try { localStorage.setItem(KEY, JSON.stringify({ n: $("#rn").value, r: $("#rr").value, sent })); } catch (e) { } }
+(function () { const d = ident(); if (d.n) $("#rn").value = d.n; if (d.r) $("#rr").value = d.r; sent = !!d.sent; })();
+async function enviar() {
+  const nome = $("#rn").value.trim(), ra = $("#rr").value.trim(), rs = $("#rs"); if (sent || !nome || !ra) return;
+  const ac = tries.filter(t => t === 0).length, uid = "d" + Date.now().toString(36) + Math.random().toString(36).slice(2, 7);
+  const p = { tipo: "mvp", matricula: ra, nome, turma: "", fase: "dna3d", acertos: ac, total: STEPS.length, seg: Math.round((Date.now() - T0) / 1000), pontos: ac * 10, det: tries.join(","), uso: 0, uid, ts: Date.now() };
+  rs.textContent = "Enviando…";
+  for (let k = 0; k < 2; k++) { try { const r = await fetch(CFG_URL, { method: "POST", headers: { "Content-Type": "text/plain;charset=utf-8" }, body: JSON.stringify(p) }); const j = await r.json(); if (j && j.ok !== false) { sent = true; saveId(); rs.textContent = "Resultado enviado ao professor. Obrigado!"; return; } } catch (e) { } }
+  rs.textContent = "Não consegui enviar agora (sem internet?). Avise o professor.";
+}
+const CFG_URL = "https://script.google.com/macros/s/AKfycbyxliHa5f1iuxdszS_YCAcqpMxoXy0gCxiWiXFceak5NSKBaY-Isfh9bfrhC-nGuhcTFA/exec", T0 = Date.now();
+document.addEventListener("input", e => { if (e.target.id === "ex") exT = e.target.value / 100; if (e.target.id === "rn" || e.target.id === "rr") saveId(); });
+document.addEventListener("click", e => {
+  const b = e.target.closest("[data-a]"); if (!b) return; const a = b.dataset.a;
+  if (a === "resp") { const k = +b.dataset.k; if (k === STEPS[cur].c2) { unl = Math.max(unl, cur + 1); tentou = -1; paint(); highlights(); if (unl === STEPS.length) enviar(); } else { tentou = k; tries[cur]++; } ui(); }
+  else if (a === "prox") { cur++; tentou = -1; if (cur >= STEPS.length) cur = STEPS.length; highlights(); ui(); }
+  else if (a === "reiniciar") { unl = 0; cur = 0; tentou = -1; exT = 0; view = "tudo"; resetPrep(); setMode("quiz"); }
+  else if (a === "lab") { unl = STEPS.length; view = "tudo"; exT = 0; tentou = -1; setMode("lab"); }
+  else if (a === "view") { view = b.dataset.k; exT = VIEWS[view].ex; tentou = -1; if (VIEWS[view].monte) mpos = MO; setMode("lab"); }
+  else if (a === "vresp") { const V = VIEWS[view], k = +b.dataset.k; if (k === V.qq.c2) { vdone[view] = true; tentou = -1; } else tentou = k; ui(); }
+  else if (a === "mb") { if (b.dataset.k === COMP[SEQ[mpos]]) { monteMsg = "Certo!"; mpos++; } else monteMsg = `${b.dataset.k} não encaixa com ${SEQ[mpos]}. Tente de novo.`; applyView(); ui(); }
+  else if (a === "mreset") { mpos = MO; monteMsg = ""; applyView(); ui(); }
+});
+paint(); applyView(); highlights(); ui();
+})();
+</script></body></html>
