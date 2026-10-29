@@ -1,4 +1,4 @@
-:root{color-scheme:dark;--bg:#09100d;--s1:#101a15;--s2:#16241d;--s3:#1c2e25;--line:#233a2f;--ink:#e8f3ed;--ink2:#a9c0b4;--mut:#7d9588;--g:#3ddc97;--gd:#0c2a1f;--amb:#f2b84b;--red:#ff7a7a;--disp:'Sora','Segoe UI',system-ui,sans-serif;--body:'Figtree','Segoe UI',system-ui,sans-serif}
+:root{color-scheme:dark;--bg:#070b14;--s1:#0d1424;--s2:#121b2f;--s3:#18243b;--line:#ffffff1c;--ink:#eef3fb;--ink2:#b4c1d8;--mut:#93a3bd;--g:#3ddc97;--gd:#0c2a1f;--amb:#f2b84b;--red:#ff8b8b;--disp:'Sora','Segoe UI',system-ui,sans-serif;--body:'Figtree','Segoe UI',system-ui,sans-serif}
 [hidden]{display:none!important}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html,body{margin:0}
@@ -14,10 +14,10 @@ header.top{padding-block:14px 8px}
 .brand b{font:600 1rem var(--disp);display:block;line-height:1.1}
 .brand small{color:var(--mut);font-size:.72rem;display:block}
 .hero{padding-block:14px 6px}.hero h1{font-size:1.5rem;line-height:1.15}.hero p{margin:6px 0 0;color:var(--ink2);max-width:60ch}
-.card{background:var(--s1);border:1px solid var(--line);border-radius:14px;padding:16px;min-width:0}
+.card{background:var(--s1);border:1px solid var(--line);border-radius:16px;padding:18px;min-width:0}
 .stack{display:flex;flex-direction:column;gap:14px;margin-top:12px}
 .row2{display:flex;gap:10px;flex-wrap:wrap;align-items:center;justify-content:space-between}
-.eyebrow{font:600 .7rem var(--disp);letter-spacing:.09em;text-transform:uppercase;color:var(--mut)}
+.eyebrow{font:600 .88rem var(--disp);color:var(--ink2)}
 .note{color:var(--ink2);font-size:.85rem}
 .tag{display:inline-block;font-size:.72rem;font-weight:700;padding:2px 9px;border-radius:999px;background:var(--s3);color:var(--ink2)}
 .tag.ok{background:var(--gd);color:var(--g)}.tag.warn{background:#3a2d0c;color:var(--amb)}
@@ -26,20 +26,20 @@ header.top{padding-block:14px 8px}
 .btn.sm{padding:7px 12px;font-size:.85rem;border-radius:10px;min-height:36px}
 .btn[disabled]{opacity:.45;cursor:not-allowed}
 .fld{display:flex;flex-direction:column;gap:6px;font-weight:600;font-size:.85rem}
-.fld input{background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:12px;font-weight:500;min-height:44px;width:100%}
+.fld input{background:#0a1020;border:1px solid var(--line);border-radius:10px;padding:12px;font-weight:500;min-height:44px;width:100%}
 .prog{height:6px;background:var(--s2);border-radius:999px;overflow:hidden;margin-block:10px}.prog i{display:block;height:100%;background:var(--g);transition:width .3s}
 .opts{display:grid;gap:10px;margin-top:10px}
 .opt{text-align:left;background:var(--s1);border:1.5px solid var(--line);border-radius:12px;padding:13px 14px;display:flex;gap:12px;align-items:flex-start;font-weight:500;width:100%}
 .opt .l{flex:none;width:24px;height:24px;border-radius:7px;background:var(--s3);display:grid;place-items:center;font:700 .78rem var(--disp);color:var(--ink2)}
-.opt.sel{border-color:var(--amb);background:#3a2d0c}.opt.sel .l{background:var(--amb);color:#2a1a00}
+.opt.sel{border-color:var(--g);background:#0c2a1f}.opt.sel .l{background:var(--g);color:#04140d}
 .kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px}
 .kpi{background:var(--s1);border:1px solid var(--line);border-radius:12px;padding:12px 14px}
-.kpi small{color:var(--mut);font-size:.72rem;text-transform:uppercase;letter-spacing:.06em;display:block}
+.kpi small{color:var(--mut);font-size:.8rem;display:block}
 .kpi b{font:700 1.7rem var(--disp);font-variant-numeric:tabular-nums}.kpi span{color:var(--ink2);font-size:.78rem;display:block}
 .tw{overflow-x:auto;margin-top:8px}
 table{border-collapse:collapse;width:100%;min-width:480px;font-variant-numeric:tabular-nums}
 th,td{padding:9px 10px;border-bottom:1px solid var(--line);text-align:right;white-space:nowrap;font-size:.86rem}
 th:first-child,td:first-child{text-align:left}
-th{font:600 .68rem var(--disp);text-transform:uppercase;letter-spacing:.07em;color:var(--mut)}
+th{font:600 .8rem var(--disp);color:var(--mut)}
 td.q{white-space:normal;min-width:220px}
 .err{color:var(--red);font-size:.85rem;margin:0}
