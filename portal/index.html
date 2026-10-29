@@ -57,6 +57,8 @@ h1 .b{background:linear-gradient(100deg,var(--pk),var(--p2));-webkit-background-
 .pro{margin-top:22px;border:1px dashed #ffc83d66;background:#ffc83d0d}.pro h3{margin:0 0 10px;font:700 1rem var(--disp);color:var(--y)}
 .back{margin-top:18px}
 @media(max-width:760px){.logins,.disc{grid-template-columns:1fr}.dcard{min-height:300px;padding:24px}.dcard svg.art{width:100%;height:46%}.dcard .t{font-size:2rem;max-width:none}.dcard .d{max-width:none}.hero{padding-top:20px}.aula{grid-template-columns:30px 1fr;gap:0 10px}.aula.atual{padding:18px 16px}}
+@media(min-width:1100px){html{font-size:112.5%}.wrap{max-width:1200px}.aula{grid-template-columns:68px 1fr;padding:24px 6px}.aula h3{font-size:1.2rem}.aula.atual h3{font-size:1.5rem}.aula .ds{font-size:1rem}.lk{font-size:1rem}.num{font-size:1.1rem}.aviso{font-size:1.02rem}.brand b{font-size:1.05rem}.brand small{font-size:.8rem}.dcard{min-height:380px}.dcard .t{font-size:2.8rem}.dcard .d{font-size:1.2rem}}
+@media(min-width:1700px){html{font-size:125%}.wrap{max-width:1360px}}
 @media(prefers-reduced-motion:reduce){*{transition:none!important}}
 </style></head><body>
 <canvas id="bg" aria-hidden="true"></canvas><div class="glow"></div>
@@ -142,7 +144,7 @@ async function dadaToggle(id,ar){const i=DADAS.indexOf(id);if(i>=0)DADAS.splice(
  try{await fetch(API,{method:"POST",mode:"no-cors",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify({tipo:"aulas",pin,dadas:DADAS})});
   const j=await (await fetch(API+"?acao=aulas&_="+Date.now())).json();
   if(m){m.textContent=j&&j.ok&&Array.isArray(j.dadas)&&j.dadas.indexOf(id)>=0===isDada(id)?"Salvo para todos os alunos.":"Salvo só neste aparelho. Para valer para os alunos, reimplante o Apps Script (código novo no repositório).";}}
- catch(e){if(m)m.textContent="Sem conexão com a planilha. Ficou salvo só neste aparelho."}}const VER="202610291910";const USO_ON=true;const vv=u=>u+(u.includes("?")?"&":"?")+"v="+VER;
+ catch(e){if(m)m.textContent="Sem conexão com a planilha. Ficou salvo só neste aparelho."}}const VER="202610291916";const USO_ON=true;const vv=u=>u+(u.includes("?")?"&":"?")+"v="+VER;
 function uso(ev,aula){if(!USO_ON||!S||isProf)return;try{navigator.sendBeacon(API,new Blob([JSON.stringify({tipo:"uso",ev,aula,matricula:S.ra,nome:S.nome,ts:Date.now()})],{type:"text/plain;charset=utf-8"}))}catch(e){}}
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 function view(v){["landing","home","disc"].forEach(k=>$("#"+k).hidden=k!==v);$("#who").hidden=v==="landing";scrollTo(0,0)}
