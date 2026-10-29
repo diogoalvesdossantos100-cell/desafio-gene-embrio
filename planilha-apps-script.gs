@@ -12,6 +12,41 @@ const PIN_PROF = "__PIN__";
 const ABA_MVP = "MVP";
 const CAB_MVP = ["Data/hora","Matrícula","Nome","Turma","Unidade","Tentativa","Acertos","Total","Nota","Segundos","Pontos","Detalhe","Uso (s)","UID"];
 const MAX_TENT = 2;
+// Gabarito dos pré e pós-testes (índice da alternativa certa). A nota dessas fases é calculada AQUI, a partir de d.det.
+const GAB = {
+  "teste-pre":[1,3,0,2,1,3,2,0,3,1],
+  "teste-pos":[3,2,1,2,3,2,0,2,1,3],
+  "pre-gen-02":[2,3,1,2,0,2],
+  "pos-gen-02":[2,1,0,3,1,2],
+  "pre2-gen-03":[1,2,1,3,0,3],
+  "pos2-gen-03":[1,2,2,2,1,3],
+  "pre-gen-04":[1,3,1,2,3,1],
+  "pos-gen-04":[2,1,0,3,1,2],
+  "pre-emb-01":[2,3,2,1,2,1],
+  "pos-emb-01":[0,2,1,3,0,2],
+  "pre-emb-02":[2,0,3,1,2,1],
+  "pos-emb-02":[0,1,2,1,0,1],
+  "pre-emb-03":[0,1,2,2,1,0],
+  "pos-emb-03":[1,1,1,3,0,1],
+  "pre-emb-04":[1,0,3,0,2,3],
+  "pos-emb-04":[2,1,2,0,2,0],
+  "pre-emb-05":[1,1,1,2,1,2],
+  "pos-emb-05":[1,0,1,3,0,1],
+  "pre-emb-06":[2,1,1,1,1,0],
+  "pos-emb-06":[1,3,1,1,2,1],
+  "pre-emb-07":[1,0,1,2,1,1],
+  "pos-emb-07":[2,1,0,0,2,3],
+  "pre-emb-08":[1,1,1,1,1,2],
+  "pos-emb-08":[1,0,2,1,2,3],
+  "pre-gen-05":[2,1,2,2,1,0],
+  "pos-gen-05":[2,0,0,1,1,2],
+  "pre-gen-06":[1,0,1,0,0,1],
+  "pos-gen-06":[0,1,0,1,0,1],
+  "pre-gen-07":[0,0,1,0,0,0],
+  "pos-gen-07":[0,0,0,0,0,0],
+  "pre-gen-08":[2,1,1,1,1,1],
+  "pos-gen-08":[0,0,0,0,0,0]
+};
 const SS_ID = "14DMPH6aj__1NNtLSON0sHHh_7hwaKDMurTO23AI7Uzg";
 const ABA = "Resultados";
 const ABA_MELHOR = "Melhor nota";
@@ -70,15 +105,21 @@ function mvpPost_(d){
   const uid = String(d.uid || "");
   let n = 0;
   for (const r of rows) {
-    if (uid && String(r[13]) === uid) return {ok:true, dup:true, tentativa:Number(r[5])};   // reenvio: já gravado
+    if (uid && String(r[13]) === uid) return {ok:true, dup:true, tentativa:Number(r[5]), ac:Number(r[6]), total:Number(r[7])};   // reenvio: já gravado
     if (norm_(r[1]) === mat && String(r[4]) === fase) n++;
   }
   if (n >= MAX_TENT) return {ok:false, err:"limite", tentativas:n};
-  const ac = Number(d.acertos) || 0, tot = Number(d.total) || 10;
+  let ac = Number(d.acertos) || 0, tot = Number(d.total) || 10, pts = Number(d.pontos) || 0;
+  const gab = GAB[fase];
+  if (gab) {                                                                                  // teste com gabarito no servidor: ignora a nota enviada pelo navegador
+    const resp = String(d.det || "").split(",");
+    if (resp.length !== gab.length) return {ok:false, err:"dados"};
+    tot = gab.length; ac = 0; resp.forEach((x, i) => { if (x !== "" && Number(x) === gab[i]) ac++; }); pts = ac * 10;
+  }
   if (ac < 0 || tot < 1 || tot > 60 || ac > tot) return {ok:false, err:"dados"};            // nota impossível
   if (!/^[A-Za-z0-9_.\-]{1,40}$/.test(fase) || String(d.nome || "").length > 120) return {ok:false, err:"dados"};
-  sh.appendRow([new Date(d.ts || Date.now()), String(d.matricula), d.nome, d.turma, fase, n + 1, ac, tot, Math.round(ac / tot * 100) / 10, Number(d.seg) || 0, Number(d.pontos) || 0, String(d.det || ""), Number(d.uso) || 0, uid]);
-  return {ok:true, tentativa:n + 1};
+  sh.appendRow([new Date(d.ts || Date.now()), String(d.matricula), d.nome, d.turma, fase, n + 1, ac, tot, Math.round(ac / tot * 100) / 10, Number(d.seg) || 0, pts, String(d.det || ""), Number(d.uso) || 0, uid]);
+  return {ok:true, tentativa:n + 1, ac:ac, total:tot};
 }
 
 function mvpStatus_(matricula){
@@ -103,7 +144,7 @@ function pinOk_(pin){
 
 function mvpPainel_(pin){
   const pk = pinOk_(pin); if (!pk.ok) return pk;
-  return {ok:true, rows:mvpRows_().map(r => ({ts:r[0] instanceof Date ? r[0].toISOString() : String(r[0]), mat:String(r[1]), nome:r[2], turma:r[3], fase:String(r[4]), tent:Number(r[5]), ac:Number(r[6]), total:Number(r[7]), seg:Number(r[9]), pts:Number(r[10]), det:String(r[11]), uso:Number(r[12])}))};
+  return {ok:true, gab:GAB, rows:mvpRows_().map(r => ({ts:r[0] instanceof Date ? r[0].toISOString() : String(r[0]), mat:String(r[1]), nome:r[2], turma:r[3], fase:String(r[4]), tent:Number(r[5]), ac:Number(r[6]), total:Number(r[7]), seg:Number(r[9]), pts:Number(r[10]), det:String(r[11]), uso:Number(r[12])}))};
 }
 
 /* ---- Registro de uso (aula / PDF / laboratório / jogo abertos) ---- */

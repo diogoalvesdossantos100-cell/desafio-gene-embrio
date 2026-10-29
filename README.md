@@ -16,7 +16,8 @@ Site estático (GitHub Pages) + planilha Google com Apps Script (`planilha-apps-
 - **Nome + RA:** conferidos no navegador contra a lista da turma, guardada só em forma embaralhada (sem nomes em texto, RA com hash esticado).
 - **Pós-teste:** sem palavra-chave. As aulas 1 a 4 têm pós-teste sempre aberto; a partir da aula 5 (e a Genética 04 no dia 29/10) o pós-teste abre sozinho no horário de `POS_AUTO` em `vendor/liberacao.js` (21h do dia da aula). As datas das aulas ficam em `LIB` no mesmo arquivo.
 - **Painel do professor:** exige PIN conferido pelo Apps Script (5 erros = 15 min de bloqueio). A sessão dura 8 h neste aparelho.
-- **Limite conhecido:** como o site é estático, as respostas certas dos testes e do jogo seguem no código do navegador, e a nota é calculada ali. Quem entende de programação consegue ler o gabarito ou forjar uma nota. Para provas valendo ponto, o próximo passo é corrigir no Apps Script (gabarito só no servidor). As travas por data também são visuais: os PDFs abrem se alguém souber o endereço.
+- **Nota dos pré e pós-testes:** calculada no Apps Script. O gabarito (`GAB` em `planilha-apps-script.gs`) não está no site; o navegador só envia as respostas marcadas (`det`) e o servidor ignora qualquer nota enviada. Ao trocar uma questão, atualize o `GAB` junto.
+- **Limite conhecido:** o jogo (`plataforma/`) ainda corrige no navegador, então quem entende de programação consegue ler o gabarito dele ou forjar nota. As travas por data também são visuais: os PDFs abrem se alguém souber o endereço.
 - **Dados de alunos:** nunca commitar nomes, RAs ou CPFs. O histórico antigo do Git ainda contém a lista anterior (ver `README` de manutenção com o professor).
 
 ## Planilha (Apps Script)
