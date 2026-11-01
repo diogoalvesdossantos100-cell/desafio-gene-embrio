@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>Saúde em Jogo · Fisioterapia</title><script src="../vendor/liberacao.js"></script><script src="../vendor/ra.js"></script><link rel="icon" type="image/svg+xml" href="../icone-app.svg"><meta name="robots" content="noindex"><meta name="theme-color" content="#070b14">
+<title>Saúde em Jogo · Fisioterapia</title><script src="../vendor/liberacao.js"></script><script src="../vendor/ra.js"></script><link rel="icon" type="image/svg+xml" href="../icone-app.svg"><meta name="robots" content="noindex"><meta name="description" content="Sua sala de estudo no celular: aulas em PDF, laboratório 2D e 3D e jogos curtos de Embriologia e Genética."><meta property="og:type" content="website"><meta property="og:site_name" content="Saúde em Jogo"><meta property="og:title" content="Saúde em Jogo · Fisioterapia"><meta property="og:description" content="Aulas, laboratório e jogos curtos de Embriologia e Genética. Aprender saúde, jogando."><meta property="og:url" content="https://saudeemjogo.app.br/"><meta property="og:image" content="https://saudeemjogo.app.br/marca/og.png"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta name="twitter:card" content="summary_large_image"><meta name="theme-color" content="#070b14">
 <link rel="icon" type="image/svg+xml" href="../icone-app.svg">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&family=Sora:wght@500;600;700;800&display=swap">
 <style>
@@ -23,7 +23,7 @@ h1{font:800 clamp(2.4rem,8.5vw,4.6rem)/1 var(--disp);margin:0;letter-spacing:-.0
 h1 .a{background:linear-gradient(100deg,var(--g),var(--b));-webkit-background-clip:text;background-clip:text;color:transparent}
 h1 .b{background:linear-gradient(100deg,var(--pk),var(--p2));-webkit-background-clip:text;background-clip:text;color:transparent}
 .sub{color:#c3cfe3;font-size:1.1rem;max-width:34ch;margin:18px 0 0}
-.logins{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:12px}.logins .card{padding:30px 28px}.logins .card h2{font-size:1.6rem;margin:6px 0}.logins .card p{font-size:1rem}.logins .fld span{font-size:.9rem}.logins .fld input{min-height:54px;font-size:1.05rem}.logins .btn{min-height:56px;font-size:1.08rem}
+.logins{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:12px;align-items:start}.logins .card{padding:30px 28px}.logins .card h2{font-size:1.6rem;margin:6px 0}.logins .card p{font-size:1rem}.logins .fld span{font-size:.9rem}.logins .fld input{min-height:54px;font-size:1.05rem}.logins .btn{min-height:56px;font-size:1.08rem}
 .card{background:#0d1424;border:1px solid var(--line);border-radius:16px;padding:20px}
 .card h2{font:700 1.1rem var(--disp);margin:0 0 4px}.card p{margin:0 0 12px;color:var(--mut);font-size:.88rem}
 .fld{display:block;margin-bottom:10px}.fld span{display:block;font-size:.75rem;color:var(--mut);margin-bottom:4px;font-weight:600}
@@ -62,7 +62,7 @@ h1 .b{background:linear-gradient(100deg,var(--pk),var(--p2));-webkit-background-
 @media(min-width:2200px){html{font-size:156%}}
 @media(min-width:3000px){html{font-size:200%}}
 @media(prefers-reduced-motion:reduce){*{transition:none!important}}
-</style></head><body>
+input::placeholder{color:#6b7b95;opacity:1}</style></head><body>
 <canvas id="bg" aria-hidden="true"></canvas><div class="glow"></div>
 <div class="wrap">
  <header class="top"><div class="brand"><img src="../icone-app.svg" alt="" width="42" height="42" style="border-radius:12px"><div><b>Saúde em Jogo</b><small>Fisioterapia · AlfaUnipac · 2026/2</small></div></div><div class="who" id="who" hidden><span id="whoT"></span><button class="btn ghost sm" id="sair">Sair</button></div></header>
@@ -74,11 +74,11 @@ h1 .b{background:linear-gradient(100deg,var(--pk),var(--p2));-webkit-background-
   </div>
   <div class="logins">
    <form class="card" id="fa" autocomplete="on" novalidate><h2>Entrar na turma</h2><p>Use seu nome completo e o seu RA (só números). Sem o RA não dá para entrar.</p>
-    <label class="fld"><span>Nome completo</span><input name="nome" maxlength="80" autocomplete="name" required></label>
-    <label class="fld"><span>RA</span><input name="ra" maxlength="14" inputmode="numeric" autocomplete="off" required></label>
+    <label class="fld"><span>Nome completo</span><input name="nome" maxlength="80" autocomplete="name" placeholder="Ex.: Maria da Silva" required></label>
+    <label class="fld"><span>RA</span><input name="ra" maxlength="14" inputmode="numeric" autocomplete="off" placeholder="Só números" required></label>
     <button class="btn" type="submit" style="width:100%">Entrar como aluno</button><p class="err" id="ea" role="alert"></p><p style="font-size:.78rem;color:var(--mut);margin:10px 0 0;line-height:1.4">Usamos seu nome e RA só para registrar seu estudo e suas notas nesta disciplina, e eles ficam visíveis apenas ao professor. Ao entrar, você concorda com esse uso (LGPD).</p></form>
    <form class="card" id="fp" autocomplete="off" novalidate><h2>Área do professor</h2><p>Digite o PIN do painel.</p>
-    <label class="fld"><span>PIN</span><input name="pin" type="password" inputmode="numeric" maxlength="20" autocomplete="off" required></label>
+    <label class="fld"><span>PIN</span><input name="pin" type="password" inputmode="numeric" maxlength="20" autocomplete="off" placeholder="PIN do painel" required></label>
     <button class="btn ghost" type="submit" style="width:100%;margin-top:4px">Entrar como professor</button><p class="err" id="ep" role="alert"></p></form>
   </div>
  </section>
@@ -146,7 +146,7 @@ async function dadaToggle(id,ar){const i=DADAS.indexOf(id);if(i>=0)DADAS.splice(
  try{await fetch(API,{method:"POST",mode:"no-cors",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify({tipo:"aulas",pin,dadas:DADAS})});
   const j=await (await fetch(API+"?acao=aulas&_="+Date.now())).json();
   if(m){m.textContent=j&&j.ok&&Array.isArray(j.dadas)&&j.dadas.indexOf(id)>=0===isDada(id)?"Salvo para todos os alunos.":"Salvo só neste aparelho. Para valer para os alunos, reimplante o Apps Script (código novo no repositório).";}}
- catch(e){if(m)m.textContent="Sem conexão com a planilha. Ficou salvo só neste aparelho."}}const VER="202610292049";const USO_ON=true;const vv=u=>u+(u.includes("?")?"&":"?")+"v="+VER;
+ catch(e){if(m)m.textContent="Sem conexão com a planilha. Ficou salvo só neste aparelho."}}const VER="202610312134";const USO_ON=true;const vv=u=>u+(u.includes("?")?"&":"?")+"v="+VER;
 function uso(ev,aula){if(!USO_ON||!S||isProf)return;try{navigator.sendBeacon(API,new Blob([JSON.stringify({tipo:"uso",ev,aula,matricula:S.ra,nome:S.nome,ts:Date.now()})],{type:"text/plain;charset=utf-8"}))}catch(e){}}
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 function view(v){["landing","home","disc"].forEach(k=>$("#"+k).hidden=k!==v);$("#who").hidden=v==="landing";scrollTo(0,0)}

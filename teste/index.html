@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Pré e pós-teste · Saúde em Jogo</title>
-<meta name="robots" content="noindex">
+<meta name="robots" content="noindex"><meta name="theme-color" content="#070b14"><meta name="description" content="Pré e pós-teste da disciplina, Saúde em Jogo.">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&family=Sora:wght@500;600;700&display=swap">
 <link rel="stylesheet" href="estilo.css">
 <script src="../vendor/liberacao.js"></script><script src="../vendor/ra.js"></script><script>try{LIB.guard(new URLSearchParams(location.search).get("aula"))}catch(e){}</script>
@@ -67,8 +67,8 @@ async function syncServer() {
 function login() {
   app.innerHTML = `<section class="hero"><h1>Entrar</h1><p>Informe seu RA (registro acadêmico) e seu nome completo. É assim que sua nota chega ao professor.</p></section>
   <form id="lf" class="card stack" style="max-width:480px" autocomplete="on" novalidate>
-    <label class="fld"><span>Nome completo</span><input name="nome" required maxlength="80" autocomplete="name"></label>
-    <label class="fld"><span>RA (registro acadêmico)</span><input name="mat" required maxlength="14" inputmode="numeric" autocomplete="off"></label>
+    <label class="fld"><span>Nome completo</span><input name="nome" required maxlength="80" autocomplete="name" placeholder="Ex.: Maria da Silva"></label>
+    <label class="fld"><span>RA (registro acadêmico)</span><input name="mat" required maxlength="14" inputmode="numeric" autocomplete="off" placeholder="Só números"></label>
     <p class="err" id="lgerr" role="alert"></p>
     <button class="btn" type="submit">Entrar</button>
   </form>`;
