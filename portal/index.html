@@ -65,7 +65,7 @@ h1 .b{background:linear-gradient(100deg,var(--pk),var(--p2));-webkit-background-
 input::placeholder{color:#6b7b95;opacity:1}</style></head><body>
 <canvas id="bg" aria-hidden="true"></canvas><div class="glow"></div>
 <div class="wrap">
- <header class="top"><div class="brand"><img src="../icone-app.svg" alt="" width="42" height="42" style="border-radius:12px"><div><b>Saúde em Jogo</b><small>Fisioterapia · AlfaUnipac · 2026/2</small></div></div><div class="who" id="who" hidden><span id="whoT"></span><button class="btn ghost sm" id="sair">Sair</button></div></header>
+ <header class="top"><div class="brand"><img src="../icone-app.svg" alt="" width="42" height="42" style="border-radius:12px"><div><b>Saúde em Jogo</b></div></div><div class="who" id="who" hidden><span id="whoT"></span><button class="btn ghost sm" id="sair">Sair</button></div></header>
 
  <section id="landing">
   <div class="hero">
@@ -146,7 +146,7 @@ async function dadaToggle(id,ar){const i=DADAS.indexOf(id);if(i>=0)DADAS.splice(
  try{await fetch(API,{method:"POST",mode:"no-cors",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify({tipo:"aulas",pin,dadas:DADAS})});
   const j=await (await fetch(API+"?acao=aulas&_="+Date.now())).json();
   if(m){m.textContent=j&&j.ok&&Array.isArray(j.dadas)&&j.dadas.indexOf(id)>=0===isDada(id)?"Salvo para todos os alunos.":"Salvo só neste aparelho. Para valer para os alunos, reimplante o Apps Script (código novo no repositório).";}}
- catch(e){if(m)m.textContent="Sem conexão com a planilha. Ficou salvo só neste aparelho."}}const VER="202610312140";const USO_ON=true;const vv=u=>u+(u.includes("?")?"&":"?")+"v="+VER;
+ catch(e){if(m)m.textContent="Sem conexão com a planilha. Ficou salvo só neste aparelho."}}const VER="202610312145";const USO_ON=true;const vv=u=>u+(u.includes("?")?"&":"?")+"v="+VER;
 function uso(ev,aula){if(!USO_ON||!S||isProf)return;try{navigator.sendBeacon(API,new Blob([JSON.stringify({tipo:"uso",ev,aula,matricula:S.ra,nome:S.nome,ts:Date.now()})],{type:"text/plain;charset=utf-8"}))}catch(e){}}
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 function view(v){["landing","home","disc"].forEach(k=>$("#"+k).hidden=k!==v);$("#who").hidden=v==="landing";scrollTo(0,0)}
