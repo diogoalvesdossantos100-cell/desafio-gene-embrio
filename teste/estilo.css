@@ -8,7 +8,7 @@ button{cursor:pointer}
 button:focus-visible,input:focus-visible{outline:2px solid var(--g);outline-offset:2px}
 h1,h2{font-family:var(--disp);margin:0}
 .wrap{max-width:760px;margin:0 auto}
-header.top{padding-block:14px 8px}
+header.top{padding-block:14px 8px;display:flex;align-items:center;flex-wrap:wrap;gap:10px 14px}
 .brand{display:flex;align-items:center;gap:10px}
 .mark{width:34px;height:34px;border-radius:10px;background:var(--g);color:#052015;display:grid;place-items:center;font:700 .8rem var(--disp)}
 .brand b{font:600 1rem var(--disp);display:block;line-height:1.1}
