@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="pt-BR"><head><meta charset="utf-8"><script src="../vendor/liberacao.js"></script><script>LIB.guard("gen-05")</script><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Saúde em Jogo · Laboratório · Genética Aula 05</title><meta name="robots" content="noindex"><meta name="theme-color" content="#070b14">
+<link rel="icon" type="image/svg+xml" href="../icone-app.svg">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&family=Sora:wght@500;600;700&display=swap">
+<link rel="stylesheet" href="../laboratorio/estilo.css">
+<style>
+main{max-width:880px;margin-left:auto;margin-right:auto}
+.menu-card{display:block;width:100%;text-align:left;cursor:pointer;color:inherit}
+.menu-card h2{margin:4px 0 2px;font-size:1.2rem}.menu-card p{margin:0;color:var(--ink2)}
+.kar{display:grid;grid-template-columns:repeat(auto-fill,minmax(58px,1fr));gap:6px;margin:10px 0}
+.slot{background:var(--s2);border:2px solid transparent;border-radius:10px;padding:6px 2px 4px;display:flex;flex-direction:column;align-items:center;gap:2px;min-height:96px;justify-content:flex-end;cursor:default;color:var(--mut);font:600 .72rem var(--body)}
+.kar.pick .slot{cursor:pointer}.kar.pick .slot:hover{border-color:var(--g)}
+.slot.sel{border-color:var(--amb)}.slot.ok{border-color:var(--g);background:var(--gd)}.slot.bad{border-color:var(--red)}
+.slot svg{display:block}
+.hist{background:var(--s2);border-radius:12px;padding:12px 14px;margin:8px 0;color:var(--ink2)}
+.step-t{font:700 1rem var(--disp);margin:14px 0 4px}
+.opts.row{grid-template-columns:repeat(auto-fit,minmax(130px,1fr))}
+.opt.ok{border-color:var(--g);background:var(--gd)}.opt.bad{border-color:var(--red);background:#3a1414}
+.fb{margin:10px 0;padding:12px 14px;border-radius:12px;background:var(--s2);border-left:4px solid var(--g)}
+.fb.no{border-left-color:var(--amb)}
+.chips{display:flex;gap:8px;flex-wrap:wrap;margin:6px 0 10px}.chip{border:1px solid var(--line);border-radius:999px;padding:8px 14px;font:600 .9rem var(--body);color:var(--ink2);background:var(--s1);min-height:40px;cursor:pointer}
+.chip.on{border-color:var(--g);color:var(--g);background:var(--gd)}
+.bar{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:8px}
+svg text{font-family:var(--body)}
+.nota{font:700 1.1rem var(--disp)}
+</style></head><body>
+<header class="top"><div class="brand"><img src="../icone-app.svg" alt="" width="42" height="42" style="border-radius:12px"><div><b>Saúde em Jogo · Laboratório</b><small>Genética · Aula 05 · Cromossomos e cariótipo</small></div></div></header>
+<main>
+<button class="btn ghost" id="back" hidden style="margin-bottom:10px">← Menu</button>
+<section id="menu"><a class="btn ghost" href="../portal/" style="text-decoration:none;display:inline-flex;margin:0 0 12px">← Voltar ao portal</a>
+<p class="note" style="margin:0 2px 12px">Escolha o que quer explorar. Faça na ordem se quiser: primeiro o erro, depois o resultado, depois o diagnóstico.</p>
+<div class="stack">
+<button class="card menu-card" data-go="meiose"><span class="eyebrow">2D · passo a passo</span><h2>A não disjunção na meiose</h2><p>Veja como um par que não se separa vira 3 cópias do cromossomo 21.</p></button>
+<button class="card menu-card" data-go="estrutura"><span class="eyebrow">2D · comparar</span><h2>Quando o pedaço muda</h2><p>Deleção, duplicação, inversão e translocação, antes e depois.</p></button>
+<button class="card menu-card" data-go="kario"><span class="eyebrow">2D · desafio com 7 casos</span><h2>Leia o cariótipo</h2><p>Conte os cromossomos, ache o par diferente e dê o diagnóstico.</p></button>
+</div></section>
+<div id="secs"></div>
+</main>
+<script>
+(function(){"use strict";
+const $=s=>document.querySelector(s);
+const secs=$("#secs"),menu=$("#menu"),back=$("#back");
+function show(id){menu.hidden=!!id;back.hidden=!id;secs.innerHTML="";if(id){secs.appendChild(VIEWS[id]());}window.scrollTo(0,0)}
+back.onclick=()=>show(null);
+document.querySelectorAll("[data-go]").forEach(b=>b.onclick=()=>show(b.dataset.go));
+function el(t,c,h){const e=document.createElement(t);if(c)e.className=c;if(h!=null)e.innerHTML=h;return e}
+
+/* ---------- cromossomo (desenho) ---------- */
+function chrom(x,h,color,opt){opt=opt||{};const w=11,top=opt.top||0;
+  const cy=top+h*0.42;
+  return `<g transform="translate(${x},0)"><rect x="0" y="${top}" width="${w}" height="${h}" rx="5" fill="${color}"/><rect x="-1" y="${cy-3}" width="${w+2}" height="6" rx="3" fill="#00000055"/>${opt.mark?`<rect x="-2" y="${top-3}" width="${w+4}" height="${h+6}" rx="6" fill="none" stroke="#f2b84b" stroke-width="2" stroke-dasharray="3 2"/>`:""}</g>`}
+function hOf(pair){if(pair==="X")return 54;if(pair==="Y")return 28;return 18+Math.round((23-pair)*2.4)}
+const COL="#8fb8ff",COLX="#ff9ec7",COLY="#7be0b4";
+function slotSVG(copies,pair,del5){
+  const n=copies.length,w=n*14+6,H=76;
+  let g="";copies.forEach((c,i)=>{const hh=hOf(c==="X"||c==="Y"?c:pair);const isDel=del5&&pair===5&&i===1;const h2=isDel?hh-12:hh;
+    const col=c==="X"?COLX:c==="Y"?COLY:COL;g+=chrom(3+i*14,h2,col,{top:H-h2,mark:false});});
+  return `<svg width="${w}" height="${H}" viewBox="0 0 ${w} ${H}" aria-hidden="true">${g}</svg>`}
+
+/* ---------- 1. NÃO DISJUNÇÃO ---------- */
+function meiose(){
+  const root=el("div");
+  let erro=true,step=0;
+  const STEPS=4;
+  const gam=(n,x,y,lab,cls)=>{let c="";for(let i=0;i<n;i++)c+=chrom(x-7*n+7+i*14-3+ (n===1?3:0),28,"#8fb8ff",{top:y+10});return `<circle cx="${x}" cy="${y+25}" r="30" fill="${cls||'#16243b'}" stroke="#ffffff33"/>${c}<text x="${x}" y="${y+75}" text-anchor="middle" font-size="12" fill="#b4c1d8">${lab}</text>`};
+  function draw(){
+    let svg="",txt="",extra="";
+    if(step===0){
+      svg=`<circle cx="300" cy="80" r="70" fill="#16243b" stroke="#ffffff33"/>${chrom(284,50,"#8fb8ff",{top:55})}${chrom(305,50,"#8fb8ff",{top:55})}<text x="300" y="175" text-anchor="middle" font-size="13" fill="#b4c1d8">Célula que vai formar óvulo ou espermatozoide: par 21 com 2 cópias</text>`;
+      txt="A célula tem o par do cromossomo 21. Na meiose ele deve se separar, para cada gameta ficar com <b>1 cópia</b>.";
+    }else if(step===1){
+      if(!erro){svg=`<circle cx="200" cy="80" r="55" fill="#16243b" stroke="#ffffff33"/>${chrom(194,40,"#8fb8ff",{top:60})}<circle cx="400" cy="80" r="55" fill="#16243b" stroke="#ffffff33"/>${chrom(394,40,"#8fb8ff",{top:60})}<text x="300" y="90" text-anchor="middle" font-size="26" fill="#3ddc97">→ ←</text><text x="300" y="175" text-anchor="middle" font-size="13" fill="#b4c1d8">Cada cromossomo vai para um lado</text>`;txt="<b>Meiose normal:</b> o par se separa e cada célula-filha recebe 1 cromossomo 21.";}
+      else{svg=`<circle cx="200" cy="80" r="55" fill="#16243b" stroke="#ffffff33"/>${chrom(184,40,"#8fb8ff",{top:60})}${chrom(204,40,"#8fb8ff",{top:60})}<circle cx="400" cy="80" r="55" fill="#16243b" stroke="#ffffff33" stroke-dasharray="4 4"/><text x="400" y="86" text-anchor="middle" font-size="13" fill="#93a3bd">nenhum</text><text x="300" y="175" text-anchor="middle" font-size="13" fill="#f2b84b">O par não se separou: os dois foram para o mesmo lado</text>`;txt="<b>Não disjunção:</b> o par 21 não se separa. Uma célula fica com <b>2 cópias</b> e a outra com <b>nenhuma</b>.";}
+    }else if(step===2){
+      if(!erro){svg=gam(1,120,30,"1 cópia")+gam(1,240,30,"1 cópia")+gam(1,360,30,"1 cópia")+gam(1,480,30,"1 cópia");txt="No fim da meiose, os <b>4 gametes</b> têm 1 cópia do cromossomo 21 cada.";}
+      else{svg=gam(2,120,30,"2 cópias","#3a2d0c")+gam(2,240,30,"2 cópias","#3a2d0c")+gam(0,360,30,"nenhuma","#16243b")+gam(0,480,30,"nenhuma","#16243b");txt="Com o erro na meiose I, saem <b>2 gametes com 2 cópias</b> e <b>2 gametes sem nenhuma</b>. Isso quase sempre acontece na formação do óvulo, e o risco aumenta com a idade da mãe.";}
+    }else{
+      const rows=erro?[[2,"Gameta com 2 cópias + gameta normal","3 cópias: trissomia do 21 (síndrome de Down)","#f2b84b"],[0,"Gameta sem cópia + gameta normal","1 cópia: monossomia do 21, em geral não sobrevive","#ff8b8b"]]:[[1,"Gameta normal + gameta normal","2 cópias: cariótipo normal","#3ddc97"]];
+      svg="";extra=rows.map(r=>`<div class="hist" style="border-left:4px solid ${r[3]}"><b>${r[1]}</b><br><span style="color:${r[3]}">${r[2]}</span></div>`).join("");
+      txt=erro?"Na fecundação, o gameta do outro genitor traz 1 cópia. Resultado: <b>47 cromossomos (47,XX,+21 ou 47,XY,+21)</b> ou uma monossomia que não se mantém.":"Os dois gametes trazem 1 cópia: o embrião fica com 2 cópias, <b>46 cromossomos</b>.";
+    }
+    box.innerHTML=(step===3?extra:`<svg viewBox="0 0 600 190" style="width:100%;height:auto;background:#0e1424;border-radius:14px">${svg}</svg>`)+`<p style="font-size:1.05rem;margin:10px 2px">${txt}</p>`;
+    root.querySelector("#ms").textContent=`Passo ${step+1} de ${STEPS}`;
+    root.querySelector("#prev").disabled=step===0;root.querySelector("#next").disabled=step===STEPS-1;
+    root.querySelectorAll(".chip").forEach(c=>c.classList.toggle("on",(c.dataset.m==="erro")===erro));
+  }
+  root.innerHTML=`<div class="card"><span class="eyebrow">Mecanismo</span><h2 class="big">A não disjunção na meiose</h2>
+  <div class="chips"><button class="chip" data-m="normal">Meiose normal</button><button class="chip" data-m="erro">Com não disjunção</button></div>
+  <div id="box"></div>
+  <div class="bar"><button class="btn ghost sm" id="prev">← Anterior</button><span id="ms" class="note"></span><button class="btn sm" id="next">Próximo →</button></div></div>`;
+  const box=root.querySelector("#box");
+  root.querySelectorAll(".chip").forEach(c=>c.onclick=()=>{erro=c.dataset.m==="erro";draw()});
+  root.querySelector("#prev").onclick=()=>{step--;draw()};root.querySelector("#next").onclick=()=>{step++;draw()};
+  draw();return root;
+}
+
+/* ---------- 2. ESTRUTURAIS ---------- */
+function estrutura(){
+  const root=el("div");
+  const CL=["#5cb8ff","#3ddc97","#ffc83d","#ff9ec7","#c9b3ff"],CL2=["#ff9f5c","#ff6f91","#7be0b4","#8fb8ff","#e0c36b"];
+  function seg(i,x,y,l,col,ghost){const w=42;return `<g><rect x="${x}" y="${y}" width="${w}" height="26" rx="5" fill="${ghost?'none':col}" ${ghost?'stroke="#ffffff55" stroke-dasharray="4 3"':''}/><text x="${x+w/2}" y="${y+18}" text-anchor="middle" font-size="14" font-weight="700" fill="${ghost?'#93a3bd':'#06121e'}">${l}</text></g>`}
+  function row(x,y,items,lbl){return `<text x="${x}" y="${y-8}" font-size="12" fill="#93a3bd">${lbl}</text>`+items.map((it,i)=>seg(i,x+i*44,y,it[0],it[1],it[2])).join("")}
+  const A=["A","B","C","D","E"].map((l,i)=>[l,CL[i]]);
+  const B=["P","Q","R","S","T"].map((l,i)=>[l,CL2[i]]);
+  const T={
+    del:{n:"Deleção",svg:()=>row(30,40,A,"Cromossomo normal")+row(30,110,[A[0],A[1],["C",CL[2],true],A[3],A[4]],"Depois: o pedaço C some"),
+      t:"Um pedaço do cromossomo se perde. <b>Exemplo:</b> síndrome do cri-du-chat, perda de parte do braço curto do cromossomo 5 (hipotonia e atraso do desenvolvimento)."},
+    dup:{n:"Duplicação",svg:()=>row(30,40,A,"Cromossomo normal")+row(30,110,[A[0],A[1],A[2],A[2],A[3],A[4]],"Depois: o pedaço C aparece repetido"),
+      t:"Um pedaço aparece <b>duas vezes</b> no mesmo cromossomo. Há material genético a mais naquela região."},
+    inv:{n:"Inversão",svg:()=>row(30,40,A,"Cromossomo normal")+row(30,110,[A[0],A[3],A[2],A[1],A[4]],"Depois: B-C-D giraram e ficaram de ponta-cabeça"),
+      t:"O pedaço <b>gira 180°</b> e se religa invertido. Não perde nem ganha material, então muitas vezes não causa doença, mas pode atrapalhar a meiose."},
+    tra:{n:"Translocação",svg:()=>row(30,30,A,"Cromossomo 1 (antes)")+row(30,80,B,"Cromossomo 2 (antes)")+row(30,150,[A[0],A[1],A[2],B[3],B[4]],"Cromossomo 1 (depois)")+row(30,200,[B[0],B[1],B[2],A[3],A[4]],"Cromossomo 2 (depois)"),
+      t:"Dois cromossomos <b>trocam pedaços</b> (recíproca) ou dois pequenos se fundem (robertsoniana). Quem tem a translocação <b>equilibrada</b> pode ser saudável, mas tem risco de ter filho afetado."}
+  };
+  let cur="del";
+  function draw(){const t=T[cur];box.innerHTML=`<svg viewBox="0 0 280 ${cur==="tra"?245:150}" style="width:100%;height:auto;background:#0e1424;border-radius:14px">${t.svg()}</svg><p style="font-size:1.05rem;margin:10px 2px">${t.t}</p>`;
+    root.querySelectorAll(".chip").forEach(c=>c.classList.toggle("on",c.dataset.k===cur))}
+  root.innerHTML=`<div class="card"><span class="eyebrow">Mutações estruturais</span><h2 class="big">Quando o pedaço do cromossomo muda</h2><div class="chips">${Object.keys(T).map(k=>`<button class="chip" data-k="${k}">${T[k].n}</button>`).join("")}</div><div id="box"></div></div>`;
+  const box=root.querySelector("#box");root.querySelectorAll(".chip").forEach(c=>c.onclick=()=>{cur=c.dataset.k;draw()});draw();return root;
+}
+
+/* ---------- 3. LEIA O CARIÓTIPO ---------- */
+const CASES=[
+ {h:"Mulher de 28 anos, saudável, fazendo exame de rotina.",auto:{},sex:"XX",tot:46,par:null,nome:"Cariótipo normal",not:"46,XX",f:"Sem alteração: 23 pares, e o par sexual é XX."},
+ {h:"Bebê de 2 meses, muito “molinho”, olhos oblíquos. A mãe tem 41 anos.",auto:{21:3},sex:"XX",tot:47,par:21,nome:"Síndrome de Down",not:"47,XX,+21",f:"Trissomia do 21. Na fisioterapia: hipotonia, frouxidão ligamentar e atraso motor. Cuidado com a instabilidade atlantoaxial: evite flexão forçada do pescoço. A estimulação motora precoce é o padrão de cuidado."},
+ {h:"Menina de 12 anos, baixa estatura. Ao nascer teve inchaço (linfedema) nas mãos e nos pés.",auto:{},sex:"X",tot:45,par:"S",nome:"Síndrome de Turner",not:"45,X",f:"Monossomia do X: só um X, mulher. Baixa estatura, linfedema e, às vezes, problema cardíaco."},
+ {h:"Adolescente alto, com hipotonia leve na infância e frouxidão ligamentar.",auto:{},sex:"XXY",tot:47,par:"S",nome:"Síndrome de Klinefelter",not:"47,XXY",f:"Homem com um X a mais. Hipotonia leve na infância e efeitos no desenvolvimento a longo prazo."},
+ {h:"Recém-nascido com malformações múltiplas e punhos cerrados, com dedos sobrepostos.",auto:{18:3},sex:"XY",tot:47,par:18,nome:"Síndrome de Edwards",not:"47,XY,+18",f:"Trissomia do 18: malformações múltiplas e sobrevida geralmente curta."},
+ {h:"Recém-nascida com fenda no lábio e no palato, dedos a mais e malformações graves.",auto:{13:3},sex:"XX",tot:47,par:13,nome:"Síndrome de Patau",not:"47,XX,+13",f:"Trissomia do 13: malformações múltiplas e sobrevida geralmente curta."},
+ {h:"Bebê com choro agudo, parecido com miado de gato, hipotonia e atraso do desenvolvimento.",auto:{},sex:"XX",del5:true,tot:46,par:5,nome:"Cri-du-chat",not:"46,XX,del(5p)",f:"Não é conta errada: o total é 46, mas um cromossomo 5 está mais curto. Deleção no braço curto do 5 (hipotonia e atraso do desenvolvimento)."}
+];
+const NOMES=["Cariótipo normal","Síndrome de Down","Síndrome de Turner","Síndrome de Klinefelter","Síndrome de Edwards","Síndrome de Patau","Cri-du-chat"];
+function kario(){
+  const root=el("div");let i=0,score=0,etapa=1,done=false,sel=null,res=[];
+  function mix(a){return a.slice().sort(()=>Math.random()-0.5)}
+  function karHTML(c){let s="";for(let p=1;p<=22;p++){const n=c.auto[p]||2;s+=`<div class="slot" data-p="${p}">${slotSVG(Array(n).fill("a"),p,c.del5)}<span>${p}</span></div>`}
+    s+=`<div class="slot" data-p="S">${slotSVG(c.sex.split(""),"S",false)}<span>X/Y</span></div>`;return s}
+  function render(){
+    if(i>=CASES.length){root.innerHTML=`<div class="card"><span class="eyebrow">Resultado</span><h2 class="big">Você fechou os 7 casos</h2><p class="nota">${score} de ${CASES.length*3} pontos</p><p style="color:var(--ink2)">Cada caso vale 3 pontos: contar os cromossomos, achar o par e dar o diagnóstico.</p><div class="bar"><button class="btn" id="again">Refazer</button></div></div>`;root.querySelector("#again").onclick=()=>{i=0;score=0;etapa=1;done=false;render()};return}
+    const c=CASES[i];
+    root.innerHTML=`<div class="card"><div class="bar"><span class="eyebrow">Caso ${i+1} de ${CASES.length}</span><span class="note">${score} pontos</span></div>
+    <div class="hist">${c.h}</div><div id="kar" class="kar${etapa===2&&!done?" pick":""}">${karHTML(c)}</div><div id="q"></div></div>`;
+    question(c);
+  }
+  function mark(c){root.querySelectorAll(".slot").forEach(s=>{const p=s.dataset.p;if(String(c.par)===p)s.classList.add("ok")})}
+  function feedback(ok,txt){const f=el("div","fb"+(ok?"":" no"),txt);root.querySelector("#q").appendChild(f)}
+  function nextBtn(label,fn){const b=el("button","btn",label);b.onclick=fn;const w=el("div","bar");w.appendChild(b);root.querySelector("#q").appendChild(w)}
+  function question(c){
+    const q=root.querySelector("#q");
+    if(etapa===1){
+      q.innerHTML=`<div class="step-t">1. Quantos cromossomos tem esta célula?</div><div class="opts row" id="o"></div>`;
+      [44,45,46,47,48].forEach(n=>{const b=el("button","opt",`<span>${n}</span>`);b.onclick=()=>{if(done)return;done=true;const ok=n===c.tot;if(ok)score++;b.classList.add(ok?"ok":"bad");if(!ok)[...q.querySelectorAll(".opt")].find(x=>x.textContent==c.tot).classList.add("ok");
+        feedback(ok,ok?`Certo: <b>${c.tot}</b>. Normal é 46 (23 pares).`:`O total é <b>${c.tot}</b>. Conte as barras de cada par: o normal é 46.`);nextBtn("Próximo passo →",()=>{etapa=2;done=false;sel=null;render()})};q.querySelector("#o").appendChild(b)});
+    }else if(etapa===2){
+      q.innerHTML=`<div class="step-t">2. Toque no par que está diferente</div><div class="bar"><button class="btn ghost sm" id="none">Nenhum, está tudo normal</button><button class="btn sm" id="go" disabled>Confirmar</button></div>`;
+      const slots=root.querySelectorAll(".slot");
+      slots.forEach(s=>s.onclick=()=>{if(done)return;slots.forEach(x=>x.classList.remove("sel"));s.classList.add("sel");sel=s.dataset.p;q.querySelector("#go").disabled=false});
+      const conf=(val)=>{if(done)return;done=true;const ok=(c.par===null&&val==="none")||(String(c.par)===val);if(ok)score++;root.querySelector("#kar").classList.remove("pick");slots.forEach(x=>{x.classList.remove("sel")});mark(c);
+        if(!ok&&val!=="none")root.querySelector(`.slot[data-p="${val}"]`).classList.add("bad");
+        const where=c.par===null?"Nenhum par está alterado.":c.par==="S"?"O par sexual é o diferente.":(c.del5?"No par 5, um dos cromossomos está mais curto (deleção).":`O par ${c.par} tem uma cópia a mais.`);
+        feedback(ok,(ok?"Certo. ":"Não foi esse. ")+where);nextBtn("Último passo →",()=>{etapa=3;done=false;render()})};
+      q.querySelector("#go").onclick=()=>conf(sel);q.querySelector("#none").onclick=()=>conf("none");
+    }else{
+      q.innerHTML=`<div class="step-t">3. Qual é o diagnóstico?</div><div class="opts" id="o"></div>`;
+      const wrong=mix(NOMES.filter(n=>n!==c.nome)).slice(0,3);
+      mix([c.nome,...wrong]).forEach(n=>{const b=el("button","opt",`<span>${n}</span>`);b.onclick=()=>{if(done)return;done=true;const ok=n===c.nome;if(ok)score++;b.classList.add(ok?"ok":"bad");if(!ok)[...q.querySelectorAll(".opt")].find(x=>x.textContent==c.nome).classList.add("ok");
+        feedback(ok,`<b>${c.nome}</b> · <b>${c.not}</b><br>${c.f}`);nextBtn(i<CASES.length-1?"Próximo caso →":"Ver resultado",()=>{i++;etapa=1;done=false;render()})};q.querySelector("#o").appendChild(b)});
+    }
+  }
+  render();return root;
+}
+const VIEWS={meiose,estrutura,kario};
+})();
+</script>
+</body></html>
