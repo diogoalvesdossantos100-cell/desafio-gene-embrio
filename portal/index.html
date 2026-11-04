@@ -68,7 +68,7 @@ main{padding:6px 40px 56px;max-width:1240px;margin:0 auto}
 
 .cal h2{display:flex;align-items:center;justify-content:space-between;gap:8px}.cal h2 span{font:600 1.25rem var(--disp)}.cal .nv{display:flex;gap:4px}.cal .nv button{border:1.5px solid var(--lk);background:#fff;border-radius:50%;width:32px;height:32px;cursor:pointer;color:var(--bl);font-size:1rem;line-height:1}
 .cg{display:grid;grid-template-columns:repeat(7,1fr);gap:3px;text-align:center;font-size:.82rem;margin-bottom:10px}.cg b{font:600 .72rem var(--body);color:var(--mut);padding:2px 0}
-.cg i{font-style:normal;padding:5px 0;border-radius:8px;position:relative}.cg i.h{background:#FDE5E5;color:#B02A2A;font-weight:600}.cg i.s{background:#E3ECFA;color:#1F4FBF;font-weight:600}.cg i.p{background:#FFE9BF;color:#7A4B00;font-weight:600}.cg i.r{background:#E7EAF0;color:#5D6B85}.cg i.e{background:#DDF3EA;color:#0C7C52;font-weight:600}.cg i.hj{outline:2px solid var(--ink);outline-offset:-2px;font-weight:700}
+.cg i{font-style:normal;padding:5px 0;border-radius:8px;position:relative}.cg i.h{background:#FDE5E5;color:#B02A2A;font-weight:600}.cg i.s{background:#E3ECFA;color:#1F4FBF;font-weight:600}.cg i.p{background:#FFE9BF;color:#7A4B00;font-weight:600}.cg i.r{background:#E7EAF0;color:#5D6B85}.cg i.e{background:#DDF3EA;color:#0C7C52;font-weight:600}.cg i.b{background:#FCE4F1;color:#A3175F;font-weight:600}.cg i.hj{outline:2px solid var(--ink);outline-offset:-2px;font-weight:700}
 .ce{list-style:none;margin:0;padding:0;font-size:.88rem}.ce li{display:flex;gap:10px;padding:5px 0;border-top:1px solid var(--line)}.ce li b{flex:none;width:3.6em;color:var(--ink)}.ce li span{color:#3A4F7A}.ce li.pas{opacity:.5}
 @media(max-width:900px){#login{grid-template-columns:1fr}.lh{display:none}.lf{min-height:100vh;align-items:flex-start;padding-top:30px}.lf .mob{display:block!important}
  .top{padding:8px 16px;gap:8px}.top img{height:44px}.who{order:2}nav{order:3;width:100%;overflow-x:auto;flex-wrap:nowrap}nav button{white-space:nowrap}
@@ -139,7 +139,7 @@ const D={
   {id:"emb-07",tid:"emb-07",n:"07",tema:"Mudanças no corpo da mulher",ds:"Gestação, parto e puerpério: o que muda no corpo da mãe e onde a fisioterapia atua.",pdf:"../aulas/AULA_07_EMBRIOLOGIA.pdf",nomePdf:"AULA_07_EMBRIOLOGIA.pdf"},
   {id:"emb-08",tid:"emb-08",n:"08",tema:"Revisão geral",ds:"Seis unidades em uma aula: flashcards, jogo em grupos e quiz final.",pdf:"../aulas/AULA_08_EMBRIOLOGIA.pdf",nomePdf:"AULA_08_EMBRIOLOGIA.pdf"}]}};
 const esc=s=>String(s==null?"":s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
-const VER="202611040349";const vv=u=>u+(u.includes("?")?"&":"?")+"v="+VER;
+const VER="202611040350";const vv=u=>u+(u.includes("?")?"&":"?")+"v="+VER;
 const ses=()=>{try{return JSON.parse(localStorage.getItem("sj_portal_v1")||"null")}catch(e){return null}};
 (function(){try{const k=JSON.parse(localStorage.getItem("sj_prof_keep")||"null");if(k&&k.exp>Date.now()&&k.pin){sessionStorage.setItem("sj_portal_prof","1");sessionStorage.setItem("sj_teste_pin",k.pin);sessionStorage.setItem("sj_ge_pin",k.pin)}else if(k)localStorage.removeItem("sj_prof_keep")}catch(e){}})();
 let S=ses();if(S&&S.role==="aluno"&&RA.check(S.nome,S.ra)){S=null;try{localStorage.removeItem("sj_portal_v1")}catch(e){}}
@@ -186,12 +186,12 @@ async function rebuild(){M=await buildModel();render()}
 const CAL={9:[[7,7,"h","Feriado: Independência"],[12,12,"s","Sábado letivo (quarta-feira)"],[26,26,"s","Sábado letivo (quinta-feira)"],[28,28,"i","Início da D4 (e D3)"]],
 10:[[10,10,"s","Sábado letivo (sexta-feira)"],[12,12,"h","Feriado: N. Sra. Aparecida"],[13,14,"r","Recesso"],[15,15,"i","Dia do Professor"],[24,24,"s","Sábado letivo (segunda-feira)"]],
 11:[[2,2,"h","Feriado: Finados"],[3,6,"p","Semana de atividades avaliativas D4"],[7,7,"s","Sábado letivo (terça-feira)"],[9,13,"i","Reunião com líder de turma"],[15,15,"h","Feriado: Proclamação da República"],[20,20,"h","Feriado: Consciência Negra"],[28,28,"s","Sábado letivo (segunda-feira)"],[30,30,"p","Início da prova regular D4 e D5"]],
-12:[[1,4,"p","Semana de prova regular D4 e D5"],[4,4,"e","Encerra D4 e D5"],[7,8,"i","Pedido de 2ª chamada D4"],[10,11,"p","2ª chamada D4"],[11,11,"e","Fim do semestre letivo"],[10,31,"i","Renovação de matrícula (até 10/01)"],[25,25,"h","Feriado: Natal"]]};
+12:[[1,4,"p","Semana de prova regular D4 e D5"],[4,4,"e","Encerra D4 e D5"],[7,8,"i","Pedido de 2ª chamada D4"],[10,11,"p","2ª chamada D4"],[11,11,"e","Fim do semestre letivo"],[10,31,"i","Renovação de matrícula (até 10/01)"],[14,14,"b","Aniversário do professor Diogo 🎂"],[25,25,"h","Feriado: Natal"]]};
 let CALM=null;
 function calHoje(){const d=new Date();return {m:d.getMonth()+1,y:d.getFullYear(),d:d.getDate()}}
 function renderCal(){const el=$("#cal");if(!el)return;const h=calHoje();if(CALM===null)CALM=(h.y===2026&&h.m>=9&&h.m<=12)?h.m:(h.y>2026||(h.y===2026&&h.m>12))?12:9;
  const m=CALM,ev=CAL[m]||[],nd=new Date(2026,m,0).getDate(),w0=new Date(2026,m-1,1).getDay(),mes=["","Janeiro","Fevereiro","Março","Abril","Maio","Junho","Julho","Agosto","Setembro","Outubro","Novembro","Dezembro"][m];
- const pr={h:5,e:4,p:3,s:2,r:1,i:0},cls={};ev.forEach(([a,b,t])=>{if(t==="i")return;for(let d=a;d<=b;d++)if(!cls[d]||pr[t]>pr[cls[d]])cls[d]=t});
+ const pr={h:5,b:6,e:4,p:3,s:2,r:1,i:0},cls={};ev.forEach(([a,b,t])=>{if(t==="i")return;for(let d=a;d<=b;d++)if(!cls[d]||pr[t]>pr[cls[d]])cls[d]=t});
  let g="DSTQQSS".split("").map(x=>`<b>${x}</b>`).join("");for(let i=0;i<w0;i++)g+="<i></i>";
  for(let d=1;d<=nd;d++)g+=`<i class="${cls[d]||""}${h.y===2026&&h.m===m&&h.d===d?" hj":""}">${d}</i>`;
  const hoje=h.y===2026&&h.m===m?h.d:0,lista=ev.filter(e=>e[2]!=="i"||e[1]-e[0]<20).sort((a,b)=>a[0]-b[0]);
