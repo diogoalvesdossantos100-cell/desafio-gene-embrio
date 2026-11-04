@@ -1,6 +1,6 @@
 # Saúde em Jogo · Fisioterapia (AlfaUnipac GV)
 
-Portal de aulas, pré/pós-testes, laboratórios 2D/3D e jogo avaliativo (Genética e Embriologia; também Psicologia Aplicada e Saúde Coletiva).
+Portal de aulas, trilha de fases, recados e mensagens com o professor, calendário acadêmico, pré/pós-testes, laboratórios 2D/3D e jogo avaliativo (Genética e Embriologia; também Psicologia Aplicada e Saúde Coletiva).
 Site estático (GitHub Pages) + planilha Google com Apps Script (`planilha-apps-script.gs`) que recebe as notas.
 
 ## Estrutura
@@ -21,4 +21,8 @@ Site estático (GitHub Pages) + planilha Google com Apps Script (`planilha-apps-
 - **Dados de alunos:** nunca commitar nomes, RAs ou CPFs. O histórico antigo do Git ainda contém a lista anterior (ver `README` de manutenção com o professor).
 
 ## Planilha (Apps Script)
-Abas: `Resultados` (jogo antigo), `MVP` (testes e jogo), `USO` (acessos). A função `notasFinais` gera a aba **Notas finais** (uma linha por aluno, maior nota por unidade e média). Para publicar mudanças: editar o script, trocar `__PIN__` pelo PIN real **só no editor**, e Implantar > Gerenciar implantações > nova versão.
+Abas: `Resultados` (jogo antigo), `MVP` (testes e jogo), `USO` (acessos), `Recados` (professor para a turma ou para um aluno) e `Mensagens` (aluno para o professor, com resposta). As duas últimas são criadas sozinhas no primeiro uso. Rotas novas: `acao=aluno`, `acao=prof_inbox` e POST `msg`, `recado`, `resp`, `recado_del`. A função `notasFinais` gera a aba **Notas finais** (uma linha por aluno, maior nota por unidade e média). Para publicar mudanças: editar o script, trocar `__PIN__` pelo PIN real **só no editor**, e Implantar > Gerenciar implantações > nova versão.
+
+
+## Visual
+Tema claro único (`marca/tema-claro.css` para teste, DNA 3D e plataforma; `laboratorio/claro.css` para os laboratórios) com a logo oficial `marca/logo-claro.svg`. Os palcos 3D e os jogos temáticos (Genética, Embriologia, Psicologia, Saúde Coletiva) mantêm fundo escuro de propósito.

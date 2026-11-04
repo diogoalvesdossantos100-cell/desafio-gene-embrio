@@ -1,0 +1,18 @@
+/* Tema claro do Saúde em Jogo (mesma identidade do portal) para teste, DNA 3D e plataforma. Carregue DEPOIS do CSS da página. */
+:root{color-scheme:light;--bg:#EEF3FC;--s1:#fff;--s2:#F4F8FF;--s3:#E3ECFA;--line:#D3DFF3;--ink:#12295C;--ink2:#3A4F7A;--mut:#5D75A3;--g:#12A56E;--g2:#0C7C52;--gd:#DDF3EA;--amb:#C98A0B;--red:#C03030;--blue:#2B6BE0;--vio:#7A4FC8;--disp:'Fredoka','Sora',system-ui,sans-serif;--body:'Public Sans','Figtree',system-ui,sans-serif}
+body{background:var(--bg);color:var(--ink)}
+header.top{background:linear-gradient(var(--bg) 82%,transparent)}
+header.top .brand img{height:48px;width:auto;border-radius:0}
+header.top .brand small{font-size:.8rem;color:var(--mut)}
+.btn{background:var(--g);color:#fff;border-radius:99px}.btn.ghost{background:#fff;color:#2B6BE0;border:1.5px solid #C9D6EC}
+.card,.kpi,.opt{background:#fff}
+.opt.sel{background:#FFF4DA;border-color:var(--amb)}.opt.sel .l{background:var(--amb);color:#fff}
+.tag.warn{background:#FFF4DA;color:#8A5A00}.tag.ok{background:var(--gd);color:var(--g2)}
+.o2.bad{background:#FDE5E5}
+input::placeholder,textarea::placeholder{color:#8FA3C7}
+/* palcos 3D continuam escuros */
+canvas{background-color:#070b14}
+.fld input,input,textarea,select{background:#fff;color:var(--ink);border:1px solid #C9D6EC}
+.fld input:focus,input:focus,textarea:focus,select:focus{border-color:#2B6BE0;outline:0;box-shadow:0 0 0 3px #2B6BE022}
+nav.bar{background:rgba(255,255,255,.96)}
+.seg button[aria-pressed="true"],.opt.right .l{color:#fff}
