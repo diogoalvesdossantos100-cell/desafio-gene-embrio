@@ -26,3 +26,8 @@ Abas: `Resultados` (jogo antigo), `MVP` (testes e jogo), `USO` (acessos), `Recad
 
 ## Visual
 Tema claro único (`marca/tema-claro.css` para teste, DNA 3D e plataforma; `laboratorio/claro.css` para os laboratórios) com a logo oficial `marca/logo-claro.svg`. Os palcos 3D e os jogos temáticos (Genética, Embriologia, Psicologia, Saúde Coletiva) mantêm fundo escuro de propósito.
+
+
+## Direitos autorais
+
+© 2026 Diogo Alves dos Santos Justino Barbosa. Todos os direitos reservados (ver `LICENSE`). Uso, cópia e modificação dependem de autorização escrita do autor.

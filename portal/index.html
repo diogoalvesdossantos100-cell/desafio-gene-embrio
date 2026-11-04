@@ -1,4 +1,5 @@
 <!doctype html>
+<!-- © 2026 Diogo Alves dos Santos Justino Barbosa. Todos os direitos reservados. Ver LICENSE. -->
 <html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Saúde em Jogo · Fisioterapia</title><script src="../vendor/liberacao.js"></script><script src="../vendor/ra.js"></script><link rel="icon" type="image/svg+xml" href="../icone-app.svg"><meta name="robots" content="noindex"><meta name="description" content="Sua sala de estudo no celular: aulas em PDF, laboratório 2D e 3D e jogos curtos de Embriologia e Genética."><meta property="og:type" content="website"><meta property="og:site_name" content="Saúde em Jogo"><meta property="og:title" content="Saúde em Jogo · Fisioterapia"><meta property="og:description" content="Aulas, laboratório e jogos curtos de Embriologia e Genética. Aprender saúde, jogando."><meta property="og:url" content="https://saudeemjogo.app.br/"><meta property="og:image" content="https://saudeemjogo.app.br/marca/og.png"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta name="twitter:card" content="summary_large_image"><meta name="theme-color" content="#EEF3FC"><link rel="manifest" href="/manifest.webmanifest"><link rel="apple-touch-icon" href="/marca/icone-192.png">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Caveat:wght@600&family=Fredoka:wght@500;600;700&family=Public+Sans:wght@400;600&display=swap">
@@ -78,6 +79,7 @@ main{padding:6px 40px 56px;max-width:1240px;margin:0 auto}
 @media(prefers-reduced-motion:reduce){*{transition:none!important}}
 input::placeholder,textarea::placeholder{color:#8FA3C7;opacity:1}
 .lf .mob{display:none;text-align:center;margin-bottom:18px}.lf .mob img{height:72px}
+.cr{font-size:12px;color:#5b6b8c;text-align:center;margin:18px 0 6px;line-height:1.4}footer.cr{padding:18px 16px 28px}
 </style></head><body>
 
 <section id="login">
@@ -94,6 +96,7 @@ input::placeholder,textarea::placeholder{color:#8FA3C7;opacity:1}
    <label class="fld"><span>PIN</span><input name="pin" type="password" inputmode="numeric" maxlength="20" autocomplete="off" placeholder="PIN do painel" required></label>
    <button class="btn" type="submit">Entrar como professor</button><p class="err" id="ep" role="alert"></p>
    <div class="sw">É aluno? <button type="button" id="goA">Voltar</button></div></form>
+ <p class="cr">© 2026 Diogo Alves dos Santos Justino Barbosa · Saúde em Jogo · Todos os direitos reservados.</p>
  </div></div>
 </section>
 
@@ -109,6 +112,7 @@ input::placeholder,textarea::placeholder{color:#8FA3C7;opacity:1}
   <section id="v-aulas" class="panel" hidden><h1 class="pt">Aulas</h1><p class="sub">Material, laboratório, jogo e testes de cada aula. O que ainda não abriu aparece em cinza, com a data.</p><div class="tabs" id="tabs"></div><div id="al"></div></section>
     <section id="v-jogos" class="panel" hidden><h1 class="pt">Jogos</h1><p class="sub">Jogos curtos para testar o que você aprendeu. Valem 2 tentativas, e conta a maior nota.</p><div id="jgs"></div></section>
   <section id="v-prof" class="panel" hidden></section>
+ <footer class="cr">© 2026 Diogo Alves dos Santos Justino Barbosa · Saúde em Jogo · Todos os direitos reservados.</footer>
  </main>
 </div>
 <script>
@@ -139,7 +143,7 @@ const D={
   {id:"emb-07",tid:"emb-07",n:"07",tema:"Mudanças no corpo da mulher",ds:"Gestação, parto e puerpério: o que muda no corpo da mãe e onde a fisioterapia atua.",pdf:"../aulas/AULA_07_EMBRIOLOGIA.pdf",nomePdf:"AULA_07_EMBRIOLOGIA.pdf"},
   {id:"emb-08",tid:"emb-08",n:"08",tema:"Revisão geral",ds:"Seis unidades em uma aula: flashcards, jogo em grupos e quiz final.",pdf:"../aulas/AULA_08_EMBRIOLOGIA.pdf",nomePdf:"AULA_08_EMBRIOLOGIA.pdf"}]}};
 const esc=s=>String(s==null?"":s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
-const VER="202611040359";const vv=u=>u+(u.includes("?")?"&":"?")+"v="+VER;
+const VER="202611040423";const vv=u=>u+(u.includes("?")?"&":"?")+"v="+VER;
 const ses=()=>{try{return JSON.parse(localStorage.getItem("sj_portal_v1")||"null")}catch(e){return null}};
 (function(){try{const k=JSON.parse(localStorage.getItem("sj_prof_keep")||"null");if(k&&k.exp>Date.now()&&k.pin){sessionStorage.setItem("sj_portal_prof","1");sessionStorage.setItem("sj_teste_pin",k.pin);sessionStorage.setItem("sj_ge_pin",k.pin)}else if(k)localStorage.removeItem("sj_prof_keep")}catch(e){}})();
 let S=ses();if(S&&S.role==="aluno"&&RA.check(S.nome,S.ra)){S=null;try{localStorage.removeItem("sj_portal_v1")}catch(e){}}
