@@ -37,13 +37,12 @@ with sync_playwright() as p:
     if os.environ.get("SJ_STUB_RA"): pg.route("**/vendor/ra.js", lambda r: r.fulfill(content_type="text/javascript", body="window.RA={check:()=>''}"))
     pg.goto("file://%s/portal/index.html" % R); pg.wait_for_timeout(500)
     pg.fill('#fa input[name=nome]', NOME); pg.fill('#fa input[name=ra]', RAT); pg.click('#fa button[type=submit]'); pg.wait_for_timeout(500)
-    assert pg.locator("#nav button").count() == 5, "menu do portal"
+    assert pg.locator("#nav button").count() == 4, "menu do portal"
     pg.click("#nav button[data-v=aulas]"); pg.wait_for_timeout(400)
     for d in ("gen", "emb"):
         pg.click("#tabs button[data-tab=%s]" % d); pg.wait_for_timeout(300)
         assert pg.locator("#al article").count() >= 8, "aulas de " + d
         assert pg.locator("a[data-u=pre-teste]").count() >= 1, "botões de pré-teste em " + d
-    pg.click("#nav button[data-v=labs]"); pg.wait_for_timeout(300); assert pg.locator("#lbs .item").count() >= 4, "laboratórios"
     pg.click("#nav button[data-v=jogos]"); pg.wait_for_timeout(300); assert pg.locator("#jgs .item").count() >= 4, "jogos"
     pg.click("#nav button[data-v=prof]"); pg.wait_for_timeout(300); assert pg.locator("#fmsg").count() == 1, "tela do professor"
     for aid in ("gen-01", "gen-02", "emb-01", "emb-02"):  # emb-03 a emb-08 abrem só depois da data de liberação
