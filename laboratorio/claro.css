@@ -1,0 +1,12 @@
+/* Tema claro do Saúde em Jogo para os laboratórios: página e menu claros, área de experimento (palco) escura. */
+:root{color-scheme:light;--bg:#EEF3FC;--s1:#fff;--s2:#F4F8FF;--s3:#E3ECFA;--line:#D3DFF3;--ink:#12295C;--ink2:#3A4F7A;--mut:#5D75A3;--g:#12A56E;--gd:#DDF3EA;--amb:#C98A0B;--red:#C03030;--disp:'Fredoka','Sora',system-ui,sans-serif;--body:'Public Sans','Figtree',system-ui,sans-serif}
+body{background:var(--bg)}
+header.top{padding-block:12px 10px}header.top .brand img{height:50px;width:auto;border-radius:0}header.top .brand div{display:none}
+.top .brand::after{content:attr(data-aula);font:600 .9rem var(--body);color:var(--mut);padding-left:14px;border-left:2px solid var(--line)}
+.btn{background:var(--g);color:#fff;border-radius:99px}.btn.ghost{background:#fff;color:#2B6BE0;border:1.5px solid #C9D6EC}
+#menu .card{background:#fff;border:1.5px solid var(--line);border-radius:18px;transition:border-color .15s}#menu .card:hover{border-color:#2B6BE0}
+#menu .card h2{color:var(--ink)}
+main>section:not(#menu){--bg:#070b14;--s1:#0d1424;--s2:#121b2f;--s3:#18243b;--line:#ffffff1c;--ink:#eef3fb;--ink2:#b4c1d8;--mut:#93a3bd;--g:#3ddc97;--gd:#0c2a1f;--amb:#f2b84b;--red:#ff8b8b;background:#070b14;color:var(--ink);border-radius:22px;padding:16px;margin-top:6px}
+main>section:not(#menu) .btn{background:var(--g);color:#052015;border-radius:12px}main>section:not(#menu) .btn.ghost{background:transparent;color:var(--ink);border:1px solid var(--line)}
+#back{border-radius:99px}
+input::placeholder{color:#8FA3C7}

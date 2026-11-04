@@ -134,7 +134,7 @@ const D={
   {id:"emb-07",tid:"emb-07",n:"07",tema:"Mudanças no corpo da mulher",ds:"Gestação, parto e puerpério: o que muda no corpo da mãe e onde a fisioterapia atua.",pdf:"../aulas/AULA_07_EMBRIOLOGIA.pdf",nomePdf:"AULA_07_EMBRIOLOGIA.pdf"},
   {id:"emb-08",tid:"emb-08",n:"08",tema:"Revisão geral",ds:"Seis unidades em uma aula: flashcards, jogo em grupos e quiz final.",pdf:"../aulas/AULA_08_EMBRIOLOGIA.pdf",nomePdf:"AULA_08_EMBRIOLOGIA.pdf"}]}};
 const esc=s=>String(s==null?"":s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
-const VER="202611040337";const vv=u=>u+(u.includes("?")?"&":"?")+"v="+VER;
+const VER="202611040344";const vv=u=>u+(u.includes("?")?"&":"?")+"v="+VER;
 const ses=()=>{try{return JSON.parse(localStorage.getItem("sj_portal_v1")||"null")}catch(e){return null}};
 (function(){try{const k=JSON.parse(localStorage.getItem("sj_prof_keep")||"null");if(k&&k.exp>Date.now()&&k.pin){sessionStorage.setItem("sj_portal_prof","1");sessionStorage.setItem("sj_teste_pin",k.pin);sessionStorage.setItem("sj_ge_pin",k.pin)}else if(k)localStorage.removeItem("sj_prof_keep")}catch(e){}})();
 let S=ses();if(S&&S.role==="aluno"&&RA.check(S.nome,S.ra)){S=null;try{localStorage.removeItem("sj_portal_v1")}catch(e){}}
@@ -234,11 +234,14 @@ function renderAulas(){
  $("#al").innerHTML=(M[TAB]||[]).map(r=>{const a=r.a,id=a.id||a.tid;const nd=r.st==="ok"?'<span class="nd ok">✓</span>':r.st==="miss"?'<span class="nd miss">!</span>':r.st==="lock"?`<span class="nd lock">${r.n}</span>`:`<span class="nd na">${r.n}</span>`;
   const dada=isDada(a.tid);
   return `<article class="aula${r.lib?"":" fut"}" data-id="${id}">${nd}<div><h3>${esc(a.tema)}<small>Aula ${r.n}</small>${dada?'<span class="selo">Aula dada</span>':""}</h3><p class="ds">${esc(a.ds)}</p></div>${r.lib?`<div class="chips">${chipsFor(r,TAB)}</div>`:`<div class="chips">Abre ${esc(r.when)}</div>`}</article>${id==="gen-04"||id==="emb-04"?FAIXA:""}${id==="gen-05"||id==="emb-05"?FAIXA2:""}`}).join("")}
-function renderLabs(){const o=[];["gen","emb"].forEach(d=>(M?M[d]:[]).forEach(r=>{if(r.a.lab)o.push(`<a class="item${r.lib?"":" fut"}" data-u="lab" href="${vv(r.a.lab)}"><b>${esc(r.a.tema)}</b><span>${DN[d]} · Aula ${r.n}${r.lib?" · "+esc(r.a.labT):" · abre "+esc(r.when)}</span></a>`)}));
- $("#lbs").innerHTML=o.length?`<div class="grid2">${o.join("")}</div>`:`<p class="emp">Carregando…</p>`}
-function renderJogos(){const o=[];["gen","emb"].forEach(d=>(M?M[d]:[]).forEach(r=>{if(r.a.jogo)o.push(`<a class="item${r.lib?"":" fut"}" data-u="jogo" href="${vv(r.a.jogo)}"><b>${esc(r.a.tema)}</b><span>${DN[d]} · Aula ${r.n}${r.lib?"":" · abre "+esc(r.when)}</span></a>`)}));
- ["psi","sc"].forEach(d=>D[d].aulas.forEach(a=>o.push(`<a class="item" data-u="jogo" href="${vv(a.jogo)}"><b>${esc(a.tema.replace("Jogo: ",""))}</b><span>${esc(D[d].nome)}</span></a>`)));
- $("#jgs").innerHTML=`<div class="grid2">${o.join("")}</div>`}
+function renderLabs(){if(!M){$("#lbs").innerHTML='<p class="emp">Carregando…</p>';return}
+ $("#lbs").innerHTML=["gen","emb"].map(d=>{const o=M[d].filter(r=>r.a.lab).map(r=>`<a class="item${r.lib?"":" fut"}" data-u="lab" href="${vv(r.a.lab)}"><b>${esc(r.a.tema)}</b><span>Aula ${r.n}${r.lib?" · "+esc(r.a.labT):" · abre "+esc(r.when)}</span></a>`);
+  return o.length?`<h2 class="h2l" style="margin-top:${d==="gen"?0:28}px">${DN[d]}</h2><div class="grid2">${o.join("")}</div>`:""}).join("")}
+function renderJogos(){if(!M){$("#jgs").innerHTML="";return}
+ const sec=(t,o,m)=>o.length?`<h2 class="h2l" style="margin-top:${m}px">${t}</h2><div class="grid2">${o.join("")}</div>`:"";
+ const mk=d=>M[d].filter(r=>r.a.jogo).map(r=>`<a class="item${r.lib?"":" fut"}" data-u="jogo" href="${vv(r.a.jogo)}"><b>${esc(r.a.tema)}</b><span>Aula ${r.n}${r.lib?"":" · abre "+esc(r.when)}</span></a>`);
+ const ex=d=>D[d].aulas.map(a=>`<a class="item" data-u="jogo" href="${vv(a.jogo)}"><b>${esc(a.tema.replace("Jogo: ",""))}</b><span>Desafio da disciplina</span></a>`);
+ $("#jgs").innerHTML=sec("Genética",mk("gen"),0)+sec("Embriologia",mk("emb"),28)+sec("Psicologia Aplicada",ex("psi"),28)+sec("Saúde Coletiva",ex("sc"),28)}
 const fdt=s=>{const d=new Date(s);return isNaN(d)?"":d.toLocaleDateString("pt-BR",{day:"2-digit",month:"2-digit"})+" "+String(d.getHours()).padStart(2,"0")+":"+String(d.getMinutes()).padStart(2,"0")};
 function renderProf(){const el=$("#v-prof");
  if(isProf){const I=INBOX;el.innerHTML=`<h1 class="pt">Recados</h1><p class="sub">Escreva para a turma toda ou para um aluno. Quem for o destinatário vê o recado assim que entrar.</p>
