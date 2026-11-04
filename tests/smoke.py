@@ -21,7 +21,7 @@ bad = []
 for f in glob.glob(R + "/**/*.html", recursive=True):
     s = open(f).read()
     for h in re.findall(r'(?:href|src)="([^"#?]+)', s) + re.findall(r'(?:lab|jogo|pdf):"([^"#?]+)', s):
-        if h.startswith(("http", "data:", "mailto", "javascript", "//")) or "${" in h: continue
+        if h.startswith(("http", "data:", "mailto", "javascript", "//", "/")) or "${" in h: continue
         p = os.path.normpath(os.path.join(os.path.dirname(f), h))
         if not (os.path.exists(p) or os.path.exists(p + "/index.html")): bad.append((os.path.relpath(f, R), h))
 assert not bad, "links quebrados: %s" % bad
@@ -33,18 +33,19 @@ with sync_playwright() as p:
         pg.on("pageerror", lambda e: errs.append(str(e)))
         pg.route("**/fonts.*/**", lambda r: r.abort()); pg.route("**/script.google.com/**", lambda r: r.abort())
         return pg
-    pg = novo(); pg.goto("file://%s/portal/index.html" % R); pg.wait_for_timeout(500)
+    pg = novo()
+    if os.environ.get("SJ_STUB_RA"): pg.route("**/vendor/ra.js", lambda r: r.fulfill(content_type="text/javascript", body="window.RA={check:()=>''}"))
+    pg.goto("file://%s/portal/index.html" % R); pg.wait_for_timeout(500)
     pg.fill('#fa input[name=nome]', NOME); pg.fill('#fa input[name=ra]', RAT); pg.click('#fa button[type=submit]'); pg.wait_for_timeout(500)
-    assert pg.locator(".dcard").count() == 4, "cards de disciplina"
-    for d, n in (("gen", 2), ("emb", 2)):
-        pg.click(".dcard.%s" % d); pg.wait_for_timeout(300)
-        assert pg.locator("#al article").count() >= n, "aulas de " + d
-        pg.click("#disc .btn.ghost, #disc button", timeout=2000) if False else None
-        pg.goto("file://%s/portal/index.html" % R); pg.wait_for_timeout(400)
-    # pré e pós-teste: todas as aulas de Genética e Embriologia têm os dois botões; a página do teste abre
+    assert pg.locator("#nav button").count() == 5, "menu do portal"
+    pg.click("#nav button[data-v=aulas]"); pg.wait_for_timeout(400)
     for d in ("gen", "emb"):
-        pg.goto("file://%s/portal/index.html" % R); pg.wait_for_timeout(300); pg.click(".dcard.%s" % d); pg.wait_for_timeout(300)
-        assert pg.locator("a[data-u=pre-teste]").count() == pg.locator("a[data-u=pos-teste]").count() >= 1, "botões de pré/pós-teste em " + d
+        pg.click("#tabs button[data-tab=%s]" % d); pg.wait_for_timeout(300)
+        assert pg.locator("#al article").count() >= 8, "aulas de " + d
+        assert pg.locator("a[data-u=pre-teste]").count() >= 1, "botões de pré-teste em " + d
+    pg.click("#nav button[data-v=labs]"); pg.wait_for_timeout(300); assert pg.locator("#lbs .item").count() >= 4, "laboratórios"
+    pg.click("#nav button[data-v=jogos]"); pg.wait_for_timeout(300); assert pg.locator("#jgs .item").count() >= 4, "jogos"
+    pg.click("#nav button[data-v=prof]"); pg.wait_for_timeout(300); assert pg.locator("#fmsg").count() == 1, "tela do professor"
     for aid in ("gen-01", "gen-02", "emb-01", "emb-02"):  # emb-03 a emb-08 abrem só depois da data de liberação
         q = novo(); q.add_init_script("if(!localStorage.getItem('sj_teste_gen_v2'))localStorage.setItem('sj_teste_gen_v2',JSON.stringify({aluno:{nome:'"+NOME+"',mat:'"+RAT+"',key:'"+KEY+"'},unl:false,unlk:{},done:{},pend:[]}))")
         q.goto("file://%s/teste/index.html?aula=%s&m=pre" % (R, aid)); q.wait_for_timeout(500)

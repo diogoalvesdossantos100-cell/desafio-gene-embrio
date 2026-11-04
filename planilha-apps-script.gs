@@ -126,8 +126,9 @@ function mvpStatus_(matricula){
   const mat = norm_(matricula), fases = {};
   mvpRows_().forEach(r => {
     if (norm_(r[1]) !== mat) return;
-    const f = String(r[4]); fases[f] = fases[f] || {tent:0, melhor:-1, vistas:[]};
+    const f = String(r[4]); fases[f] = fases[f] || {tent:0, melhor:-1, nota:-1, vistas:[]};
     fases[f].tent++; fases[f].melhor = Math.max(fases[f].melhor, Number(r[6]) || 0);
+    fases[f].nota = Math.max(fases[f].nota, Number(String(r[8]).replace(",", ".")) || 0);
     String(r[11] || "").split(",").forEach(x => { const i = parseInt(x, 10); if (!isNaN(i) && fases[f].vistas.indexOf(i) < 0) fases[f].vistas.push(i); });
   });
   return {ok:true, fases:fases};
@@ -165,6 +166,67 @@ function aulasSet_(d){
   return {ok:true, dadas:l};
 }
 
+
+// ===== Recados e mensagens (portal novo) =====
+// Abas "Recados" (professor -> turma ou aluno) e "Mensagens" (aluno -> professor, com resposta).
+function abaRec_(){
+  const ss = SpreadsheetApp.openById(SS_ID);
+  let sh = ss.getSheetByName("Recados");
+  if (!sh) { sh = ss.insertSheet("Recados"); sh.getRange(1,1,1,5).setValues([["ts","id","alvo","texto","apagado"]]).setFontWeight("bold"); sh.setFrozenRows(1); sh.getRange("C2:C").setNumberFormat("@"); }
+  return sh;
+}
+function abaMsg_(){
+  const ss = SpreadsheetApp.openById(SS_ID);
+  let sh = ss.getSheetByName("Mensagens");
+  if (!sh) { sh = ss.insertSheet("Mensagens"); sh.getRange(1,1,1,7).setValues([["ts","id","matricula","nome","texto","resposta","tsResposta"]]).setFontWeight("bold"); sh.setFrozenRows(1); sh.getRange("C2:C").setNumberFormat("@"); }
+  return sh;
+}
+function iso_(v){ return v instanceof Date ? v.toISOString() : String(v || ""); }
+function recRows_(){ const sh = abaRec_(), n = sh.getLastRow() - 1; return n > 0 ? sh.getRange(2,1,n,5).getValues().filter(r => String(r[4]) !== "1") : []; }
+function msgRows_(){ const sh = abaMsg_(), n = sh.getLastRow() - 1; return n > 0 ? sh.getRange(2,1,n,7).getValues() : []; }
+function alunoGet_(matricula){
+  const mat = norm_(matricula); if (!mat) return {ok:false, err:"matricula"};
+  const rec = recRows_().filter(r => String(r[2]) === "turma" || norm_(r[2]) === mat)
+    .map(r => ({id:String(r[1]), ts:iso_(r[0]), alvo:String(r[2]) === "turma" ? "turma" : "aluno", texto:String(r[3])})).slice(-20).reverse();
+  const msgs = msgRows_().filter(r => norm_(r[2]) === mat)
+    .map(r => ({id:String(r[1]), ts:iso_(r[0]), texto:String(r[4]), resp:String(r[5] || ""), tsResp:iso_(r[6])})).slice(-20).reverse();
+  return {ok:true, v:2, recados:rec, msgs:msgs, pendente: msgs.some(m => !m.resp)};
+}
+function profInbox_(pin){
+  const pk = pinOk_(pin); if (!pk.ok) return pk;
+  return {ok:true, v:2,
+    recados: recRows_().map(r => ({id:String(r[1]), ts:iso_(r[0]), alvo:String(r[2]), texto:String(r[3])})).reverse().slice(0, 60),
+    msgs: msgRows_().map(r => ({id:String(r[1]), ts:iso_(r[0]), mat:String(r[2]), nome:String(r[3]), texto:String(r[4]), resp:String(r[5] || ""), tsResp:iso_(r[6])})).reverse().slice(0, 80)};
+}
+function msgPost_(d){
+  const mat = norm_(d.matricula), texto = String(d.texto || "").trim().slice(0, 800);
+  if (!mat || !texto) return {ok:false, err:"vazio"};
+  if (msgRows_().some(r => norm_(r[2]) === mat && !String(r[5] || ""))) return {ok:false, err:"pendente"};
+  abaMsg_().appendRow([new Date(), Utilities.getUuid().slice(0,8), mat, String(d.nome || "").slice(0,80), texto, "", ""]);
+  return {ok:true};
+}
+function recadoPost_(d){
+  const pk = pinOk_(d.pin); if (!pk.ok) return pk;
+  const texto = String(d.texto || "").trim().slice(0, 600), alvo = String(d.alvo || "turma") === "turma" ? "turma" : norm_(d.alvo);
+  if (!texto || !alvo) return {ok:false, err:"vazio"};
+  abaRec_().appendRow([new Date(), Utilities.getUuid().slice(0,8), alvo, texto, ""]);
+  return {ok:true};
+}
+function respPost_(d){
+  const pk = pinOk_(d.pin); if (!pk.ok) return pk;
+  const texto = String(d.texto || "").trim().slice(0, 800); if (!texto) return {ok:false, err:"vazio"};
+  const sh = abaMsg_(), rows = msgRows_();
+  for (let i = 0; i < rows.length; i++) if (String(rows[i][1]) === String(d.id)) { sh.getRange(i + 2, 6, 1, 2).setValues([[texto, new Date()]]); return {ok:true}; }
+  return {ok:false, err:"nao_achou"};
+}
+function recadoDel_(d){
+  const pk = pinOk_(d.pin); if (!pk.ok) return pk;
+  const sh = abaRec_(), n = sh.getLastRow() - 1; if (n < 1) return {ok:false, err:"nao_achou"};
+  const rows = sh.getRange(2,1,n,5).getValues();
+  for (let i = 0; i < rows.length; i++) if (String(rows[i][1]) === String(d.id)) { sh.getRange(i + 2, 5).setValue("1"); return {ok:true}; }
+  return {ok:false, err:"nao_achou"};
+}
+
 function doPost(e){
   const lock = LockService.getScriptLock(); lock.waitLock(20000);
   try {
@@ -172,6 +234,11 @@ function doPost(e){
     if (d.tipo === "mvp") return json_(mvpPost_(d));
     if (d.tipo === "uso") return json_(usoPost_(d));
     if (d.tipo === "aulas") return json_(aulasSet_(d));
+    if (d.tipo === "msg") return json_(msgPost_(d));
+    if (d.tipo === "recado") return json_(recadoPost_(d));
+    if (d.tipo === "resp") return json_(respPost_(d));
+    if (d.tipo === "recado_del") return json_(recadoDel_(d));
+    if (d.tipo) return json_({ok:false, err:"tipo"});
     const sh = aba_();
     sh.appendRow([new Date(), d.nome, String(d.matricula), d.turma, d.disciplina, d.tentativa, d.acertos, d.total, d.pontos, d.nota, d.erradas, d.jogo || JOGO_PADRAO]);
     return ContentService.createTextOutput(JSON.stringify({ok:true})).setMimeType(ContentService.MimeType.JSON);
@@ -183,6 +250,8 @@ function doGet(e){
   if (acao === "status") return json_(mvpStatus_(e.parameter.matricula));
   if (acao === "painel") return json_(mvpPainel_(e.parameter.pin));
   if (acao === "aulas") return json_(aulasGet_());
+  if (acao === "aluno") return json_(alunoGet_(e.parameter.matricula));
+  if (acao === "prof_inbox") return json_(profInbox_(e.parameter.pin));
   const mat = norm_(e.parameter.matricula), jogo = String(e.parameter.jogo || JOGO_PADRAO).trim().toLowerCase();
   const sh = aba_(), n = sh.getLastRow() - 1;
   let tent = 0, melhor = 0;

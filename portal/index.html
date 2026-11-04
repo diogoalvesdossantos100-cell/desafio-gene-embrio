@@ -1,108 +1,114 @@
 <!doctype html>
 <html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>Saúde em Jogo · Fisioterapia</title><script src="../vendor/liberacao.js"></script><script src="../vendor/ra.js"></script><link rel="icon" type="image/svg+xml" href="../icone-app.svg"><meta name="robots" content="noindex"><meta name="description" content="Sua sala de estudo no celular: aulas em PDF, laboratório 2D e 3D e jogos curtos de Embriologia e Genética."><meta property="og:type" content="website"><meta property="og:site_name" content="Saúde em Jogo"><meta property="og:title" content="Saúde em Jogo · Fisioterapia"><meta property="og:description" content="Aulas, laboratório e jogos curtos de Embriologia e Genética. Aprender saúde, jogando."><meta property="og:url" content="https://saudeemjogo.app.br/"><meta property="og:image" content="https://saudeemjogo.app.br/marca/og.png"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta name="twitter:card" content="summary_large_image"><meta name="theme-color" content="#070b14"><link rel="manifest" href="/manifest.webmanifest"><link rel="apple-touch-icon" href="/marca/icone-192.png">
-<link rel="icon" type="image/svg+xml" href="../icone-app.svg">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&family=Sora:wght@500;600;700;800&display=swap">
+<title>Saúde em Jogo · Fisioterapia</title><script src="../vendor/liberacao.js"></script><script src="../vendor/ra.js"></script><link rel="icon" type="image/svg+xml" href="../icone-app.svg"><meta name="robots" content="noindex"><meta name="description" content="Sua sala de estudo no celular: aulas em PDF, laboratório 2D e 3D e jogos curtos de Embriologia e Genética."><meta property="og:type" content="website"><meta property="og:site_name" content="Saúde em Jogo"><meta property="og:title" content="Saúde em Jogo · Fisioterapia"><meta property="og:description" content="Aulas, laboratório e jogos curtos de Embriologia e Genética. Aprender saúde, jogando."><meta property="og:url" content="https://saudeemjogo.app.br/"><meta property="og:image" content="https://saudeemjogo.app.br/marca/og.png"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta name="twitter:card" content="summary_large_image"><meta name="theme-color" content="#EEF3FC"><link rel="manifest" href="/manifest.webmanifest"><link rel="apple-touch-icon" href="/marca/icone-192.png">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Caveat:wght@600&family=Fredoka:wght@500;600;700&family=Public+Sans:wght@400;600&display=swap">
 <style>
-:root{--bg:#070b14;--ink:#eef3fb;--mut:#93a3bd;--line:#ffffff1c;--g:#3ddc97;--p:#8e6bd8;--p2:#c9b3ff;--pk:#ff5fa2;--b:#5cb8ff;--y:#ffc83d;--disp:"Sora",system-ui,sans-serif;--body:"Figtree",system-ui,sans-serif}
-*{box-sizing:border-box}html{-webkit-text-size-adjust:100%}body{margin:0;background:var(--bg);color:var(--ink);font:400 1rem/1.5 var(--body);min-height:100vh;overflow-x:hidden}
-button,input{font:inherit;color:inherit}a{color:inherit}[hidden]{display:none!important}
-#bg{position:fixed;inset:0;width:100%;height:100%;z-index:0;display:block}
-.glow{position:fixed;inset:0;z-index:0;pointer-events:none;background:radial-gradient(60% 50% at 80% 10%,#8e6bd833,transparent 70%),radial-gradient(50% 45% at 10% 90%,#3ddc9722,transparent 70%),radial-gradient(40% 40% at 50% 50%,#ff5fa211,transparent 70%)}
-.wrap{position:relative;z-index:1;max-width:1080px;margin:0 auto;padding:18px 20px 40px;min-height:100vh;display:flex;flex-direction:column}
-.top{display:flex;align-items:center;justify-content:space-between;gap:12px}.who span{white-space:nowrap}
-.brand{display:flex;align-items:center;gap:12px}.mark{width:42px;height:42px;border-radius:12px;background:#10203a;display:grid;place-items:center;color:#04140d;font:800 .9rem var(--disp)}
-.brand b{font:700 .95rem var(--disp);display:block}.brand small{color:var(--mut);font-size:.75rem}
-.who{display:flex;align-items:center;gap:10px;font-size:.85rem;color:var(--mut)}
-.btn{border:0;border-radius:14px;background:var(--g);color:#04140d;font:700 1rem var(--body);padding:14px 22px;min-height:48px;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;justify-content:center;gap:8px;transition:background .15s}
-.btn:hover{background:#5fe8ae}
-.btn.ghost{background:#ffffff0f;color:var(--ink);border:1px solid var(--line)}.btn.ghost:hover{background:#ffffff1a}.btn.sm{padding:8px 14px;min-height:38px;font-size:.85rem;border-radius:11px}
-/* landing */
-.hero{flex:1;display:flex;flex-direction:column;justify-content:center;padding:34px 0 22px;max-width:700px}
-h1{font:800 clamp(2.4rem,8.5vw,4.6rem)/1 var(--disp);margin:0;letter-spacing:-.02em}
-h1 .a{background:linear-gradient(100deg,var(--g),var(--b));-webkit-background-clip:text;background-clip:text;color:transparent}
-h1 .b{background:linear-gradient(100deg,var(--pk),var(--p2));-webkit-background-clip:text;background-clip:text;color:transparent}
-.sub{color:#c3cfe3;font-size:1.1rem;max-width:34ch;margin:18px 0 0}
-.logins{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:12px;align-items:start}.logins .card{padding:30px 28px}.logins .card h2{font-size:1.6rem;margin:6px 0}.logins .card p{font-size:1rem}.logins .fld span{font-size:.9rem}.logins .fld input{min-height:54px;font-size:1.05rem}.logins .btn{min-height:56px;font-size:1.08rem}
-.card{background:#0d1424;border:1px solid var(--line);border-radius:16px;padding:20px}
-.card h2{font:700 1.1rem var(--disp);margin:0 0 4px}.card p{margin:0 0 12px;color:var(--mut);font-size:.88rem}
-.fld{display:block;margin-bottom:10px}.fld span{display:block;font-size:.75rem;color:var(--mut);margin-bottom:4px;font-weight:600}
-.fld input{width:100%;min-height:46px;border-radius:12px;border:1px solid var(--line);background:#0a1020cc;padding:0 14px;outline:0}.fld input:focus{border-color:var(--g);box-shadow:0 0 0 3px #3ddc9722}
-.err{color:#ff8b8b;font-size:.85rem;min-height:1.2em;margin:6px 0 0}
-/* home */
-.greet{padding:34px 0 8px}.greet h2{font:800 clamp(1.7rem,5vw,2.6rem)/1.1 var(--disp);margin:0}.greet p{color:var(--mut);margin:8px 0 0}
-.disc{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:22px}
-.dcard{position:relative;overflow:hidden;border-radius:20px;padding:30px 30px 28px;min-height:340px;text-align:left;border:1px solid var(--line);cursor:pointer;color:var(--ink);display:flex;flex-direction:column;justify-content:flex-end;transition:border-color .2s;background:#0c1426}
-.dcard:hover{border-color:#ffffff55}
-.dcard svg.art{position:absolute;top:0;right:0;width:46%;height:100%}
-.dcard .t{position:relative;font:800 2.4rem/1.05 var(--disp);margin:0 0 8px;max-width:54%}.dcard .d{position:relative;color:#c3cfe3;font-size:1.05rem;margin:0;max-width:52%}.dcard .go{position:relative;margin-top:20px;font-weight:700;font-size:1.05rem}
-.psi{background:linear-gradient(160deg,#0b2f3a,#0c1426 70%)}.sc{background:linear-gradient(160deg,#0f3322,#0c1426 70%)}.gen{background:linear-gradient(160deg,#1b1240,#0c1426 70%)}.emb{background:linear-gradient(160deg,#3a0f2c,#0c1426 70%)}
-/* disciplina */
-.dh{padding:26px 0 6px}.dh h2{font:800 clamp(1.8rem,6vw,2.8rem)/1.05 var(--disp);margin:6px 0 0}.dh p{color:var(--mut);margin:8px 0 0}
-.aulas{display:flex;flex-direction:column;margin-top:20px;border-top:1px solid var(--line)}
-.aula{display:grid;grid-template-columns:40px 1fr;gap:0 14px;padding:18px 4px;border-bottom:1px solid var(--line)}
-.num{font:600 1rem var(--disp);color:var(--mut);padding-top:2px;font-variant-numeric:tabular-nums}
-.aula h3{font:600 1.08rem/1.3 var(--disp);margin:0}.aula .ds{color:#a9b7cf;margin:6px 0 0;font-size:.92rem;max-width:62ch}
-.selo{display:inline-block;margin-left:8px;padding:1px 9px;border-radius:999px;background:#3ddc9733;color:#8af2c4;font:600 .78rem/1.6 var(--body);vertical-align:middle;white-space:nowrap}
-.acts{display:flex;flex-wrap:wrap;gap:2px 18px;margin-top:8px}
-.lk{display:inline-flex;align-items:center;min-height:40px;padding:0;border:0;background:none;color:var(--ink);font:600 .92rem var(--body);text-decoration:underline;text-decoration-color:#ffffff40;text-underline-offset:4px;cursor:pointer}
-.lk:hover{text-decoration-color:var(--g)}.lk:focus-visible{outline:2px solid var(--g);outline-offset:3px;border-radius:4px}
-.lock{color:var(--mut);font-size:.9rem;padding:8px 0}
-.aula.dada .ds,.aula.futura .ds{display:none}.aula.dada h3,.aula.futura h3{font-size:1rem}.aula.futura h3{color:#9fb0c9;font-weight:500}.aula.futura .num{opacity:.6}
-.aula.atual{background:#0d1424;border:1px solid #ffffff2e;border-left:4px solid var(--c,#3ddc97);border-radius:16px;padding:22px 20px;margin:14px 0}
-.aula.atual h3{font-size:1.3rem}.aula.atual .acts{gap:10px;margin-top:16px}
-.aula.atual .lk{padding:10px 16px;min-height:44px;border:1px solid var(--line);border-radius:12px;background:#ffffff0d;text-decoration:none}.aula.atual .lk:hover{background:#ffffff1c}
-.aula.atual .lk.main{background:var(--g);border-color:var(--g);color:#04140d;font-weight:700}.aula.atual .lk.main:hover{background:#5fe8ae}
-.aviso{margin:14px 0;padding:14px 18px;border-radius:12px;background:#ffc83d12;border:1px solid #ffc83d40;border-left:4px solid var(--y);font-size:.98rem;line-height:1.45}
-.pro{margin-top:22px;border:1px dashed #ffc83d66;background:#ffc83d0d}.pro h3{margin:0 0 10px;font:700 1rem var(--disp);color:var(--y)}
-.back{margin-top:18px}
-@media(max-width:760px){.logins,.disc{grid-template-columns:1fr}.dcard{min-height:300px;padding:24px}.dcard svg.art{width:100%;height:46%}.dcard .t{font-size:2rem;max-width:none}.dcard .d{max-width:none}.hero{padding-top:20px}.aula{grid-template-columns:30px 1fr;gap:0 10px}.aula.atual{padding:18px 16px}}
-@media(min-width:1100px){html{font-size:112.5%}.wrap{max-width:64rem}.aula{grid-template-columns:68px 1fr;padding:24px 6px}.aula h3{font-size:1.2rem}.aula.atual h3{font-size:1.5rem}.aula .ds{font-size:1rem}.lk{font-size:1rem}.num{font-size:1.1rem}.aviso{font-size:1.02rem}.brand b{font-size:1.05rem}.brand small{font-size:.8rem}.dcard{min-height:380px}.dcard .t{font-size:2.8rem}.dcard .d{font-size:1.2rem}}
-@media(min-width:1700px){html{font-size:125%}}
-@media(min-width:2200px){html{font-size:156%}}
-@media(min-width:3000px){html{font-size:200%}}
+:root{--bg:#EEF3FC;--ink:#12295C;--mut:#5D75A3;--line:#D3DFF3;--bl:#2B6BE0;--gr:#12A56E;--am:#F5A524;--lk:#C9D6EC;--disp:"Fredoka",system-ui,sans-serif;--body:"Public Sans",system-ui,sans-serif;--hand:"Caveat",cursive}
+*{box-sizing:border-box}html{-webkit-text-size-adjust:100%}body{margin:0;background:var(--bg);color:var(--ink);font:400 1rem/1.55 var(--body);min-height:100vh;overflow-x:hidden}
+button,input,select,textarea{font:inherit;color:inherit}a{color:inherit}[hidden]{display:none!important}
+:focus-visible{outline:3px solid var(--bl);outline-offset:2px;border-radius:6px}
+.btn{border:0;border-radius:99px;background:var(--bl);color:#fff;font:600 1rem var(--body);padding:12px 24px;min-height:46px;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;justify-content:center;gap:8px}
+.btn:hover{background:#1F55BE}.btn.ghost{background:#fff;color:var(--bl);border:1.5px solid var(--lk)}.btn.ghost:hover{background:#F4F8FF}.btn.sm{padding:7px 16px;min-height:38px;font-size:.88rem}
+.err{color:#C03030;font-size:.88rem;min-height:1.3em;margin:8px 0 0}.ok{color:var(--gr)}
+h1,h2,h3{font-family:var(--disp)}
+.fld{display:block;margin-bottom:14px}.fld span{display:block;font-weight:600;font-size:.88rem;margin-bottom:6px}
+.fld input,.fld select,.fld textarea{width:100%;min-height:50px;border-radius:12px;border:1.5px solid var(--lk);background:#fff;padding:0 14px;outline:0}.fld textarea{padding:12px 14px;min-height:110px;resize:vertical;line-height:1.5}
+.fld input:focus,.fld select:focus,.fld textarea:focus{border-color:var(--bl);box-shadow:0 0 0 3px #2B6BE022}
+.hint{font-size:.82rem;color:var(--mut);margin:-6px 0 14px}
+/* login */
+#login{display:grid;grid-template-columns:1.05fr 1fr;min-height:100vh}
+.lh{background:#fff;padding:40px 56px;display:flex;flex-direction:column;justify-content:space-between;gap:24px}
+.lh img{height:84px;align-self:flex-start;display:block}.lh h1{font:600 clamp(2rem,4.4vw,2.9rem)/1.08 var(--disp);margin:0 0 14px;max-width:11em}.lh p{color:var(--mut);font-size:1.05rem;max-width:28em;margin:0 0 22px}
+.lf{display:flex;align-items:center;justify-content:center;padding:36px 24px}.lbox{width:100%;max-width:400px}.lbox h2{font:600 1.75rem var(--disp);margin:0 0 4px}.lbox .s{color:var(--mut);font-size:.92rem;margin:0 0 20px}
+.lbox .btn{width:100%;min-height:52px;font-size:1.05rem}.lgpd{font-size:.78rem;color:var(--mut);margin:12px 0 0;line-height:1.45}
+.sw{margin-top:20px;text-align:center;font-size:.9rem;color:var(--mut)}.sw button{border:0;background:none;color:var(--bl);font-weight:600;cursor:pointer;padding:6px}
+/* app */
+.top{display:flex;align-items:center;gap:26px;padding:10px 40px;flex-wrap:wrap}.top img{height:54px;display:block;margin-right:auto}
+nav{display:flex;gap:4px;flex-wrap:wrap}nav button{border:0;background:none;font:600 .95rem var(--body);color:var(--mut);padding:10px 12px;cursor:pointer;border-radius:10px;position:relative}
+nav button.on{color:var(--ink)}nav button.on:after{content:"";position:absolute;left:12px;right:12px;bottom:3px;height:3px;border-radius:3px;background:var(--gr)}
+nav .dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--am);margin-left:5px;vertical-align:middle}
+.who{display:flex;align-items:center;gap:10px;font-size:.88rem;color:var(--mut)}.who b{color:var(--ink)}
+main{padding:6px 40px 56px;max-width:1240px;margin:0 auto}
+.panel{background:#fff;border-radius:28px;padding:34px 40px 30px}
+.pt{font:600 clamp(1.7rem,3.4vw,2.2rem)/1.1 var(--disp);margin:0 0 6px}.sub{color:var(--mut);margin:0 0 20px;max-width:46em}
+.stage{display:grid;grid-template-columns:minmax(260px,340px) 1fr;gap:36px;align-items:start}
+.stage h1{font:600 clamp(1.8rem,3vw,2.4rem)/1.1 var(--disp);margin:0 0 20px}
+.nota{background-image:repeating-linear-gradient(transparent 0 31px,#D3DFF3 31px 32px)}.nota p{font:600 25px/32px var(--hand);color:#1F4FBF;margin:0}.nota small{display:block;font:400 13.5px/32px var(--body);color:var(--mut)}
+.nota .none{font:400 15px/32px var(--body);color:var(--mut)}
+.stage>*,.row3>*,.cols>*{min-width:0}.lane{margin-bottom:6px;overflow-x:auto;max-width:100%}.lane svg{display:block;min-width:560px;width:100%;height:auto}.lane svg a{cursor:pointer}
+.row3{display:grid;grid-template-columns:repeat(3,1fr);gap:44px;padding:26px 4px 0}
+.row3 h2,.card h2{font:600 1.25rem var(--disp);margin:0 0 10px}
+.fz{list-style:none;margin:0;padding:0}.fz li{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--line)}.fz li small{display:block;color:var(--mut);font-size:.82rem}.fz a{color:var(--bl);font-weight:600;text-decoration:none;white-space:nowrap}.fz a:hover{text-decoration:underline}
+.med{font:700 2.6rem/1 var(--disp);color:var(--gr)}.med small{font:400 .9rem var(--body);color:var(--mut);margin-left:6px}
+.emp{color:var(--mut);margin:0}
+.tabs{display:flex;gap:8px;margin:0 0 10px;flex-wrap:wrap}.tabs button{border:0;border-radius:99px;padding:9px 20px;font:600 .95rem var(--body);color:var(--mut);background:#EEF3FC;cursor:pointer}.tabs button.on{background:var(--bl);color:#fff}
+.aula{display:grid;grid-template-columns:44px 1fr;gap:6px 16px;align-items:start;padding:16px 0;border-top:1px solid #E0E8F6}
+.nd{width:38px;height:38px;border-radius:50%;display:grid;place-items:center;font:700 1.05rem var(--disp);color:#fff;flex:none}
+.nd.ok{background:var(--bl)}.nd.miss{background:var(--am);color:var(--ink)}.nd.lock{background:#fff;border:2.5px solid var(--lk);color:#8FA3C7}.nd.na{background:#E7EEFA;color:var(--mut)}
+.aula h3{font:600 1.1rem var(--disp);margin:0}.aula h3 small{font:400 .82rem var(--body);color:var(--mut);margin-left:6px}.aula .ds{margin:2px 0 0;color:#3A4F7A;font-size:.93rem;max-width:62ch}
+.selo{display:inline-block;margin-left:8px;padding:1px 10px;border-radius:99px;background:#DDF3EA;color:#0C7C52;font:600 .76rem/1.6 var(--body);vertical-align:middle}
+.chips{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px;grid-column:2}
+.chip{font:600 .85rem var(--body);padding:7px 14px;border-radius:99px;border:1.5px solid var(--lk);color:var(--bl);text-decoration:none;background:#fff;cursor:pointer;min-height:36px;display:inline-flex;align-items:center}
+.chip:hover{background:#F4F8FF}.chip.p{background:var(--bl);border-color:var(--bl);color:#fff}.chip.d{color:#0C7C52;border-color:#BFE6D5}.chip.a{background:var(--am);border-color:var(--am);color:var(--ink)}
+.aula.fut{opacity:.62}.aula.fut .chips{color:var(--mut);font-size:.88rem}
+.aviso{margin:12px 0;padding:12px 16px;border-radius:12px;background:#FFF4DA;border-left:4px solid var(--am);font-size:.95rem}
+.grid2{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:14px}
+.item{display:block;text-decoration:none;border:1.5px solid var(--line);border-radius:18px;padding:16px 18px;background:#fff}.item:hover{border-color:var(--bl);background:#F8FAFF}
+.item b{font:600 1.05rem var(--disp);display:block}.item span{color:var(--mut);font-size:.88rem}.item.fut{opacity:.55;pointer-events:none}
+.h2l{font:600 1.3rem var(--disp);margin:24px 0 10px}
+.cols{display:grid;grid-template-columns:1fr 360px;gap:48px;align-items:start}
+.msg{padding:16px 0;border-top:1px solid #E0E8F6}.msg:first-child{border-top:0;padding-top:4px}
+.msg .w{font-size:.82rem;color:var(--mut);margin-bottom:2px}.msg .w b{color:var(--ink)}.tag{font-size:.74rem;font-weight:600;padding:2px 10px;border-radius:99px;background:#EEF3FC;color:var(--bl);margin-left:6px}
+.hand{font:600 24px/30px var(--hand);color:#1F4FBF;white-space:pre-wrap;overflow-wrap:anywhere}.eu{white-space:pre-wrap;overflow-wrap:anywhere}
+.rep{margin:10px 0 0 18px;padding-left:16px;border-left:3px solid var(--gr)}
+.form{background:#EEF3FC;border-radius:20px;padding:20px}.form .fld input,.form .fld select,.form .fld textarea{background:#fff}
+.pro{border:1.5px dashed #F5A52499;background:#FFFAEE;border-radius:18px;padding:16px 18px;margin-bottom:22px}.pro h3{margin:0 0 10px;font:600 1rem var(--disp)}
+.rm{border:0;background:none;color:#C03030;font-weight:600;cursor:pointer;padding:2px 6px;font-size:.82rem}
+@media(max-width:900px){#login{grid-template-columns:1fr}.lh{display:none}.lf{min-height:100vh;align-items:flex-start;padding-top:30px}.lf .mob{display:block!important}
+ .top{padding:8px 16px;gap:8px}.top img{height:44px}.who{order:2}nav{order:3;width:100%;overflow-x:auto;flex-wrap:nowrap}nav button{white-space:nowrap}
+ main{padding:4px 14px 40px}.panel{padding:22px 18px;border-radius:22px}.stage{grid-template-columns:1fr;gap:18px}.row3{grid-template-columns:1fr;gap:26px}.cols{grid-template-columns:1fr;gap:28px}
+ .aula{grid-template-columns:34px 1fr;gap:4px 12px}.chips{grid-column:1/-1}.nd{width:34px;height:34px}}
+@media(min-width:1500px){html{font-size:112.5%}}@media(min-width:2200px){html{font-size:150%}}
 @media(prefers-reduced-motion:reduce){*{transition:none!important}}
-input::placeholder{color:#6b7b95;opacity:1}</style></head><body>
-<canvas id="bg" aria-hidden="true"></canvas><div class="glow"></div>
-<div class="wrap">
- <header class="top"><div class="brand"><img src="../icone-app.svg" alt="" width="42" height="42" style="border-radius:12px"><div><b>Saúde em Jogo</b></div></div><div class="who" id="who" hidden><span id="whoT"></span><button class="btn ghost sm" id="sair">Sair</button></div></header>
+input::placeholder,textarea::placeholder{color:#8FA3C7;opacity:1}
+.lf .mob{display:none;text-align:center;margin-bottom:18px}.lf .mob img{height:72px}
+</style></head><body>
 
- <section id="landing">
-  <div class="hero">
-   <img src="../logo-escuro.svg" alt="Saúde em Jogo" style="width:min(600px,94%);height:auto;display:block;margin:0 0 6px">
-   <p class="sub" style="font-size:1.12rem;max-width:560px">O <b>Saúde em Jogo</b> é a sua sala de estudo no celular: baixe a aula em PDF, explore o laboratório em 2D e 3D e teste o que aprendeu em jogos curtos. Aprender saúde, jogando.</p>
-  </div>
-  <div class="logins">
-   <form class="card" id="fa" autocomplete="on" novalidate><h2>Entrar na turma</h2><p>Use seu nome completo e o seu RA (só números). Sem o RA não dá para entrar.</p>
-    <label class="fld"><span>Nome completo</span><input name="nome" maxlength="80" autocomplete="name" placeholder="Ex.: Maria da Silva" required></label>
-    <label class="fld"><span>RA</span><input name="ra" maxlength="14" inputmode="numeric" autocomplete="off" placeholder="Só números" required></label>
-    <button class="btn" type="submit" style="width:100%">Entrar como aluno</button><p class="err" id="ea" role="alert"></p><p style="font-size:.78rem;color:var(--mut);margin:10px 0 0;line-height:1.4">Usamos seu nome e RA só para registrar seu estudo e suas notas nesta disciplina, e eles ficam visíveis apenas ao professor. Ao entrar, você concorda com esse uso (LGPD).</p></form>
-   <form class="card" id="fp" autocomplete="off" novalidate><h2>Área do professor</h2><p>Digite o PIN do painel.</p>
-    <label class="fld"><span>PIN</span><input name="pin" type="password" inputmode="numeric" maxlength="20" autocomplete="off" placeholder="PIN do painel" required></label>
-    <button class="btn ghost" type="submit" style="width:100%;margin-top:4px">Entrar como professor</button><p class="err" id="ep" role="alert"></p></form>
-  </div>
- </section>
+<section id="login">
+ <div class="lh"><img src="../marca/logo-claro.svg" alt="Saúde em Jogo"><div><h1>Estude, jogue e acompanhe seu semestre.</h1><p>Aulas, laboratórios e jogos de Embriologia e Genética em um só lugar, com o que falta fazer e os recados do professor.</p></div><span></span></div>
+ <div class="lf"><div class="lbox">
+  <div class="mob"><img src="../marca/logo-claro.svg" alt="Saúde em Jogo"></div>
+  <form id="fa" autocomplete="on" novalidate><h2>Entrar</h2><p class="s">Use o nome da matrícula e o RA da sua carteirinha.</p>
+   <label class="fld"><span>Nome completo</span><input name="nome" maxlength="80" autocomplete="name" placeholder="Ex.: Maria da Silva" required></label>
+   <label class="fld"><span>RA</span><input name="ra" maxlength="14" inputmode="numeric" autocomplete="off" placeholder="Só números" required></label>
+   <button class="btn" type="submit">Entrar</button><p class="err" id="ea" role="alert"></p>
+   <p class="lgpd">Usamos seu nome e RA só para registrar seu estudo e suas notas nesta disciplina. Elas ficam visíveis apenas para você e para o professor. Ao entrar, você concorda com esse uso (LGPD).</p>
+   <div class="sw">É o professor? <button type="button" id="goP">Entrar com PIN</button></div></form>
+  <form id="fp" autocomplete="off" novalidate hidden><h2>Área do professor</h2><p class="s">Digite o PIN do painel.</p>
+   <label class="fld"><span>PIN</span><input name="pin" type="password" inputmode="numeric" maxlength="20" autocomplete="off" placeholder="PIN do painel" required></label>
+   <button class="btn" type="submit">Entrar como professor</button><p class="err" id="ep" role="alert"></p>
+   <div class="sw">É aluno? <button type="button" id="goA">Voltar</button></div></form>
+ </div></div>
+</section>
 
- <section id="home" hidden>
-  <div class="greet"><h2 id="gt"></h2><p>Escolha a disciplina.</p></div>
-  <div class="disc">
-   <button class="dcard gen" data-d="gen"><svg class="art" viewBox="170 0 240 300" preserveAspectRatio="xMidYMid meet" aria-hidden="true" id="artg"></svg><span class="t">Genética</span><p class="d">DNA, cromossomos, heranças e mutações.</p><span class="go">Abrir →</span></button>
-   <button class="dcard emb" data-d="emb"><svg class="art" viewBox="170 0 240 300" preserveAspectRatio="xMidYMid meet" aria-hidden="true" id="arte"></svg><span class="t">Embriologia</span><p class="d">Do ciclo menstrual ao bebê protegido.</p><span class="go">Abrir →</span></button>
-   <button class="dcard psi" data-d="psi"><svg class="art" viewBox="170 0 240 300" preserveAspectRatio="xMidYMid meet" aria-hidden="true" id="artp"></svg><span class="t">Psicologia Aplicada</span><p class="d">Entender a pessoa por trás do paciente.</p><span class="go">Abrir →</span></button>
-   <button class="dcard sc" data-d="sc"><svg class="art" viewBox="170 0 240 300" preserveAspectRatio="xMidYMid meet" aria-hidden="true" id="arts"></svg><span class="t">Saúde Coletiva</span><p class="d">O sistema que sustenta o cuidado: SUS e território.</p><span class="go">Abrir →</span></button>
-  </div>
-  <div id="prof" class="card pro" hidden><h3>Área do professor</h3><div class="acts"><a class="btn ghost" href="../teste/painel.html">Painel do teste</a><a class="btn ghost" href="../plataforma/?painel=1">Painel do jogo (Plataforma)</a></div><p style="margin:12px 0 0">Os painéis abrem já liberados com o PIN que você digitou.</p></div>
- </section>
-
- <section id="disc" hidden>
-  <button class="btn ghost sm back" id="vh">← Disciplinas</button>
-  <div class="dh"><h2 id="dt"></h2><p id="dd"></p></div>
-  <div class="aulas" id="al"></div>
- </section>
+<div id="app" hidden>
+ <header class="top"><img src="../marca/logo-claro.svg" alt="Saúde em Jogo">
+  <nav id="nav" aria-label="Seções"></nav>
+  <div class="who"><span id="whoT"></span><button class="btn ghost sm" id="sair">Sair</button></div></header>
+ <main id="main">
+  <section id="v-sem" class="panel" hidden>
+   <div class="stage"><div><h1 id="gt"></h1><div class="nota" id="rec"></div></div><div><div id="lanes"></div></div></div>
+   <div class="row3"><div><h2>Falta fazer</h2><div id="fz"></div></div><div><h2>Seu desempenho</h2><div id="dm"></div></div><div><h2>Falar com o professor</h2><form id="fq" novalidate><label class="fld"><span class="sr" style="position:absolute;left:-9999px">Mensagem</span><textarea name="t" maxlength="800" placeholder="Escreva sua dúvida…" style="min-height:84px"></textarea></label><button class="btn sm" type="submit">Enviar mensagem</button><p class="err" id="eq" role="status"></p></form></div></div>
+  </section>
+  <section id="v-aulas" class="panel" hidden><h1 class="pt">Aulas</h1><p class="sub">Material, laboratório, jogo e testes de cada aula. O que ainda não abriu aparece em cinza, com a data.</p><div class="tabs" id="tabs"></div><div id="al"></div></section>
+  <section id="v-labs" class="panel" hidden><h1 class="pt">Laboratórios</h1><p class="sub">Explore os conteúdos em 2D e 3D. Cada laboratório abre junto com a aula.</p><div id="lbs"></div></section>
+  <section id="v-jogos" class="panel" hidden><h1 class="pt">Jogos</h1><p class="sub">Jogos curtos para testar o que você aprendeu. Valem 2 tentativas, e conta a maior nota.</p><div id="jgs"></div></section>
+  <section id="v-prof" class="panel" hidden></section>
+ </main>
 </div>
 <script>
 (function(){"use strict";
-const $=s=>document.querySelector(s);
+const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
 const API="https://script.google.com/macros/s/AKfycbyxliHa5f1iuxdszS_YCAcqpMxoXy0gCxiWiXFceak5NSKBaY-Isfh9bfrhC-nGuhcTFA/exec";
 const D={
  gen:{nome:"Genética",tag:"Disciplina",cor:"#8e6bd8",desc:"DNA, cromossomos, divisão celular, heranças e mutações.",aulas:[
@@ -127,86 +133,153 @@ const D={
   {id:"emb-06",tid:"emb-06",n:"06",tema:"Métodos anticoncepcionais",ds:"Como se evita uma gravidez: do ciclo menstrual à escolha do método certo.",pdf:"../aulas/AULA_06_EMBRIOLOGIA.pdf",nomePdf:"AULA_06_EMBRIOLOGIA.pdf"},
   {id:"emb-07",tid:"emb-07",n:"07",tema:"Mudanças no corpo da mulher",ds:"Gestação, parto e puerpério: o que muda no corpo da mãe e onde a fisioterapia atua.",pdf:"../aulas/AULA_07_EMBRIOLOGIA.pdf",nomePdf:"AULA_07_EMBRIOLOGIA.pdf"},
   {id:"emb-08",tid:"emb-08",n:"08",tema:"Revisão geral",ds:"Seis unidades em uma aula: flashcards, jogo em grupos e quiz final.",pdf:"../aulas/AULA_08_EMBRIOLOGIA.pdf",nomePdf:"AULA_08_EMBRIOLOGIA.pdf"}]}};
+const esc=s=>String(s==null?"":s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const VER="202611040337";const vv=u=>u+(u.includes("?")?"&":"?")+"v="+VER;
 const ses=()=>{try{return JSON.parse(localStorage.getItem("sj_portal_v1")||"null")}catch(e){return null}};
 (function(){try{const k=JSON.parse(localStorage.getItem("sj_prof_keep")||"null");if(k&&k.exp>Date.now()&&k.pin){sessionStorage.setItem("sj_portal_prof","1");sessionStorage.setItem("sj_teste_pin",k.pin);sessionStorage.setItem("sj_ge_pin",k.pin)}else if(k)localStorage.removeItem("sj_prof_keep")}catch(e){}})();
-let S=ses();if(S&&S.role==="aluno"&&(RA.check(S.nome,S.ra))){S=null;try{localStorage.removeItem("sj_portal_v1")}catch(e){}}let isProf=false;try{isProf=sessionStorage.getItem("sj_portal_prof")==="1"}catch(e){}
+let S=ses();if(S&&S.role==="aluno"&&RA.check(S.nome,S.ra)){S=null;try{localStorage.removeItem("sj_portal_v1")}catch(e){}}
+let isProf=false;try{isProf=sessionStorage.getItem("sj_portal_prof")==="1"}catch(e){}
+const PIN=()=>{try{return sessionStorage.getItem("sj_ge_pin")||""}catch(e){return""}};
 function nk(n){n=String(n).normalize("NFD").replace(/[̀-ͯ]/g,"").toLowerCase().replace(/[^a-z]/g,"");let h=5381;for(const c of n)h=((h*33)^c.charCodeAt(0))>>>0;return h.toString(36)}
 function prefill(nome,ra){try{const K="sj_teste_gen_v2";let T=JSON.parse(localStorage.getItem(K)||"null")||{},key=ra+"~"+nk(nome);
-  if(!T.aluno||T.aluno.key!==key){T.aluno={nome,mat:ra,key};T.unl=false;T.unlk={};T.done=T.done||{};T.pend=T.pend||[];localStorage.setItem(K,JSON.stringify(T))}
-  const Dn="sj_dna3d_v1";let d={};try{d=JSON.parse(localStorage.getItem(Dn)||"{}")}catch(e){}if(d.n!==nome||d.r!==ra)localStorage.setItem(Dn,JSON.stringify({n:nome,r:ra,sent:false}))}catch(e){}}
-let DADAS=["gen-01","gen-02","gen-03","emb-01","emb-02","emb-03","emb-04"];let DADAS_SRV=false;try{const c=JSON.parse(localStorage.getItem("sj_dadas")||"null");if(Array.isArray(c))DADAS=c}catch(e){}
-function dadasSync(){try{const c=new AbortController(),t=setTimeout(()=>c.abort(),8000);fetch(API+"?acao=aulas",{signal:c.signal}).then(r=>r.json()).then(j=>{clearTimeout(t);if(j&&j.ok){DADAS_SRV=true;if(Array.isArray(j.dadas)){DADAS=j.dadas;try{localStorage.setItem("sj_dadas",JSON.stringify(DADAS))}catch(e){}}document.querySelectorAll("#al article[data-id]").forEach(dadaPaint)}}).catch(()=>{})}catch(e){}}
+ if(!T.aluno||T.aluno.key!==key){T.aluno={nome,mat:ra,key};T.unl=false;T.unlk={};T.done=T.done||{};T.pend=T.pend||[];localStorage.setItem(K,JSON.stringify(T))}
+ const Dn="sj_dna3d_v1";let d={};try{d=JSON.parse(localStorage.getItem(Dn)||"{}")}catch(e){}if(d.n!==nome||d.r!==ra)localStorage.setItem(Dn,JSON.stringify({n:nome,r:ra,sent:false}))}catch(e){}}
+/* aulas dadas */
+let DADAS=["gen-01","gen-02","gen-03","emb-01","emb-02","emb-03","emb-04"];try{const c=JSON.parse(localStorage.getItem("sj_dadas")||"null");if(Array.isArray(c))DADAS=c}catch(e){}
+const isDada=a=>DADAS.indexOf(a)>=0;
+function dadasSync(){try{const c=new AbortController(),t=setTimeout(()=>c.abort(),8000);fetch(API+"?acao=aulas",{signal:c.signal}).then(r=>r.json()).then(j=>{clearTimeout(t);if(j&&j.ok&&Array.isArray(j.dadas)){DADAS=j.dadas;try{localStorage.setItem("sj_dadas",JSON.stringify(DADAS))}catch(e){}if(S)rebuild()}}).catch(()=>{})}catch(e){}}
+async function dadaToggle(id){const i=DADAS.indexOf(id);if(i>=0)DADAS.splice(i,1);else DADAS.push(id);try{localStorage.setItem("sj_dadas",JSON.stringify(DADAS))}catch(e){}
+ try{await fetch(API,{method:"POST",mode:"no-cors",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify({tipo:"aulas",pin:PIN(),dadas:DADAS})})}catch(e){}rebuild()}
+function uso(ev,aula){if(!S||isProf)return;try{navigator.sendBeacon(API,new Blob([JSON.stringify({tipo:"uso",ev,aula,matricula:S.ra,nome:S.nome,ts:Date.now()})],{type:"text/plain;charset=utf-8"}))}catch(e){}}
+/* helpers de dados */
 const FAIXA=`<div role="note" class="aviso"><b>Trabalho aplicado:</b> entrega no dia <b>05/11</b>.</div>`;
 const FAIXA2=`<div role="note" class="aviso"><b>Semana de avaliação:</b> vale <b>15 pontos</b> e cai da aula 01 à 05.</div>`;
-const isDada=a=>DADAS.indexOf(a)>=0;
-const SELO=`<span class="dd" title="Aula dada" class="selo">Aula dada</span>`;
-function dadaPaint(ar){const id=ar.dataset.tid||ar.dataset.id;const h=ar.querySelector("h3");if(!h)return;const on=isDada(id);const old=h.querySelector(".dd");if(on&&!old)h.insertAdjacentHTML("beforeend"," "+SELO);if(!on&&old)old.remove();const b=ar.querySelector("[data-dada]");if(b)b.textContent=on?"Desmarcar aula dada":"Marcar como aula dada"}
-async function dadaToggle(id,ar){const i=DADAS.indexOf(id);if(i>=0)DADAS.splice(i,1);else DADAS.push(id);try{localStorage.setItem("sj_dadas",JSON.stringify(DADAS))}catch(e){}dadaPaint(ar);
- let pin="";try{pin=sessionStorage.getItem("sj_ge_pin")||""}catch(e){}const m=$("#dadamsg");
- try{await fetch(API,{method:"POST",mode:"no-cors",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify({tipo:"aulas",pin,dadas:DADAS})});
-  const j=await (await fetch(API+"?acao=aulas&_="+Date.now())).json();
-  if(m){m.textContent=j&&j.ok&&Array.isArray(j.dadas)&&j.dadas.indexOf(id)>=0===isDada(id)?"Salvo para todos os alunos.":"Salvo só neste aparelho. Para valer para os alunos, reimplante o Apps Script (código novo no repositório).";}}
- catch(e){if(m)m.textContent="Sem conexão com a planilha. Ficou salvo só neste aparelho."}}const VER="202611031922";const USO_ON=true;const vv=u=>u+(u.includes("?")?"&":"?")+"v="+VER;
-function uso(ev,aula){if(!USO_ON||!S||isProf)return;try{navigator.sendBeacon(API,new Blob([JSON.stringify({tipo:"uso",ev,aula,matricula:S.ra,nome:S.nome,ts:Date.now()})],{type:"text/plain;charset=utf-8"}))}catch(e){}}
-const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
-function view(v){["landing","home","disc"].forEach(k=>$("#"+k).hidden=k!==v);$("#who").hidden=v==="landing";scrollTo(0,0)}
-function enter(){const first=(S.nome||"Professor").split(" ")[0];$("#gt").textContent=isProf?"Olá, professor.":"Olá, "+first+".";$("#whoT").textContent=isProf?"Professor":first;$("#prof").hidden=!isProf;view("home")}
+const fm=n=>Number(n).toFixed(1).replace(".",",");
+const DN={gen:"Genética",emb:"Embriologia"};
+function kPre(t){return t==="gen-01"?"teste-pre":t==="gen-03"?"pre2-gen-03":"pre-"+t}
+function kPos(t){return t==="gen-01"?"teste-pos":t==="gen-03"?"pos2-gen-03":"pos-"+t}
+const nm=t=>DN[t.slice(0,3)]+" "+t.slice(4);
+const resolve=v=>Promise.resolve(v);
+let ST=null,STOK=false,M=null,INFO=null,SRV=false,CUR="sem",TAB="gen",INBOX=null;
+function feita(k){const f=ST&&ST[k]||(k==="pre2-gen-03"&&ST&&ST["pre-gen-03"])||(k==="pos2-gen-03"&&ST&&ST["pos-gen-03"]);return f&&f.tent>0?f:null}
+async function buildModel(){
+ const out={};
+ for(const d of ["gen","emb"]){out[d]=[];for(const a of D[d].aulas){const t=a.tid;if(!t)continue;
+  const lib=await resolve(LIB.liberado(a.id||t)),po=lib?await resolve(LIB.posAberto(a.id||t)):false;
+  const pre=feita(kPre(t)),pos=feita(kPos(t));
+  const need=[];if(lib&&!pre)need.push("pre");if(po&&!pos)need.push("pos");
+  const st=!lib?"lock":!STOK?"na":need.length?"miss":"ok";
+  out[d].push({a,t,n:a.n,lib,po,pre,pos,need,st,when:lib?"":LIB.quando(a.id||t)})}}
+ return out}
+async function loadStatus(){
+ try{const c=new AbortController(),tm=setTimeout(()=>c.abort(),9000);const r=await fetch(API+"?"+new URLSearchParams({acao:"status",matricula:S.ra}),{signal:c.signal});clearTimeout(tm);const j=await r.json();if(j&&j.ok&&j.fases){ST=j.fases;STOK=true}}catch(e){}
+ try{const r=await fetch(API+"?"+new URLSearchParams({acao:"aluno",matricula:S.ra}));const j=await r.json();if(j&&j.ok&&j.v>=2){INFO=j;SRV=true}}catch(e){}}
+async function loadInbox(){if(!isProf)return;try{const r=await fetch(API+"?"+new URLSearchParams({acao:"prof_inbox",pin:PIN()}));const j=await r.json();if(j&&j.ok&&j.v>=2){INBOX=j;SRV=true}}catch(e){}}
+async function rebuild(){M=await buildModel();render()}
+/* login */
+function view(v){$("#login").hidden=v!=="login";$("#app").hidden=v==="login";scrollTo(0,0)}
+function show(s){CUR=s;["sem","aulas","labs","jogos","prof"].forEach(k=>{$("#v-"+(k==="sem"?"sem":k)).hidden=k!==s});
+ $$("#nav button").forEach(b=>b.classList.toggle("on",b.dataset.v===s));scrollTo(0,0);if(s==="prof"&&!isProf)markSeen()}
+function seenId(){try{return localStorage.getItem("sj_rec_seen")||""}catch(e){return""}}
+function markSeen(){try{if(INFO&&INFO.recados&&INFO.recados[0])localStorage.setItem("sj_rec_seen",INFO.recados[0].id);if(INFO&&INFO.msgs)INFO.msgs.forEach(m=>{if(m.resp)localStorage.setItem("sj_resp_seen_"+m.id,"1")})}catch(e){}drawNav()}
+function drawNav(){const items=[["sem","Semestre"],["aulas","Aulas"],["labs","Laboratórios"],["jogos","Jogos"],["prof",isProf?"Recados":"Professor"]];
+ let novo=false;try{novo=!isProf&&!!INFO&&((INFO.recados&&INFO.recados[0]&&INFO.recados[0].id!==seenId())||(INFO.msgs&&INFO.msgs.some(m=>m.resp&&!localStorage.getItem("sj_resp_seen_"+m.id))))}catch(e){}
+ $("#nav").innerHTML=items.map(([k,l])=>`<button data-v="${k}" class="${CUR===k?"on":""}">${l}${k==="prof"&&novo?'<span class="dot" title="Novidade"></span>':""}</button>`).join("")}
+function enter(){const first=(S.nome||"Professor").split(" ")[0];$("#whoT").innerHTML=isProf?"<b>Professor</b>":`<b>${esc(S.nome)}</b> · 1º A Fisioterapia`;
+ view("app");show("sem");drawNav();$("#gt").textContent=isProf?"Olá, professor.":"Olá, "+first+".";
+ if(isProf){M=null;boot()}else{boot()}}
+async function boot(){M=await buildModel();render();if(!isProf){await loadStatus()}else{await loadInbox()}M=await buildModel();render();dadasSync()}
+/* render */
+function render(){drawNav();renderSem();renderAulas();renderLabs();renderJogos();renderProf()}
+function ptNode(x,y,s,n,id){const c=s==="ok"?"#2B6BE0":s==="miss"?"#F5A524":"#fff",stk=s==="lock"?"#C9D6EC":c,tc=s==="ok"?"#fff":s==="miss"?"#12295C":"#8FA3C7";
+ const g=s==="ok"?`<path d="M${x-8} ${y} l5.5 6 l10 -12" fill="none" stroke="#fff" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"/>`:s==="miss"?`<text x="${x}" y="${y+6.5}" text-anchor="middle" font-family="Fredoka" font-weight="700" font-size="20" fill="#12295C">!</text>`:`<text x="${x}" y="${y+5.5}" text-anchor="middle" font-family="Fredoka" font-weight="600" font-size="16" fill="${tc}">${n}</text>`;
+ return `<a data-go="${id}" aria-label="Aula ${n}"><circle cx="${x}" cy="${y}" r="22" fill="${c}" stroke="${stk}" stroke-width="3"/>${g}</a>`}
+function lane(d){const L=M[d];if(!L||!L.length)return"";const W=720,x0=48,dx=(W-2*x0)/(L.length-1),y=66;let path="",nodes="",cur=-1;
+ L.forEach((r,i)=>{if(r.st==="miss"&&cur<0)cur=i});if(cur<0)L.forEach((r,i)=>{if(r.st==="ok")cur=i});
+ L.forEach((r,i)=>{const x=x0+i*dx;if(i<L.length-1){const done=r.st==="ok";path+=`<line x1="${x}" y1="${y}" x2="${x+dx}" y2="${y}" stroke="${done?"#12A56E":"#C9D6EC"}" stroke-width="${done?5:4}" stroke-linecap="round" ${done?"":'stroke-dasharray="2 9"'}/>`}
+  nodes+=ptNode(x,y,r.st==="na"?"lock":r.st,r.n,r.t);if(i===cur&&r.st==="miss")nodes+=`<g transform="translate(${x} ${y-40})"><path d="M0 18 C-10 4 -9 -8 0 -8 C9 -8 10 4 0 18Z" fill="#12295C"/><circle cx="0" cy="-1" r="3.4" fill="#fff"/></g>`});
+ return `<div class="lane"><b style="font:600 1.05rem Fredoka">${DN[d]}</b><svg viewBox="0 0 ${W} 118" role="img" aria-label="Trilha de ${DN[d]}">${path}${nodes}</svg></div>`}
+function pend(){const o=[];["gen","emb"].forEach(d=>(M[d]||[]).forEach(r=>r.need.forEach(k=>o.push({r,k,d}))));return o}
+function recadoTxt(){const r=INFO&&INFO.recados&&INFO.recados[0];
+ if(r){const dt=new Date(r.ts),h=isNaN(dt)?"":dt.toLocaleDateString("pt-BR",{day:"2-digit",month:"2-digit"})+" às "+dt.getHours()+"h"+(dt.getMinutes()?String(dt.getMinutes()).padStart(2,"0"):"");
+  return `<p>“${esc(r.texto)}”</p><small>Prof. Diogo, ${r.alvo==="turma"?"para a turma":"só para você"}${h?", "+h:""} <a href="#" data-go-prof>Responder</a></small>`}
+ const P=pend();if(!STOK)return `<p class="none">Carregando seus dados…</p>`;
+ if(!P.length)return `<p>“Tudo em dia, ${esc((S.nome||"").split(" ")[0])}! Aproveite para revisar e jogar.”</p><small>Prof. Diogo</small>`;
+ const p=P[0],first=(S.nome||"").split(" ")[0];
+ return P.length===1?`<p>“${esc(first)}, falta só o ${p.k==="pre"?"pré":"pós"}-teste da ${nm(p.r.t)} para você ficar em dia. Vai que dá!”</p><small>Prof. Diogo</small>`:`<p>“${esc(first)}, faltam ${P.length} testes para você ficar em dia. Comece pela ${nm(p.r.t)}. Vai que dá!”</p><small>Prof. Diogo</small>`}
+function mediaDe(d){const v=[];(M[d]||[]).forEach(r=>[r.pre,r.pos].forEach(f=>{if(f){const n=f.nota>=0?f.nota:null;if(n!==null&&n!==undefined)v.push(n)}}));return v.length?v.reduce((a,b)=>a+b,0)/v.length:null}
+function renderSem(){
+ if(isProf){$("#gt").textContent="Olá, professor.";$("#rec").innerHTML=`<p class="none">Aqui você acompanha a turma. Use a aba Recados para escrever à turma ou a um aluno.</p>`;$("#lanes").innerHTML="";$("#fz").innerHTML=`<p class="emp">Painel da turma: <a href="../teste/painel.html" style="color:var(--bl);font-weight:600">notas dos testes</a> · <a href="../plataforma/?painel=1" style="color:var(--bl);font-weight:600">notas dos jogos</a></p>`;$("#dm").innerHTML="";$("#fq").hidden=true;return}
+ $("#fq").hidden=false;
+ if(!M){return}
+ const P=pend();$("#gt").textContent=!STOK?"Olá, "+(S.nome||"").split(" ")[0]+".":P.length?`${(S.nome||"").split(" ")[0]}, ${P.length===1?"falta 1 teste":"faltam "+P.length+" testes"} para ficar em dia.`:`${(S.nome||"").split(" ")[0]}, você está em dia.`;
+ $("#rec").innerHTML=recadoTxt();$("#lanes").innerHTML=lane("gen")+lane("emb");
+ $("#fz").innerHTML=!STOK?`<p class="emp">Não consegui buscar seus dados agora. Tente atualizar a página.</p>`:P.length?`<ul class="fz">${P.slice(0,5).map(({r,k})=>`<li><span>${nm(r.t)}<small>${k==="pre"?"Pré-teste":"Pós-teste"}</small></span><a data-u="${k}-teste" data-t="${r.t}" href="${vv("../teste/?aula="+r.t+"&m="+k)}">Fazer</a></li>`).join("")}</ul>${P.length>5?`<p class="emp" style="margin-top:8px"><a href="#" data-go-aulas style="color:var(--bl);font-weight:600">Ver todos (${P.length})</a></p>`:""}`:`<p class="emp">Nada pendente. Bom trabalho!</p>`;
+ const g=mediaDe("gen"),e=mediaDe("emb"),all=[g,e].filter(x=>x!==null);
+ $("#dm").innerHTML=!STOK?`<p class="emp">Sem dados por enquanto.</p>`:all.length?`<div class="med">${fm(all.reduce((a,b)=>a+b,0)/all.length)}<small>média nos testes</small></div><ul class="fz" style="margin-top:8px"><li><span>Genética</span><b>${g===null?"—":fm(g)}</b></li><li><span>Embriologia</span><b>${e===null?"—":fm(e)}</b></li></ul>`:`<p class="emp">Faça seu primeiro teste para ver sua média aqui.</p>`;
+ $("#fq button").disabled=!SRV;if(!SRV&&STOK)$("#eq").textContent="O envio de mensagens será ativado em breve."}
+function chipsFor(r,d){const a=r.a,L=[];
+ if(a.pdf)L.push(`<a class="chip p" data-u="aula" href="${a.pdf}" target="_blank" rel="noopener">Material</a>`);
+ if(a.lab)L.push(`<a class="chip" data-u="lab" href="${vv(a.lab)}">${esc(a.labT)}</a>`);
+ if(a.jogo)L.push(`<a class="chip" data-u="jogo" href="${vv(a.jogo)}">Jogo</a>`);
+ (a.extra||[]).forEach(z=>L.push(`<a class="chip" data-u="teste" href="${vv(z[1])}">${esc(z[0])}</a>`));
+ const T=a.tid;
+ L.push(r.pre?`<a class="chip d" data-u="pre-teste" href="${vv("../teste/?aula="+T+"&m=pre")}">Pré ✓</a>`:`<a class="chip ${STOK?"a":""}" data-u="pre-teste" href="${vv("../teste/?aula="+T+"&m=pre")}">${STOK?"Fazer pré-teste":"Pré-teste"}</a>`);
+ if(r.po||r.pos)L.push(r.pos?`<a class="chip d" data-u="pos-teste" href="${vv("../teste/?aula="+T+"&m=pos")}">Pós ✓</a>`:`<a class="chip ${STOK?"a":""}" data-u="pos-teste" href="${vv("../teste/?aula="+T+"&m=pos")}">${STOK?"Fazer pós-teste":"Pós-teste"}</a>`);
+ if(isProf){(a.prof||[]).forEach(z=>L.push(`<a class="chip" data-u="quadro" href="${vv(z[1])}">${esc(z[0])}</a>`));L.push(`<button type="button" class="chip" data-dada="${T}">${isDada(T)?"Desmarcar aula dada":"Marcar como aula dada"}</button>`)}
+ return L.join("")}
+function renderAulas(){
+ $("#tabs").innerHTML=["gen","emb"].map(d=>`<button data-tab="${d}" class="${TAB===d?"on":""}">${DN[d]}</button>`).join("");
+ if(!M){$("#al").innerHTML="";return}
+ $("#al").innerHTML=(M[TAB]||[]).map(r=>{const a=r.a,id=a.id||a.tid;const nd=r.st==="ok"?'<span class="nd ok">✓</span>':r.st==="miss"?'<span class="nd miss">!</span>':r.st==="lock"?`<span class="nd lock">${r.n}</span>`:`<span class="nd na">${r.n}</span>`;
+  const dada=isDada(a.tid);
+  return `<article class="aula${r.lib?"":" fut"}" data-id="${id}">${nd}<div><h3>${esc(a.tema)}<small>Aula ${r.n}</small>${dada?'<span class="selo">Aula dada</span>':""}</h3><p class="ds">${esc(a.ds)}</p></div>${r.lib?`<div class="chips">${chipsFor(r,TAB)}</div>`:`<div class="chips">Abre ${esc(r.when)}</div>`}</article>${id==="gen-04"||id==="emb-04"?FAIXA:""}${id==="gen-05"||id==="emb-05"?FAIXA2:""}`}).join("")}
+function renderLabs(){const o=[];["gen","emb"].forEach(d=>(M?M[d]:[]).forEach(r=>{if(r.a.lab)o.push(`<a class="item${r.lib?"":" fut"}" data-u="lab" href="${vv(r.a.lab)}"><b>${esc(r.a.tema)}</b><span>${DN[d]} · Aula ${r.n}${r.lib?" · "+esc(r.a.labT):" · abre "+esc(r.when)}</span></a>`)}));
+ $("#lbs").innerHTML=o.length?`<div class="grid2">${o.join("")}</div>`:`<p class="emp">Carregando…</p>`}
+function renderJogos(){const o=[];["gen","emb"].forEach(d=>(M?M[d]:[]).forEach(r=>{if(r.a.jogo)o.push(`<a class="item${r.lib?"":" fut"}" data-u="jogo" href="${vv(r.a.jogo)}"><b>${esc(r.a.tema)}</b><span>${DN[d]} · Aula ${r.n}${r.lib?"":" · abre "+esc(r.when)}</span></a>`)}));
+ ["psi","sc"].forEach(d=>D[d].aulas.forEach(a=>o.push(`<a class="item" data-u="jogo" href="${vv(a.jogo)}"><b>${esc(a.tema.replace("Jogo: ",""))}</b><span>${esc(D[d].nome)}</span></a>`)));
+ $("#jgs").innerHTML=`<div class="grid2">${o.join("")}</div>`}
+const fdt=s=>{const d=new Date(s);return isNaN(d)?"":d.toLocaleDateString("pt-BR",{day:"2-digit",month:"2-digit"})+" "+String(d.getHours()).padStart(2,"0")+":"+String(d.getMinutes()).padStart(2,"0")};
+function renderProf(){const el=$("#v-prof");
+ if(isProf){const I=INBOX;el.innerHTML=`<h1 class="pt">Recados</h1><p class="sub">Escreva para a turma toda ou para um aluno. Quem for o destinatário vê o recado assim que entrar.</p>
+ ${!SRV?'<div class="aviso">Os recados dependem da nova versão do Apps Script. Reimplante o script (código no repositório) para ativar.</div>':""}
+ <div class="cols"><div><h2 class="h2l" style="margin-top:0">Mensagens dos alunos</h2>${I&&I.msgs.length?I.msgs.map(m=>`<div class="msg"><div class="w"><b>${esc(m.nome)}</b> · RA ${esc(m.mat)} · ${fdt(m.ts)}</div><div class="eu">${esc(m.texto)}</div>${m.resp?`<div class="rep"><div class="w">Sua resposta · ${fdt(m.tsResp)}</div><div class="hand">${esc(m.resp)}</div></div>`:`<form class="fresp" data-id="${esc(m.id)}" style="margin-top:8px"><label class="fld" style="margin-bottom:8px"><span class="sr" style="position:absolute;left:-9999px">Resposta</span><textarea name="t" maxlength="800" placeholder="Responder ${esc(m.nome.split(" ")[0])}…" style="min-height:70px"></textarea></label><button class="btn sm" type="submit">Enviar resposta</button></form>`}</div>`).join(""):`<p class="emp">${SRV?"Nenhuma mensagem ainda.":"—"}</p>`}
+ <h2 class="h2l">Recados enviados</h2>${I&&I.recados.length?I.recados.map(r=>`<div class="msg"><div class="w">${r.alvo==="turma"?'<span class="tag" style="margin-left:0">Turma</span>':`<span class="tag" style="margin-left:0">RA ${esc(r.alvo)}</span>`} ${fdt(r.ts)} <button class="rm" data-del="${esc(r.id)}">apagar</button></div><div class="hand">${esc(r.texto)}</div></div>`).join(""):`<p class="emp">${SRV?"Nenhum recado enviado.":"—"}</p>`}</div>
+ <form class="form" id="frec" novalidate><h2 style="font:600 1.2rem Fredoka;margin:0 0 12px">Novo recado</h2><label class="fld"><span>Para</span><select name="alvo" id="alvoSel"><option value="turma">Turma toda</option><option value="aluno">Um aluno (informar RA)</option></select></label><label class="fld" id="raW" hidden><span>RA do aluno</span><input name="ra" inputmode="numeric" maxlength="14" placeholder="Só números"></label><label class="fld"><span>Recado</span><textarea name="t" maxlength="600" placeholder="Escreva o recado…"></textarea></label><button class="btn" type="submit"${SRV?"":" disabled"}>Enviar recado</button><p class="err" id="er" role="status"></p></form></div>`;return}
+ const R=(INFO&&INFO.recados)||[],Mg=(INFO&&INFO.msgs)||[];
+ el.innerHTML=`<h1 class="pt">Professor</h1><p class="sub">Recados do professor e suas conversas com ele.</p><div class="cols"><div>
+ <h2 class="h2l" style="margin-top:0">Recados</h2>${R.length?R.map(r=>`<div class="msg"><div class="w"><b>Prof. Diogo</b> · ${fdt(r.ts)}<span class="tag">${r.alvo==="turma"?"Turma":"Só para você"}</span></div><div class="hand">${esc(r.texto)}</div></div>`).join(""):`<p class="emp">Nenhum recado por enquanto.</p>`}
+ <h2 class="h2l">Suas mensagens</h2>${Mg.length?Mg.map(m=>`<div class="msg"><div class="w"><b>Você</b> · ${fdt(m.ts)}</div><div class="eu">${esc(m.texto)}</div>${m.resp?`<div class="rep"><div class="w"><b>Prof. Diogo</b> · ${fdt(m.tsResp)}</div><div class="hand">${esc(m.resp)}</div></div>`:`<p class="emp" style="margin-top:6px">Aguardando resposta.</p>`}</div>`).join(""):`<p class="emp">Você ainda não enviou mensagens.</p>`}</div>
+ <form class="form" id="fmsg" novalidate><h2 style="font:600 1.2rem Fredoka;margin:0 0 12px">Escrever ao professor</h2>${INFO&&INFO.pendente?'<p class="emp">Sua última mensagem ainda não foi respondida. Assim que o professor responder, você poderá enviar outra.</p>':`<label class="fld"><span>Mensagem</span><textarea name="t" maxlength="800" placeholder="Escreva sua dúvida…"></textarea></label><button class="btn" type="submit"${SRV?"":" disabled"}>Enviar mensagem</button><p class="err" id="er" role="status">${SRV?"":"O envio será ativado em breve."}</p>`}</form></div>`;}
+/* envio */
+async function post(o){await fetch(API,{method:"POST",mode:"no-cors",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify(o)});await new Promise(r=>setTimeout(r,1200))}
+async function enviarMsg(t,er){t=String(t||"").trim();if(!t){er.textContent="Escreva a mensagem.";return}if(!SRV){er.textContent="O envio será ativado em breve.";return}er.textContent="Enviando…";
+ await post({tipo:"msg",matricula:S.ra,nome:S.nome,texto:t});await loadStatus();er.textContent="";render();show("prof")}
+document.addEventListener("submit",async e=>{const f=e.target;
+ if(f.id==="fq"){e.preventDefault();await enviarMsg(f.t.value,$("#eq"));return}
+ if(f.id==="fmsg"){e.preventDefault();await enviarMsg(f.t.value,$("#er"));return}
+ if(f.id==="frec"){e.preventDefault();const er=$("#er"),t=f.t.value.trim(),al=f.alvo.value==="turma"?"turma":f.ra.value.replace(/\D/g,"");if(!t||!al){er.textContent=!t?"Escreva o recado.":"Informe o RA do aluno.";return}er.textContent="Enviando…";await post({tipo:"recado",pin:PIN(),alvo:al,texto:t});await loadInbox();render();return}
+ if(f.classList.contains("fresp")){e.preventDefault();const t=f.t.value.trim();if(!t)return;f.querySelector("button").disabled=true;await post({tipo:"resp",pin:PIN(),id:f.dataset.id,texto:t});await loadInbox();render()}});
+document.addEventListener("change",e=>{if(e.target.id==="alvoSel")$("#raW").hidden=e.target.value==="turma"});
+document.addEventListener("click",async e=>{const t=e.target;
+ let b=t.closest("#nav button");if(b){show(b.dataset.v);if(b.dataset.v==="prof"){if(isProf)await loadInbox();else{await loadStatus();markSeen()}render()}return}
+ b=t.closest("[data-tab]");if(b){TAB=b.dataset.tab;renderAulas();return}
+ b=t.closest("[data-go]");if(b){e.preventDefault();TAB=b.dataset.go.slice(0,3);renderAulas();show("aulas");const ar=document.querySelector('#al article[data-id="'+b.dataset.go+'"]');if(ar)ar.scrollIntoView({block:"center"});return}
+ if(t.closest("[data-go-prof]")){e.preventDefault();show("prof");await loadStatus();markSeen();render();return}
+ if(t.closest("[data-go-aulas]")){e.preventDefault();show("aulas");return}
+ b=t.closest("[data-dada]");if(b){dadaToggle(b.dataset.dada);return}
+ b=t.closest("[data-del]");if(b){if(!confirm("Apagar este recado?"))return;await post({tipo:"recado_del",pin:PIN(),id:b.dataset.del});await loadInbox();render();return}
+ b=t.closest("a[data-u]");if(b){const ar=b.closest("article[data-id]"),id=ar?ar.dataset.id:(b.dataset.t||"");uso(b.dataset.u,(id?nm(id):"portal"))}});
 $("#fa").addEventListener("submit",e=>{e.preventDefault();const f=new FormData(e.target),nome=String(f.get("nome")).trim().replace(/\s+/g," "),ra=String(f.get("ra")).trim().replace(/\s+/g,""),er=$("#ea");
- if(nome.split(" ").length<2){er.textContent="Digite nome e sobrenome.";return}var ck=RA.check(nome,ra);if(ck){er.textContent=ck;return}
+ if(nome.split(" ").length<2){er.textContent="Digite nome e sobrenome.";return}const ck=RA.check(nome,ra);if(ck){er.textContent=ck;return}
  er.textContent="";S={role:"aluno",nome,ra};isProf=false;try{sessionStorage.removeItem("sj_portal_prof");localStorage.setItem("sj_portal_v1",JSON.stringify(S))}catch(x){}prefill(nome,ra);enter()});
 $("#fp").addEventListener("submit",async e=>{e.preventDefault();const pin=String(new FormData(e.target).get("pin")).trim(),er=$("#ep");if(!pin){er.textContent="Digite o PIN.";return}er.textContent="Verificando…";
  try{const c=new AbortController(),t=setTimeout(()=>c.abort(),12000);const r=await fetch(API+"?"+new URLSearchParams({acao:"painel",pin}),{signal:c.signal});clearTimeout(t);const j=await r.json();
   if(j&&j.ok){try{sessionStorage.setItem("sj_teste_pin",pin);sessionStorage.setItem("sj_ge_pin",pin);sessionStorage.setItem("sj_portal_prof","1");localStorage.setItem("sj_prof_keep",JSON.stringify({pin,exp:Date.now()+8*36e5}))}catch(x){}isProf=true;S={role:"prof",nome:"Professor"};er.textContent="";enter()}
   else er.textContent=j&&j.err==="pin"?"PIN incorreto.":j&&j.err==="bloqueado"?"Muitas tentativas erradas. Aguarde 15 minutos.":"Não consegui validar agora. Tente de novo."}catch(x){er.textContent="Sem resposta do servidor. Verifique a internet."}});
-$("#sair").onclick=()=>{try{localStorage.removeItem("sj_portal_v1");localStorage.removeItem("sj_prof_keep");sessionStorage.removeItem("sj_portal_prof");sessionStorage.removeItem("sj_teste_pin");sessionStorage.removeItem("sj_ge_pin")}catch(e){}S=null;isProf=false;view("landing")};
-document.addEventListener("click",e=>{const d=e.target.closest("[data-d]");if(!d)return;const x=D[d.dataset.d];$("#dt").textContent=x.nome;$("#dd").textContent=x.desc;
- $("#al").innerHTML=x.aulas.map(a=>{const id=a.id||a.tid||"",L=[];
-  if(a.tid)L.push(`<a class="lk" data-u="pre-teste" href="${vv("../teste/?aula="+a.tid+"&m=pre")}">Pré-teste</a>`);
-  if(a.pdf)L.push(`<a class="lk main" data-u="aula" href="${a.pdf}" target="_blank" rel="noopener">Ver a aula</a><a class="lk" data-u="pdf" href="${a.pdf}" download="${a.nomePdf}">Baixar PDF</a>`);
-  if(a.lab)L.push(`<a class="lk" data-u="lab" href="${vv(a.lab)}">${esc(a.labT)}</a>`);
-  if(a.jogo)L.push(`<a class="lk${a.pdf?"":" main"}" data-u="jogo" href="${vv(a.jogo)}">Jogo</a>`);
-  if(a.tid)L.push(`<a class="lk" data-u="pos-teste" href="${vv("../teste/?aula="+a.tid+"&m=pos")}">Pós-teste</a>`);
-  (a.extra||[]).forEach(z=>L.push(`<a class="lk" data-u="teste" href="${vv(z[1])}">${esc(z[0])}</a>`));
-  if(isProf)(a.prof||[]).forEach(z=>L.push(`<a class="lk" data-u="quadro" href="${vv(z[1])}">${esc(z[0])}</a>`));
-  if(isProf)L.push(`<button type="button" class="lk" data-dada="1">Marcar como aula dada</button>`);
-  return `<article class="aula ${id&&isDada(id)?"dada":"aberta"}" data-id="${a.id||""}" data-tid="${id}" style="--c:${x.cor}"><div class="num">${a.n}</div><div class="cnt"><h3>${esc(a.tema)}${id&&isDada(id)?" "+SELO:""}</h3><p class="ds">${esc(a.ds)}</p><div class="acts">${L.join("")}</div></div></article>${a.id==="gen-04"||a.id==="emb-04"?FAIXA:""}${a.id==="gen-05"||a.id==="emb-05"?FAIXA2:""}`}).join("")+(isProf?'<p id="dadamsg" class="note" style="margin:10px 2px"></p>':"");
- $("#al").querySelectorAll("article[data-tid]").forEach(dadaPaint);$("#al").querySelectorAll("[data-dada]").forEach(b=>b.addEventListener("click",()=>{const ar=b.closest("article");dadaToggle(ar.dataset.tid,ar)}));view("disc");
- $("#al").querySelectorAll("a[data-u]").forEach(l=>l.addEventListener("click",()=>uso(l.dataset.u,x.nome+" · "+(l.closest("article").querySelector(".num")||{}).textContent)));
- const arts=[...$("#al").querySelectorAll("article[data-id]")].filter(ar=>ar.dataset.id);
- Promise.all(arts.map(ar=>LIB.liberado(ar.dataset.id).then(ok=>[ar,ok]))).then(rs=>{rs.forEach(([ar,ok])=>{if(ok)return;ar.classList.remove("aberta","dada");ar.classList.add("futura");ar.querySelector(".acts").innerHTML=`<span class="lock">Libera em ${LIB.quando(ar.dataset.id)}</span>`});const nx=$("#al").querySelector("article.aberta");if(nx)nx.classList.add("atual")})});
-$("#vh").onclick=()=>view("home");
-dadasSync();if(isProf&&(!S||S.role!=="prof"))S={role:"prof",nome:"Professor"};if(S&&(S.role==="aluno"||isProf)){if(S.role==="aluno")prefill(S.nome,S.ra);enter()}else view("landing");
-/* arte dos cards */
-function art(id,col,kind){let s="";const el=$("#"+id);
- if(kind==="g"){for(let i=0;i<14;i++){const y=14+i*20,x1=270+Math.sin(i*.62)*56,x2=270-Math.sin(i*.62)*56;s+=`<line x1="${x1}" y1="${y}" x2="${x2}" y2="${y}" stroke="${["#3ddc97","#ff7a7a","#5cb8ff","#ffc83d"][i%4]}" stroke-width="6" stroke-linecap="round" opacity=".75"/>`}
-  let a="",b="";for(let i=0;i<=56;i++){const y=i*5.2,x=270+Math.sin(i*.62/3.85)*56;a+=`${x.toFixed(1)},${y.toFixed(1)} `;b+=`${(540-x).toFixed(1)},${y.toFixed(1)} `}
-  s=`<polyline points="${a}" fill="none" stroke="#8e6bd8" stroke-width="7" stroke-linecap="round"/><polyline points="${b}" fill="none" stroke="#c9b3ff" stroke-width="7" stroke-linecap="round"/>`+s}
- else if(kind==="p"){s+='<text x="290" y="205" font-size="230" font-weight="800" fill="#3cc4d6" opacity=".35" text-anchor="middle" font-family="serif">Ψ</text>';[[60,0],[95,1],[130,2]].forEach(([r,i])=>{s+=`<circle cx="290" cy="150" r="${r}" fill="none" stroke="#3cc4d6" stroke-width="2" stroke-dasharray="6 10" opacity=".6"><animateTransform attributeName="transform" type="rotate" from="0 290 150" to="${i%2?-360:360} 290 150" dur="${18+i*8}s" repeatCount="indefinite"/></circle><circle cx="${290+r}" cy="150" r="7" fill="#8fe3f0"><animateTransform attributeName="transform" type="rotate" from="0 290 150" to="${i%2?-360:360} 290 150" dur="${18+i*8}s" repeatCount="indefinite"/></circle>`})}
- else if(kind==="s"){s+='<path d="M290 85h24v50h50v24h-50v50h-24v-50h-50v-24h50z" fill="#3ddc97" opacity=".35"/>';[[220,70],[360,80],[390,170],[330,250],[230,230],[200,150]].forEach(([x,y],i)=>{s+=`<line x1="302" y1="147" x2="${x}" y2="${y}" stroke="#3ddc97" stroke-width="2" opacity=".5"/><circle cx="${x}" cy="${y}" r="11" fill="#9be8b4"><animate attributeName="r" values="11;15;11" dur="${2.5+i*.4}s" repeatCount="indefinite"/></circle>`})}
- else{[[300,90,60],[250,130,40],[340,150,44],[290,190,36],[230,70,28],[360,70,26],[210,170,24]].forEach(([x,y,r],i)=>{s+=`<circle cx="${x}" cy="${y}" r="${r}" fill="${i%2?"#ff5fa233":"#ffb3d333"}" stroke="#ff8fc0" stroke-width="2"><animate attributeName="r" values="${r};${r+4};${r}" dur="${3+i*.4}s" repeatCount="indefinite"/></circle><circle cx="${x}" cy="${y}" r="${r*.35}" fill="#ff5fa2" opacity=".6"/>`})}
- el.innerHTML=s}
-art("arte","","e");art("artp","","p");art("arts","","s");
-(function(){const el=$("#artg"),C=["#3ddc97","#ff7a7a","#5cb8ff","#ffc83d"],rm=matchMedia("(prefers-reduced-motion: reduce)").matches;let t=0;
- function f(){const N=16,A=46,cx=268;let r="",A1=[],B1=[],bl="";
-  for(let i=0;i<=N;i++){const y=10+i*18.2,p=i*.7+t,sn=Math.sin(p),cs=Math.cos(p),x1=cx+A*sn,x2=cx-A*sn;
-   A1.push(x1.toFixed(1)+","+y.toFixed(1));B1.push(x2.toFixed(1)+","+y.toFixed(1));
-   r+=`<line x1="${x1.toFixed(1)}" y1="${y.toFixed(1)}" x2="${x2.toFixed(1)}" y2="${y.toFixed(1)}" stroke="${C[i%4]}" stroke-width="5" stroke-linecap="round" opacity="${(.3+.5*Math.abs(cs)).toFixed(2)}"/>`;
-   bl+=`<circle cx="${x1.toFixed(1)}" cy="${y.toFixed(1)}" r="${(6+3*cs).toFixed(1)}" fill="#8e6bd8" opacity="${(.55+.4*cs).toFixed(2)}"/><circle cx="${x2.toFixed(1)}" cy="${y.toFixed(1)}" r="${(6-3*cs).toFixed(1)}" fill="#c9b3ff" opacity="${(.55-.4*cs).toFixed(2)}"/>`}
-  el.innerHTML=`<polyline points="${A1.join(" ")}" fill="none" stroke="#8e6bd8" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" opacity=".7"/><polyline points="${B1.join(" ")}" fill="none" stroke="#c9b3ff" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" opacity=".7"/>`+r+bl}
- f();if(rm)return;function loop(){t+=.025;if(el.isConnected&&el.getBoundingClientRect().width>0)f();requestAnimationFrame(loop)}requestAnimationFrame(loop)})();
-/* fundo animado */
-const cv=$("#bg"),cx=cv.getContext("2d"),RM=matchMedia("(prefers-reduced-motion: reduce)").matches;let W,H,dpr,parts=[];
-function rs(){dpr=Math.min(2,devicePixelRatio||1);W=innerWidth;H=innerHeight;cv.width=W*dpr;cv.height=H*dpr;cx.setTransform(dpr,0,0,dpr,0,0);parts=[];const n=Math.round(W*H/26000);for(let i=0;i<n;i++)parts.push({x:Math.random()*W,y:Math.random()*H,r:6+Math.random()*26,vx:(Math.random()-.5)*.15,vy:-.1-Math.random()*.2,c:["#3ddc97","#8e6bd8","#ff5fa2","#5cb8ff"][i%4],o:.06+Math.random()*.12})}
-addEventListener("resize",rs);rs();
-function draw(t){cx.clearRect(0,0,W,H);
- parts.forEach(p=>{p.x+=p.vx;p.y+=p.vy;if(p.y<-40)p.y=H+40;if(p.x<-40)p.x=W+40;if(p.x>W+40)p.x=-40;const g=cx.createRadialGradient(p.x,p.y,0,p.x,p.y,p.r);g.addColorStop(0,p.c+"55");g.addColorStop(1,p.c+"00");cx.globalAlpha=p.o*4;cx.fillStyle=g;cx.beginPath();cx.arc(p.x,p.y,p.r,0,7);cx.fill()});
- cx.globalAlpha=1;
- if(!$("#landing").hidden){const hx=W>760?W*.76:W*.78,top=-20,bot=H+20,N=46,R=W>760?92:60,ph=t/1400,cols=["#3ddc97","#ff7a7a","#5cb8ff","#ffc83d"],al=W>760?1:.38;
-  const pts=[];for(let i=0;i<=N;i++){const y=top+(bot-top)*i/N,a=ph+i*.42;pts.push({y,x1:hx+Math.cos(a)*R,z1:Math.sin(a),x2:hx-Math.cos(a)*R,z2:-Math.sin(a)})}
-  for(let i=0;i<=N;i++){const p=pts[i],c=cols[i%4];cx.globalAlpha=al*(.25+.35*Math.abs(Math.cos(ph+i*.42)));cx.strokeStyle=c;cx.lineWidth=5;cx.lineCap="round";cx.beginPath();cx.moveTo(p.x1,p.y);cx.lineTo(p.x2,p.y);cx.stroke()}
-  [["x1","z1","#8e6bd8"],["x2","z2","#c9b3ff"]].forEach(([xk,zk,col])=>{for(let i=0;i<N;i++){const a=pts[i],b=pts[i+1];cx.globalAlpha=al*(.35+.65*((a[zk]+1)/2));cx.strokeStyle=col;cx.lineWidth=4+3*((a[zk]+1)/2);cx.beginPath();cx.moveTo(a[xk],a.y);cx.lineTo(b[xk],b.y);cx.stroke()}});
-  cx.globalAlpha=1}
- if(!RM)requestAnimationFrame(draw)}
-requestAnimationFrame(draw);
+$("#goP").onclick=()=>{$("#fa").hidden=true;$("#fp").hidden=false};$("#goA").onclick=()=>{$("#fp").hidden=true;$("#fa").hidden=false};
+$("#sair").onclick=()=>{try{localStorage.removeItem("sj_portal_v1");localStorage.removeItem("sj_prof_keep");sessionStorage.removeItem("sj_portal_prof");sessionStorage.removeItem("sj_teste_pin");sessionStorage.removeItem("sj_ge_pin")}catch(e){}S=null;isProf=false;ST=null;STOK=false;M=null;INFO=null;INBOX=null;SRV=false;view("login")};
+if(isProf&&(!S||S.role!=="prof"))S={role:"prof",nome:"Professor"};
+if(S&&(S.role==="aluno"||isProf)){if(S.role==="aluno")prefill(S.nome,S.ra);enter()}else view("login");
 })();
 </script></body></html>
