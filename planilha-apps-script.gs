@@ -47,10 +47,16 @@ const GAB = {
   "pre-gen-08":[2,1,1,1,1,1],
   "pos-gen-08":[0,0,0,0,0,0]
 };
+// <GAB_JOGOS>
+// Gabaritos dos jogos (gerado por tools/gerar_gabaritos.js; não edite à mão).
+const GAB_PLAT = {"emb1":[0,3,1,2,1,2,0,3,1,2,0,3,1,2,0,3,0,2],"emb2":[2,1,3,0,2,1,3,1,2,0,1,3,0,2,3,1,2,0],"emb3":[1,0,2,3,0,1,2,3,0,1,2,3,0,1,2,3,0,2],"emb4":[1,0,3,2,1,0,3,2,1,0,3,2,1,0,3,2,1,0],"emb5":[2,0,3,0,2,1,0,3,2,1,3,2,1,3,1,0,2,1],"emb6":[1,3,0,2,1,2,0,3,1,2,0,3,3,0,2,3,1,0],"gen1":[1,3,0,2,1,0,2,3,0,1,2,3,0,2,1,3,0,2],"gen2":[1,2,3,0,1,0,2,3,0,1,2,3,2,0,3,1,0,2],"gen3":[2,1,3,0,3,0,2,1,3,0,0,2,2,1,0,1,3,2],"gen4":[1,2,0,3,0,2,1,3,2,0,3,1,2,0,3,1,0,1],"gen5":[1,3,0,2,1,0,2,3,1,0,2,3,1,0,3,2,0,1],"gen6":[2,1,3,0,1,0,3,1,2,0,3,2,0,1,3,2,1,2]};
+const GAB_ARC = {"genetica":{"G01":1,"G02":1,"G03":3,"G04":1,"G05":1,"G06":1,"G07":2,"G08":1,"G09":1,"G10":1,"G11":2,"G12":1,"G13":1,"G14":1,"G15":1,"G16":2,"G17":1,"G18":2,"G19":1,"G20":0},"embriologia":{"E01":1,"E02":2,"E03":1,"E04":1,"E05":1,"E06":2,"E07":1,"E08":0,"E09":1,"E10":1,"E11":1,"E12":1,"E13":2,"E14":1,"E15":1,"E16":1,"E17":1,"E18":3,"E19":0,"E20":0},"psicologia-aplicada":{"PP01":3,"PP02":2,"PP03":1,"PP04":1,"PP05":1,"PP06":0,"PP07":3,"PP08":2,"PP09":3,"PP10":0,"PP11":2,"PP12":0,"PP13":2,"PP14":2,"PP15":3,"PP16":0,"PP17":1,"PP18":2,"PM01":3,"PM02":1,"PM03":0,"PM04":0,"PM05":0,"PM06":3,"PM07":1,"PM08":3,"PM09":3,"PM10":0,"PM11":2,"PM12":0,"PM13":0,"PM14":2,"PM15":0,"PM16":2,"PM17":1,"PM18":1},"saude-coletiva":{"SS01":3,"SS02":0,"SS03":2,"SS04":2,"SS05":2,"SS06":2,"SS07":0,"SS08":0,"SS09":0,"SS10":2,"SS11":0,"SS12":1,"SS13":1,"SS14":2,"SS15":3,"SS16":2,"SS17":2,"SS18":2,"SS19":2,"SS20":2,"SS21":0,"SS22":3,"SS23":3,"SU01":2,"SU02":2,"SU03":3,"SU04":0,"SU05":1,"SU06":1,"SU07":0,"SU08":3,"SU09":3,"SU10":1,"SU11":1,"SU12":1,"SU13":0,"SU14":1,"SU15":1,"SU16":1,"SU17":0,"SU18":0,"SU19":3,"SU20":0}};
+// </GAB_JOGOS>
 const SS_ID = "14DMPH6aj__1NNtLSON0sHHh_7hwaKDMurTO23AI7Uzg";
 const ABA = "Resultados";
 const ABA_MELHOR = "Melhor nota";
 const JOGO_PADRAO = "gene-embrio";
+const NOTA_ARCADE = 2.0;   // valor da atividade dos jogos de fliperama (igual a CONFIG.NOTA_MAXIMA nas páginas)
 const CAB = ["Data/hora","Nome","Matrícula","Turma","Disciplina","Tentativa","Acertos","Total","Pontos","Nota","Questões erradas","Jogo"];
 
 function norm_(x){ return String(x == null ? "" : x).trim().toLowerCase().replace(/^0+/, ""); }
@@ -99,6 +105,24 @@ function mvpRows_(){
   return n > 0 ? sh.getRange(2,1,n,CAB_MVP.length).getValues() : [];
 }
 
+// Correção no servidor dos jogos. O navegador manda só as alternativas marcadas (índice ORIGINAL da alternativa, -1 = sem resposta).
+function corrigeEsc_(esc, gab, porId){
+  const partes = String(esc || "").split(",").filter(x => x !== "");
+  if (partes.length < 5 || partes.length > 30) return null;
+  const vistos = {}; let ac = 0; const det = [], erradas = [];
+  for (const p of partes) {
+    const m = /^([A-Za-z0-9_.\-]{1,12}):(-?\d)$/.exec(p); if (!m) return null;
+    const chave = m[1], op = Number(m[2]);
+    if (vistos[chave] || op < -1 || op > 5) return null; vistos[chave] = 1;
+    let c;
+    if (porId) { if (!(chave in gab)) return null; c = gab[chave]; }
+    else { const qi = Number(chave); if (!(qi >= 0 && qi < gab.length) || String(qi) !== chave) return null; c = gab[qi]; }
+    const ok = op === c; if (ok) ac++; else erradas.push(chave);
+    det.push(chave + ":" + (ok ? 1 : 0));
+  }
+  return {ac:ac, tot:partes.length, det:det.join(","), erradas:erradas.join(", ")};
+}
+
 function mvpPost_(d){
   const sh = abaMvp_(), rows = mvpRows_(), mat = norm_(d.matricula), fase = String(d.fase || "").trim();
   if (!mat || !fase) return {ok:false, err:"dados"};
@@ -116,9 +140,17 @@ function mvpPost_(d){
     if (resp.length !== gab.length) return {ok:false, err:"dados"};
     tot = gab.length; ac = 0; resp.forEach((x, i) => { if (x !== "" && Number(x) === gab[i]) ac++; }); pts = ac * 10;
   }
+  let det = String(d.det || "");
+  const gj = GAB_PLAT[fase];
+  if (gj) {                                                                                   // jogo: nota calculada AQUI a partir das alternativas marcadas (d.esc)
+    const c = corrigeEsc_(d.esc, gj, false);
+    if (!c || c.tot !== 10) return {ok:false, err:"esc"};
+    ac = c.ac; tot = c.tot; det = c.det;
+    pts = ac === 0 ? 0 : Math.max(100 * ac, Math.min(Number(d.pontos) || 0, 150 * ac));    // pontos (bônus de tempo) só podem variar dentro do limite possível
+  }
   if (ac < 0 || tot < 1 || tot > 60 || ac > tot) return {ok:false, err:"dados"};            // nota impossível
   if (!/^[A-Za-z0-9_.\-]{1,40}$/.test(fase) || String(d.nome || "").length > 120) return {ok:false, err:"dados"};
-  sh.appendRow([new Date(d.ts || Date.now()), String(d.matricula), d.nome, d.turma, fase, n + 1, ac, tot, Math.round(ac / tot * 100) / 10, Number(d.seg) || 0, pts, String(d.det || ""), Number(d.uso) || 0, uid]);
+  sh.appendRow([new Date(d.ts || Date.now()), String(d.matricula), d.nome, d.turma, fase, n + 1, ac, tot, Math.round(ac / tot * 100) / 10, Number(d.seg) || 0, pts, det, Number(d.uso) || 0, uid]);
   return {ok:true, tentativa:n + 1, ac:ac, total:tot};
 }
 
@@ -240,6 +272,14 @@ function doPost(e){
     if (d.tipo === "recado_del") return json_(recadoDel_(d));
     if (d.tipo) return json_({ok:false, err:"tipo"});
     const sh = aba_();
+    const ga = GAB_ARC[String(d.jogo || "")];
+    if (ga) {                                                                                 // jogos de fliperama: nota calculada no servidor
+      const c = corrigeEsc_(d.esc, ga, true);
+      if (!c) return json_({ok:false, err:"esc"});
+      d.acertos = c.ac; d.total = c.tot; d.erradas = c.erradas;
+      d.nota = Math.round(c.ac / c.tot * NOTA_ARCADE * 100) / 100;
+      d.pontos = c.ac === 0 ? 0 : Math.max(100 * c.ac, Math.min(Number(d.pontos) || 0, 200 * c.tot + 200));
+    }
     sh.appendRow([new Date(), d.nome, String(d.matricula), d.turma, d.disciplina, d.tentativa, d.acertos, d.total, d.pontos, d.nota, d.erradas, d.jogo || JOGO_PADRAO]);
     return ContentService.createTextOutput(JSON.stringify({ok:true})).setMimeType(ContentService.MimeType.JSON);
   } finally { lock.releaseLock(); }

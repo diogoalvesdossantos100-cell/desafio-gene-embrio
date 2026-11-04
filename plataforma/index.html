@@ -1608,10 +1608,10 @@ async function flush() {
   try {
     for (const p of S.pend.slice()) {
       let r; try { r = await postAttempt(p); } catch (e) { break; }
-      if (r && (r.ok || r.err === "limite")) {
+      if (r && (r.ok || r.err === "limite" || r.err === "esc" || r.err === "dados")) {
         S.pend = S.pend.filter(x => x.uid !== p.uid);
         const a = (S.tent[norm(p.matricula) + "|" + p.fase] || []).find(x => x.uid === p.uid);
-        if (a) { if (r.ok) a.sent = true; else { a.inv = true; a.sent = true; } }
+        if (a) { if (r.ok) { a.sent = true; if (typeof r.ac === "number" && r.ac !== a.ac) a.ac = r.ac; } else { a.inv = true; a.sent = true; a.motivo = r.err; } }
       } else break;
     }
   } finally { flushing = false; save(); const st = $("#syncst"); if (st) st.outerHTML = syncBadge(); }
@@ -1793,7 +1793,7 @@ async function startGame(fid) {
   const idx = f.q.map((_, i) => i), novas = shuffle(idx.filter(i => !vistas.has(i))), velhas = shuffle(idx.filter(i => vistas.has(i)));
   const pick = shuffle(novas.concat(velhas).slice(0, NQ));
   G = { f, i: 0, pts: 0, ok: 0, seg: 0, r: [], sel: null, left: 0, done: false, tnum: tentCount(fid) + 1, sent: null,
-    q: pick.map(qi => { const q = f.q[qi], o = shuffle([0, 1, 2, 3]); return { qi, t: q.t, q: q.q, e: q.e, d: q.d || 2, o: o.map(k => q.o[k]), c: o.indexOf(q.c) }; }) };
+    q: pick.map(qi => { const q = f.q[qi], o = shuffle([0, 1, 2, 3]); return { qi, t: q.t, q: q.q, e: q.e, d: q.d || 2, o: o.map(k => q.o[k]), c: o.indexOf(q.c), m: o }; }) };
   role = "aluno"; S.tab = "jogar"; shell(); runTimer(); window.scrollTo(0, 0);
 }
 const limOf = q => q.d === 3 ? CFG.LIM_CASO : CFG.LIM;
@@ -1827,11 +1827,12 @@ function proximo() {
   if (G.i < NQ - 1) { G.i++; G.sel = null; shell(); runTimer(); return; }
   clearInterval(timerId);
   const det = G.r.map(x => x.qi + ":" + (x.ok ? 1 : 0)).join(",");
+  const esc = G.r.map(x => x.qi + ":" + (x.k < 0 ? -1 : G.q[x.i].m[x.k])).join(",");
   const a = { uid: uid(), ts: Date.now(), ac: G.ok, pts: G.pts, seg: Math.round(G.seg), det, sent: !REAL };
   (S.tent[tkey(G.f.id)] = S.tent[tkey(G.f.id)] || []).push(a);
   G.att = a;
   if (REAL) {
-    const p = { tipo: "mvp", uid: a.uid, nome: S.aluno.nome, matricula: S.aluno.mat, turma: S.aluno.turma, fase: G.f.id, tentativa: G.tnum, acertos: G.ok, total: NQ, pontos: G.pts, seg: a.seg, det, uso: S.uso, ts: new Date(a.ts).toISOString() };
+    const p = { tipo: "mvp", uid: a.uid, nome: S.aluno.nome, matricula: S.aluno.mat, turma: S.aluno.turma, fase: G.f.id, tentativa: G.tnum, acertos: G.ok, total: NQ, pontos: G.pts, seg: a.seg, det, esc, uso: S.uso, ts: new Date(a.ts).toISOString() };
     S.pend.push(p);
   }
   save(); G.done = true; shell(); flush().then(() => { const st = $("#syncst2"); if (st) st.outerHTML = syncLine(); });
@@ -1839,7 +1840,7 @@ function proximo() {
 function syncLine() {
   if (!REAL) return '<p class="note" id="syncst2">Modo demonstração: a nota ficou só neste aparelho.</p>';
   const a = G && G.att;
-  if (a && a.inv) return '<p class="note" id="syncst2" style="color:var(--red)">O servidor recusou esta tentativa: o limite de ' + CFG.MAXT + ' tentativas já havia sido atingido. Ela não vale nota.</p>';
+  if (a && a.inv) return '<p class="note" id="syncst2" style="color:var(--red)">O servidor recusou esta tentativa' + (a.motivo === 'limite' ? ': o limite de ' + CFG.MAXT + ' tentativas já havia sido atingido' : '. Recarregue a página (Ctrl+F5) e jogue de novo') + '. Ela não vale nota.</p>';
   if (a && a.sent) return '<p class="note" id="syncst2" style="color:var(--g)">Nota registrada e enviada ao professor.</p>';
   return '<p class="note" id="syncst2">Enviando a nota… Se estiver sem internet, ela será enviada sozinha quando a conexão voltar. Não limpe os dados do navegador antes disso.</p>';
 }

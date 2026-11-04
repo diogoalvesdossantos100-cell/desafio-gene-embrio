@@ -526,7 +526,7 @@ $("btn-continuar").onclick = async () => {
 /* ---------- partida ---------- */
 function prepara(q){
   const ordem=shuffle(q.o.map((_,i)=>i));
-  return {id:q.id,d:q.d,q:q.q,e:q.e,opts:ordem.map(i=>q.o[i]),correta:ordem.indexOf(q.c)};
+  return {id:q.id,d:q.d,q:q.q,e:q.e,opts:ordem.map(i=>q.o[i]),correta:ordem.indexOf(q.c),ordem:ordem};
 }
 function sorteia(disc){
   const n=CONFIG.QUESTOES_POR_PARTIDA; let esc;
@@ -616,7 +616,7 @@ function responde(idx,esgotou){
     S.streak=0; SFX.bad(); flash("bad");
     if(!REDUZ){ const c=$("qcard"); c.classList.remove("shake"); void c.offsetWidth; c.classList.add("shake"); }
   }
-  S.resp.push({id:q.id,ok,marcada:idx});
+  S.resp.push({id:q.id,ok,marcada:idx,orig:idx<0?-1:q.ordem[idx]});
   $("h-streak").textContent=S.streak; $("h-combo").classList.toggle("hot",S.streak>=2);
   [...$("rungs").children][S.i].classList.remove("cur");
   const li=[...$("rungs").children][S.i]; li.classList.add(ok?"ok":"bad"); li.textContent=ok?"✓":"✗";
@@ -687,7 +687,8 @@ function termina(){
   $("btn-again").classList.toggle("hide",resta<=0);
   $("again-msg").textContent = resta>0 ? "Você ainda tem "+resta+" tentativa"+(resta>1?"s":"")+"." : "Você usou todas as suas tentativas.";
   S.payload={jogo:GAME.id,nome:P.nome,matricula:P.mat,turma:CONFIG.TURMA,disciplina:S.disc,tentativa:P.tent,acertos:S.acertos,total,pontos:S.pts,nota,
-    erradas:erros.map(q=>q.id).join(", ")};
+    erradas:erros.map(q=>q.id).join(", "),
+    esc:S.resp.map(r=>r.id+":"+r.orig).join(",")};
   if(S.acertos>=7){ SFX.win(); confetti(200,2800); } else if(S.acertos>=4) SFX.ok(); else SFX.bad();
   envia();
 }
