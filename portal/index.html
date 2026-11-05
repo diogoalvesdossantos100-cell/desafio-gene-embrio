@@ -53,6 +53,7 @@ main{padding:6px 40px 56px;max-width:1240px;margin:0 auto}
 .chip{font:600 .85rem var(--body);padding:7px 14px;border-radius:99px;border:1.5px solid var(--lk);color:var(--bl);text-decoration:none;background:#fff;cursor:pointer;min-height:36px;display:inline-flex;align-items:center}
 .chip:hover{background:#F4F8FF}.chip.p{background:var(--bl);border-color:var(--bl);color:#fff}.chip.d{color:#0C7C52;border-color:#BFE6D5}.chip.a{background:var(--am);border-color:var(--am);color:var(--ink)}
 .aula.fut{opacity:.62}.aula.fut .chips{color:var(--mut);font-size:.88rem}
+.feira{margin:12px 0 4px 60px;padding:16px 18px;border-radius:14px;background:#EAF2FF;border-left:4px solid var(--bl)}.feira h3{font:600 1.1rem var(--disp);margin:0 0 4px}.feira p{margin:2px 0 8px;color:#3A4F7A;font-size:.93rem;max-width:64ch}.feira ul{margin:0 0 12px;padding-left:20px;font-size:.93rem;color:#2A3F6A}.feira li{margin:2px 0}.feira .chips{display:flex;flex-wrap:wrap;gap:8px}@media(max-width:640px){.feira{margin-left:0}}
 .aviso{margin:12px 0;padding:12px 16px;border-radius:12px;background:#FFF4DA;border-left:4px solid var(--am);font-size:.95rem}
 .grid2{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:14px}
 .item{display:block;text-decoration:none;border:1.5px solid var(--line);border-radius:18px;padding:16px 18px;background:#fff}.item:hover{border-color:var(--bl);background:#F8FAFF}
@@ -143,7 +144,7 @@ const D={
   {id:"emb-07",tid:"emb-07",n:"07",tema:"Mudanças no corpo da mulher",ds:"Gestação, parto e puerpério: o que muda no corpo da mãe e onde a fisioterapia atua.",pdf:"../aulas/AULA_07_EMBRIOLOGIA.pdf",nomePdf:"AULA_07_EMBRIOLOGIA.pdf"},
   {id:"emb-08",tid:"emb-08",n:"08",tema:"Revisão geral",ds:"Seis unidades em uma aula: flashcards, jogo em grupos e quiz final.",pdf:"../aulas/AULA_08_EMBRIOLOGIA.pdf",nomePdf:"AULA_08_EMBRIOLOGIA.pdf"}]}};
 const esc=s=>String(s==null?"":s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
-const VER="202611040431";const vv=u=>u+(u.includes("?")?"&":"?")+"v="+VER;
+const VER="202611051959";const vv=u=>u+(u.includes("?")?"&":"?")+"v="+VER;
 const ses=()=>{try{return JSON.parse(localStorage.getItem("sj_portal_v1")||"null")}catch(e){return null}};
 (function(){try{const k=JSON.parse(localStorage.getItem("sj_prof_keep")||"null");if(k&&k.exp>Date.now()&&k.pin){sessionStorage.setItem("sj_portal_prof","1");sessionStorage.setItem("sj_teste_pin",k.pin);sessionStorage.setItem("sj_ge_pin",k.pin)}else if(k)localStorage.removeItem("sj_prof_keep")}catch(e){}})();
 let S=ses();if(S&&S.role==="aluno"&&RA.check(S.nome,S.ra)){S=null;try{localStorage.removeItem("sj_portal_v1")}catch(e){}}
@@ -163,6 +164,10 @@ function uso(ev,aula){if(!S||isProf)return;try{navigator.sendBeacon(API,new Blob
 /* helpers de dados */
 const FAIXA=`<div role="note" class="aviso"><b>Trabalho aplicado:</b> entrega no dia <b>05/11</b>.</div>`;
 const FAIXA2=`<div role="note" class="aviso"><b>Semana de avaliação:</b> vale <b>15 pontos</b> e cai da aula 01 à 05.</div>`;
+const FEIRA={
+ gen:{dia:"terça, 24/11",tt:["G1 · DNA, RNA e proteína, com uma enzima que falta","G2 · Heredograma com peças móveis","G3 · Tubos de aglutinação ABO e Rh e fita de DNA","G4 · Cariótipo de feltro: normal, Down e Turner","G5 · Percurso: triagem, exame e aconselhamento"]},
+ emb:{dia:"quinta, 26/11",tt:["E1 · Disco giratório de 28 dias com hormônios","E2 · Corte do útero com embrião, placenta e cordão","E3 · Três folhetos e os órgãos que cada um forma","E4 · Painel por mecanismo de ação e vias de transmissão","E5 · Pelve com feto em escala e fases do parto"]}};
+const feiraHtml=d=>{const f=FEIRA[d];return `<aside class="feira" aria-label="Mini Feira"><h3>Mini Feira de Genética e Embriologia</h3><p>Cada grupo de 4 alunos monta uma maquete e explica um tema. A feira de ${DN[d]} é na <b>${f.dia}</b>, no horário da aula, com 5 bancas.</p><ul>${f.tt.map(x=>`<li>${esc(x)}</li>`).join("")}</ul><div class="chips"><a class="chip p" data-u="aula" href="../aulas/MINI_FEIRA_GENETICA_EMBRIOLOGIA.pdf" target="_blank" rel="noopener">Slides da feira (PDF)</a></div></aside>`};
 const fm=n=>Number(n).toFixed(1).replace(".",",");
 const DN={gen:"Genética",emb:"Embriologia"};
 function kPre(t){return t==="gen-01"?"teste-pre":t==="gen-03"?"pre2-gen-03":"pre-"+t}
@@ -258,7 +263,7 @@ function renderAulas(){
  if(!M){$("#al").innerHTML="";return}
  $("#al").innerHTML=(M[TAB]||[]).map(r=>{const a=r.a,id=a.id||a.tid;const nd=r.st==="ok"?'<span class="nd ok">✓</span>':r.st==="miss"?'<span class="nd miss">!</span>':r.st==="lock"?`<span class="nd lock">${r.n}</span>`:`<span class="nd na">${r.n}</span>`;
   const dada=isDada(a.tid);
-  return `<article class="aula${r.lib?"":" fut"}" data-id="${id}">${nd}<div><h3>${esc(a.tema)}<small>Aula ${r.n}</small>${dada?'<span class="selo">Aula dada</span>':""}</h3><p class="ds">${esc(a.ds)}</p></div>${r.lib?`<div class="chips">${chipsFor(r,TAB)}</div>`:`<div class="chips">Abre ${esc(r.when)}</div>`}</article>${id==="gen-04"||id==="emb-04"?FAIXA:""}${id==="gen-05"||id==="emb-05"?FAIXA2:""}`}).join("")}
+  return `<article class="aula${r.lib?"":" fut"}" data-id="${id}">${nd}<div><h3>${esc(a.tema)}<small>Aula ${r.n}</small>${dada?'<span class="selo">Aula dada</span>':""}</h3><p class="ds">${esc(a.ds)}</p></div>${r.lib?`<div class="chips">${chipsFor(r,TAB)}</div>`:`<div class="chips">Abre ${esc(r.when)}</div>`}</article>${id==="gen-04"||id==="emb-04"?FAIXA:""}${id==="gen-05"||id==="emb-05"?FAIXA2+feiraHtml(TAB):""}`}).join("")}
 function renderJogos(){if(!M){$("#jgs").innerHTML="";return}
  const sec=(t,o,m)=>o.length?`<h2 class="h2l" style="margin-top:${m}px">${t}</h2><div class="grid2">${o.join("")}</div>`:"";
  const mk=d=>M[d].filter(r=>r.a.jogo).map(r=>`<a class="item${r.lib?"":" fut"}" data-u="jogo" href="${vv(r.a.jogo)}"><b>${esc(r.a.tema)}</b><span>Aula ${r.n}${r.lib?"":" · abre "+esc(r.when)}</span></a>`);
